@@ -8,9 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage:{
+        'bg-home': "url(/components/icons/bgImage)"
+      },
+      fontFamily:{
+        'inter': [ 'Inter', 'sans-serif'],
+        'rubik': [ 'Rubik', 'sans-serif']
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        rosinha: "#C70039"
       },
     },
   },
