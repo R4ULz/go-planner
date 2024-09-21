@@ -8,7 +8,7 @@ export default function SectionHome(){
 
 
     return(
-        <div className="h-[664px] flex justify-center items-center px-40 gap-24 ">
+        <div className="h-[664px] flex justify-center items-center px-40 gap-24 border">
             <div className="flex bg-red-400 w-1/2 h-[406px]">
                 <h1>teste</h1>
             </div>
