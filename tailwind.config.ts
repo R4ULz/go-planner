@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage:{
-        'bg-home': "url(/components/icons/bgImage)"
+        'hero-pattern': "url(/imgs/hero.png)",
+        'hero-login': "url(/imgs/hero-login.png)"
       },
       fontFamily:{
         'inter': [ 'Inter', 'sans-serif'],
@@ -18,7 +19,9 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        rosinha: "#C70039"
+        rosinha: "#C70039",
+        roxo: "#511845",
+        laranja: "#FF5733"
       },
     },
   },
