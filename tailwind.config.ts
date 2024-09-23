@@ -6,6 +6,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  plugins: [],
   theme: {
     extend: {
       boxShadow:{
@@ -23,10 +24,10 @@ const config: Config = {
         foreground: "var(--foreground)",
         rosinha: "#C70039",
         laranjinha: "#ff5833",
-        meugrad: 'linear-gradient(to right, #8f0b3e, #ff5833)', //N sei pq nao esta funcionando.
+        RosinhaEscurinho: "#c70038",
+       // meugrad: 'linear-gradient(to right, #8f0b3e, #ff5833)', N sei pq nao esta funcionando.
       },
     },
   },
-  plugins: [],
 };
 export default config;
