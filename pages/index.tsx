@@ -1,3 +1,4 @@
+import Services from "@/components/SectionServices";
 import Header from "@/components/Header";
 import BgImg from "@/components/icons/BgImgs";
 
@@ -10,8 +11,9 @@ export default function Home() {
       <section className="z-0 h-full w-full">
           <BgImg/>
       </section>
+      
       <section className="flex w-full">
-        
+        <Services/>
       </section>
     </div>
   );
