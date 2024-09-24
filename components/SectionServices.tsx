@@ -60,8 +60,8 @@ export default function Services(){
 
         <div className="flex flex-col justify-center max-w-[55em] sm: max-w-[30em] md:max-w-[55em] lg:max-w-[55em]">
 
-            <div className="flex justify-center bg-laranjinha h-[500px] max-w-7xl rounded-lg">
-                <p>Oi</p>
+            <div className="flex justify-center items-center bg-laranjinha h-[500px] max-w-7xl rounded-lg">
+                <p>Inserir a tela deseja ao selecionar aqui</p>
             </div>
             
             <div className="ml-72 mt-10 flex justify-center">
