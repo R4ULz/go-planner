@@ -2,7 +2,7 @@ import { useState } from "react"
 import ServiceCard1 from "./ServiceCard1"
 import ServiceCard2 from "./ServiceCard2"
 import ServiceCard3 from "./ServiceCard3"
-import {iconeCalendario} from "./icons/Schedule"
+import { iconeCalendario } from "./icons/Schedule"
 
 export default function Services(){
     const [selectedCard, setSelectedCard] = useState(null);
@@ -12,7 +12,7 @@ export default function Services(){
     };
 
     return(
-    <div className=" w-full flex flex-row justify-around sm:flex-col md:flex-col lg:flex-row">
+    <div className="w-full flex flex-row justify-around sm: flex-col items-center md:flex-row">
 
         <div className="flex flex-col p-5 pt-10 w-[450px]">
             <div className="h-[100px] w-[500px]">
@@ -58,18 +58,18 @@ export default function Services(){
         </div>
 
 
-        <div className="flex flex-col justify-center max-w-[55em] sm: max-w-[30em] md:max-w-[55em] lg:max-w-[55em]">
+        <div className="flex flex-col justify-center w-full sm: max-w-[30em] md:max-w-[55em] lg:max-w-[55em]">
 
-            <div className="flex justify-center items-center bg-laranjinha h-[500px] max-w-7xl rounded-lg">
+            <div className="flex justify-center items-center bg-laranjinha h-[500px] rounded-lg">
                 <p>Inserir a tela deseja ao selecionar aqui</p>
             </div>
-            
-            <div className="ml-72 mt-10 flex justify-center">
-                <button className="bg-gradient-to-r from-RosinhaEscurinho to-laranjinha text-white border w-[15em] h-[3em] rounded-xl flex flex-row text-xl items-center text-center justify-center "> 
+
+            <div className="ml-10 mt-10 flex justify-start">
+                <button className="bg-gradient-to-r from-RosinhaEscurinho to-laranjinha text-white border w-[15em] h-[3em] rounded-xl flex flex-row text-xl items-center text-center justify-center"> 
                     {iconeCalendario} Planejar agora
                 </button>   
             </div>
-
+            
         </div>
 
     </div>
