@@ -1,4 +1,4 @@
-import { Viajem } from "../icons"
+import { Viagem } from "../icons"
 
 interface BtnGradientProps{
     text: string

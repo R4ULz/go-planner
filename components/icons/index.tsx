@@ -8,7 +8,7 @@ export const IconeLogo = (
     </svg>
 )
 
-export const Viajem = (
+export const Viagem = (
     <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_122_151)">
 <path d="M14.6867 25.375H7.56295C6.98162 25.375 6.4241 25.1204 6.01303 24.6672C5.60197 24.214 5.37103 23.5993 5.37103 22.9583V8.45834C5.37103 7.8174 5.60197 7.20271 6.01303 6.7495C6.4241 6.29628 6.98162 6.04167 7.56295 6.04167H20.7145C21.2958 6.04167 21.8533 6.29628 22.2644 6.7495C22.6755 7.20271 22.9064 7.8174 22.9064 8.45834V14.5" stroke="white" stroke-width="2.41667" stroke-linecap="round" stroke-linejoin="round"/>
