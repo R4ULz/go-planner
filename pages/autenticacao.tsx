@@ -6,6 +6,8 @@ import { useState } from "react";
 export default function Login(){
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
+    const [nome, setNome] = useState("")
+    const [confirmarSenha, setConfirmarSenha] = useState("")
     const [erro, setErro] = useState(null);
     const [modo, setModo] = useState<"login" | "cadastro">("login");
 
@@ -43,8 +45,11 @@ export default function Login(){
                     </div>
                     <div className="w-1/2 h-full bg-black/35 rounded-l-3xl flex flex-col justify-center items-center">
                         <div className="w-1/2">
-                            <InputTxt label="" placeholder="Email:" valor={email} valorMudou={setEmail} tipo="text" obrigatorio />
+                            <InputTxt label="" placeholder="Nome" valor={nome} valorMudou={setNome} tipo="text" obrigatorio />
+                            <InputTxt label="" placeholder="Email:" valor={email} valorMudou={setEmail} tipo="email" obrigatorio />
                             <InputTxt label="" placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
+                            <InputTxt label="" placeholder="Senha:" valor={confirmarSenha} valorMudou={setConfirmarSenha} tipo="password" obrigatorio />
+
                             <div className="mt-10">
                                 <BtnGradient text="Criar sua viagem" />
                             </div>
