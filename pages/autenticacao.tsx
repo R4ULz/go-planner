@@ -19,6 +19,30 @@ export default function Login(){
         }
     }
 
+     function SenhasIguais(){
+        if(senha !== confirmarSenha){
+            alert("Senha nao é igual")
+            return;
+        }
+    }
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        
+        SenhasIguais();
+        const userData = { nome, email, senha };
+        const res = await fetch('/api/cadastrar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        });
+        const result = await res.json();
+        // Trate a resposta aqui
+      };
+      
+
     return (
         <div className="bg-hero-login w-screen h-screen bg-cover bg-center flex">
             {modo === "login" 
@@ -51,7 +75,7 @@ export default function Login(){
                             <InputTxt label="" placeholder="Senha:" valor={confirmarSenha} valorMudou={setConfirmarSenha} tipo="password" obrigatorio />
 
                             <div className="mt-10">
-                                <BtnGradient text="Criar sua viagem" />
+                                <button className="text-white" onClick={handleSubmit}>Crie sua conta</button>
                             </div>
                             <p className="text-white">Já tem conta?<a onClick={() => setModo("login")} className="text-blue-500 hover:text-blue-700 cursor-pointer"> Faça login</a></p>
                         </div>

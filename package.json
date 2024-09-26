@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.6.3",
     "next": "14.2.13",
     "react": "^18",
     "react-content-loader": "^7.0.2",
