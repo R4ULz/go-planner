@@ -19,7 +19,7 @@ export default function Services(){
                 <div className="flex flex-row">
                      <h1 className="font-rubik font-bold text-black text-4xl md: text-3xl ">Simplicidade e práticidade</h1><span className="flex flex-row bg-rosinha w-2 h-2 rounded-full p-1 relative top-6 mx-1"></span>
                 </div>
-                <h6 className="font-rubik text-xs">Mostrar as funcionalidades da nossa aplicação bem aqui</h6>
+                <h6 className="font-rubik textsm ">Mostrar as funcionalidades da nossa aplicação bem aqui</h6>
             </div>
 
             <div className="h-full gap-5 flex flex-col text-lg">

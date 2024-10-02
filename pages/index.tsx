@@ -5,13 +5,13 @@ import Footer from "@/components/footer";
 
 export default function Home() {
   return (
-    <div className="flex flex-col relative w-full h-[600px]">
+    <div className="flex flex-col relative w-full items-center">
 
-      <div className="fixed z-50 w-full">
+      <header className="fixed z-50 w-full flex justify-center">
         <Header />
-      </div>
+      </header>
 
-      <section className="z-0 h-full w-full">
+      <section className="z-0 h-full w-full mt-20  ">
           <BgImg/>
       </section>
       
@@ -29,9 +29,9 @@ export default function Home() {
         <hr className="bg-laranjinha h-[10px]" /> {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
       </section>
 
-      <div>
+      <footer className="w-full">
         <Footer/>
-      </div>
+      </footer>
 
     </div>
   );

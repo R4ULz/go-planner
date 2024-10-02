@@ -27,6 +27,7 @@ const config: Config = {
         laranja: "#FF5733",
         laranjinha: "#ff5833",
         RosinhaEscurinho: "#c70038",
+  
       },
     },
   },
