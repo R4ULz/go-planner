@@ -3,11 +3,11 @@ import { IconeLogo } from "./icons";
 
 export default function Header(){
     return (
-        <div className="h-20 flex px-8 justify-between items-center gap-10 bg-white">
+        <div className="h-20 w-full flex px-20 justify-between items-center gap-10 bg-white">
             <div className="">
                 {IconeLogo}
             </div>
-            <nav className="hidden sm:flex space-x-4 font-inter">
+            <nav className="hidden sm:flex space-x-8 font-inter">
                 <Link href="/sobre" className="text-gray-500 hover:text-gray-900"> Sobre</Link>
                 <Link href="como-funciona" className="text-gray-500 hover:text-gray-900">Como Funciona</Link>
                 <Link href="lugares" className="text-gray-500 hover:text-gray-900">Lugares</Link>

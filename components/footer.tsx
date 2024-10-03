@@ -6,10 +6,10 @@ import { LinkedInLogo } from "./icons/linkedin"
 
 export default function Footer(){
     return(
-    <div className="flex flex-col font-rubik text-white w-full h-full bg-black p-5">
-        <div className="flex p-20 flex flex-row justify-between">
+    <div className="flex flex-col font-rubik text-white w-full h-full bg-black px-20">
+        <div className="flex py-20 flex-row justify-between">
 
-            <div className="">
+            <div className="font-bold">
                 {IconeLogo}
 
                 <div className="flex flex-col text-4xl w-[15em] mt-5">
@@ -33,41 +33,47 @@ export default function Footer(){
 
                 <div className="flex flex-col gap-5">
                     <div>
-                        <h1>Company</h1>
+                        <h1 className="no-underline">Company</h1>
                     </div>
 
                     <div className="opacity-[50%]">
-                        <h3>Blogs</h3>
-                        <h3>Carreiras</h3>
-                        <h3>Viagens</h3>
+                        <ul>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Blogs</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Carreiras</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Viagens</li>
+                        </ul>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-5">
                     <div>
-                        <h1>Locais</h1>
+                        <h1 className="no-underline">Locais</h1>
                     </div>
 
                     <div className="opacity-[50%]">
-                        <h3>Brasil</h3>
-                        <h3>Espanha</h3>
-                        <h3>Estados Unidos</h3>
-                        <h3>França</h3>
-                        <h3>Itália</h3>
-                        <h3>Japão</h3>
+                        <ul>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Brasil</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Espanha</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Estados Unidos</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">França</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Itália</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Japão</li>
+                        </ul>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-5">
                     <div>
-                        <h1>Legais</h1>
+                        <h1 className="no-underline">Legais</h1>
                     </div>
 
                     <div className="opacity-[50%]">
-                        <h3>Termos e serviços</h3>
-                        <h3>Políticas e privacidade</h3>
-                        <h3>políticas de cookies</h3>
-                        <h3>Destaques</h3>
+                        <ul>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Termos e Serviços</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Políticas de Privacidade</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Políticas de Cookies</li>
+                            <li className="no-underline hover:cursor-pointer hover:underline">Destaques</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -75,22 +81,22 @@ export default function Footer(){
         </div>
 
 
-        <div className="p-5 flex justify-center">
-            <hr className=" h-[5px] w-[100em]"/>
+        <div className="py-5 flex justify-center w-full ">
+            <hr className=" h-[5px] w-full opacity-[50%]"/>
         </div>
 
-        <div className="flex flex-row justify-between mr-10 opacity-[50%]">
+        <div className="flex flex-row justify-between ">
 
-            <div className="flex flex-col ml-10 ">
+            <div className="flex flex-col opacity-[50%] ">
                 <p>Copyright © 2024 Go.planner Todos os direitos reservados. Todas as marcas registradas </p>
                 <p>são propriedade dos seus respectivos donos.</p>
             </div>
 
-            <div className="flex flex-row gap-10">
-                <div className="hover:cursor-pointer">{FacebookLogo}</div>
-                <div className="hover:cursor-pointer">{InstagramLogo}</div>
-                <div className="hover:cursor-pointer">{Xlogo}</div>
-                <div className="hover:cursor-pointer">{LinkedInLogo}</div>
+            <div className="flex flex-row gap-10 mb-14 ">
+                <div className="opacity-[50%]  hover:opacity-[100%] hover:cursor-pointer">{FacebookLogo}</div>
+                <div className="opacity-[50%]  hover:opacity-[100%] hover:cursor-pointer">{InstagramLogo}</div>
+                <div className="opacity-[50%]  hover:opacity-[100%] hover:cursor-pointer">{Xlogo}</div>
+                <div className="opacity-[50%]  hover:opacity-[100%] hover:cursor-pointer">{LinkedInLogo}</div>
             
             </div>
         </div>  
