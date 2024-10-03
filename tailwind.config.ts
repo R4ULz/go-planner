@@ -6,6 +6,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  plugins: [],
   theme: {
     extend: {
       boxShadow:{
@@ -23,6 +24,7 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         rosinha: "#C70039",
+
         roxo: "#511845",
         laranja: "#FF5733",
         laranjinha: "#ff5833",
@@ -30,6 +32,5 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
 };
 export default config;
