@@ -12,7 +12,7 @@ export default function SectionHome(){
 
     return(
         <div className="h-[664px] flex justify-center items-center px-40 w-full">
-            <div className="flex w-1/2 h-[406px] p-5 w-full flex-col space-y-2 ">
+            <div className="flex w-1/2 h-[406px] p-5 flex-col space-y-2">
                 <TxtHome />
             </div>
             <div className="flex flex-col bg-black/20 rounded-2xl w-1/2 h-[406px] justify-center items-center text-gray-400">
