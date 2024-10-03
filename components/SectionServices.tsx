@@ -1,3 +1,4 @@
+
 import ServiceCard1 from "./ServiceCard1"
 import ServiceCard2 from "./ServiceCard2"
 import ServiceCard3 from "./ServiceCard3"
@@ -17,15 +18,14 @@ export default function Services(){
 
                 <ServiceCard1
                     title="Convide seus amigos"
-
                     description="Lorem ipsum dolor sit amet consectetur adipisicing elit. 
                     Quaerat sit earum magnam cum ipsam voluptate distinctio 
                     asperiores odio delectus voluptatum."
                 />
 
+
                 <ServiceCard2
                     title="Convide seus amigos"
-
                     description="Lorem ipsum dolor sit amet consectetur adipisicing elit. 
                     Quaerat sit earum magnam cum ipsam voluptate distinctio 
                     asperiores odio delectus voluptatum."
@@ -33,7 +33,6 @@ export default function Services(){
 
                 <ServiceCard3
                     title="Convide seus amigos"
-
                     description="Lorem ipsum dolor sit amet consectetur adipisicing elit. 
                     Quaerat sit earum magnam cum ipsam voluptate distinctio 
                     asperiores odio delectus voluptatum."
@@ -54,6 +53,7 @@ export default function Services(){
                     {iconeCalendario} Planejar agora {/*Não sei pq mas o gradient n ta funcionando */}
                 </button>   
             </div>
+
 
         </div>
 

@@ -1,3 +1,4 @@
+
 export default function ServiceCard2({title, description}){
     return(
         <div className="border-solid border-black rounded-md s shadow-border-shadow">
