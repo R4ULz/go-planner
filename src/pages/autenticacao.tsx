@@ -1,6 +1,6 @@
-import BtnGradient from "@/components/inputs/BtnGradient";
-import InputTxt from "@/components/inputs/InputTxt";
-import TxtHome from "@/components/TxtHome";
+import BtnGradient from "@/src/components/inputs/BtnGradient";
+import InputTxt from "@/src/components/inputs/InputTxt";
+import TxtHome from "@/src/components/Home/Section1/TxtHome";
 import { useState } from "react";
 
 export default function Login(){

@@ -1,8 +1,8 @@
 
-import Services from "@/components/SectionServices";
-import Header from "@/components/Header";
-import BgImg from "@/components/icons/BgImgs";
-import Footer from "@/components/footer";
+import Services from "@/src/components/SectionServices";
+import Header from "@/src/components/Header";
+import BgImg from "@/src/components/icons/BgImgs";
+import Footer from "@/src/components/footer";
 
 export default function Home() {
   return (
