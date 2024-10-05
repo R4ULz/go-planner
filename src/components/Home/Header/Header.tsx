@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IconeLogo } from "./icons";
+import { IconeLogo } from "../../icons/index";
 
 export default function Header(){
     return (

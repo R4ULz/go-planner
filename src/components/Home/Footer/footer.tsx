@@ -1,8 +1,8 @@
-import { IconeLogo } from "./icons"
-import { Xlogo } from "./icons/X"
-import { FacebookLogo } from "./icons/facebook"
-import { InstagramLogo } from "./icons/instagram"
-import { LinkedInLogo } from "./icons/linkedin"
+import { IconeLogo } from "../../icons/index"
+import { Xlogo } from "../../icons/X"
+import { FacebookLogo } from "../../icons/facebook"
+import { InstagramLogo } from "../../icons/instagram"
+import { LinkedInLogo } from "../../icons/linkedin"
 
 export default function Footer(){
     return(

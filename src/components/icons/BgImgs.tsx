@@ -1,5 +1,5 @@
 
-import SectionHome from "../SectionHome";
+import SectionHome from "../Home/Section1/SectionHome";
 
 export default function BgImg(){
     

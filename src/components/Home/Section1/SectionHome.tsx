@@ -1,7 +1,7 @@
 import { useState } from "react";
-import InputTxt from "./inputs/InputTxt";
-import BtnGradient from "./inputs/BtnGradient";
-import { Arrows, LineDestiny } from "./icons";
+import InputTxt from "../../inputs/InputTxt";
+import BtnGradient from "../../inputs/BtnGradient";
+import { Arrows, LineDestiny } from "../../icons/index";
 import TxtHome from "./TxtHome";
 
 
