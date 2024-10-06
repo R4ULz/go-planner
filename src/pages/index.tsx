@@ -16,7 +16,7 @@ export default function Home() {
           <BgImg/>
       </section>
       
-      <section className="flex w-full">
+      <section className="flex w-full max-w-2xl">
         <Services/>
         <hr className="bg-laranjinha h-[10px]" />
       </section>
@@ -25,7 +25,7 @@ export default function Home() {
         <hr className="bg-laranjinha h-[2px] w-3/4 " />
       </div>
 
-      <section className="flex w-full">
+      <section className="flex w-full max-w-2xl">
         <Services/>                               {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
         <hr className="bg-laranjinha h-[10px]" /> {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
       </section>

@@ -36,22 +36,6 @@ export default function TripsSection() {
     ]
 
     return (
-            <div className="bg-white p-5 w-full">
-              <h2 className="text-2xl font-bold mb-5">Viagens populares</h2>
-              <div className="grid grid-cols-3 gap-4">
-                {trips.map((trip, index) => (
-                  <div key={index} className={`relative ${trip.style} h-48 md:h-96`}>
-                    <Image
-                      src={trip.image}
-                      alt={trip.title}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-lg"
-                    />
-                    <h3 className="absolute bottom-0 left-0 bg-black text-white text-sm p-2 rounded-tl-lg rounded-br-lg">{trip.title}</h3>
-                  </div>
-                ))}
-              </div>
-            </div>
+      <div></div>
     );
 }

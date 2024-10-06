@@ -32,6 +32,9 @@ const config: Config = {
         RosinhaEscurinho: "#c70038",
   
       },
+      blur:{
+        xs: '1px',
+      }
     },
   },
 };

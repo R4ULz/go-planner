@@ -1,15 +1,23 @@
 import BtnGradient from "@/src/components/inputs/BtnGradient";
 import InputTxt from "@/src/components/inputs/InputTxt";
 import TxtHome from "@/src/components/Home/Section1/TxtHome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Login(){
+    const router = useRouter()
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [nome, setNome] = useState("")
     const [confirmarSenha, setConfirmarSenha] = useState("")
     const [erro, setErro] = useState(null);
     const [modo, setModo] = useState<"login" | "cadastro">("login");
+
+    useEffect(() =>{
+        if (router.query.modo) {
+            setModo(router.query.modo as "login" | "cadastro");
+        }
+    }, [router.query.modo]);
 
     function submeter(){
         if (modo === "login"){
@@ -48,16 +56,17 @@ export default function Login(){
             {modo === "login" 
             ?
                 <div className="w-full h-full flex">
-                    <div className="w-1/2 h-full bg-black/35 rounded-r-3xl flex flex-col justify-center items-center">
-                        <div className="w-1/2">
-                            <InputTxt label="" placeholder="Email:" valor={email} valorMudou={setEmail} tipo="text" obrigatorio />
-                            <InputTxt label="" placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
-                            <div className="mt-10">
-                                <BtnGradient text="Criar sua viagem" />
+                    <div className="w-1/2 h-full bg-black/35 absolute rounded-r-3xl"></div>
+                        <div className="flex flex-col justify-center items-center w-1/2">
+                            <div className="w-1/2">
+                                <InputTxt label="" placeholder="Email:" valor={email} valorMudou={setEmail} tipo="text" obrigatorio />
+                                <InputTxt label="" placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
+                                <div className="mt-10">
+                                    <BtnGradient text="Criar sua viagem" />
+                                </div>
+                                <p className="text-white">Novo por aqui?<a onClick={() => setModo("cadastro")} className="text-blue-500 hover:text-blue-700 cursor-pointer">Crie uma conta Gratuitamente</a></p>
                             </div>
-                            <p className="text-white">Novo por aqui?<a onClick={() => setModo("cadastro")} className="text-blue-500 hover:text-blue-700 cursor-pointer">Crie uma conta Gratuitamente</a></p>
                         </div>
-                    </div>
                     <div className="flex justify-center items-center w-1/2 p-20">
                         <TxtHome />
                     </div>
