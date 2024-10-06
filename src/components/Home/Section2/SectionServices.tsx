@@ -6,7 +6,7 @@ import {iconeCalendario} from "../../icons/Schedule"
 
 export default function Services(){
     return(
-    <div className="flex flex-row justify-around w-full">
+    <div className="flex flex-row justify-around w-full max-w-2xl">
         <div className="flex flex-col p-5 pt-10 w-[450px]">
             <div className="h-[100px] w-[500px]">
                 <div className="flex flex-row">
