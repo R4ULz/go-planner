@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface InputTxtProps{
-    label: string
+    label?: string
     valor: any
     obrigatorio?: boolean
     naoRenderizarQuando?: boolean
@@ -11,7 +11,7 @@ interface InputTxtProps{
 
 export default function InputTxt(props: InputTxtProps){
     return props.naoRenderizarQuando ? null :(
-        <div className="flex flex-col mt-4 w-2/3">
+        <div className="flex flex-col mt-4 w-full">
         <label>{props.label}</label>
         <input 
             type={props.tipo ?? 'text'} 
