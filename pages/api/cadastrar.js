@@ -1,11 +1,17 @@
 import connect from '../../lib/mongoose';
 import User from '../../models/User';
+import { hashPassword } from '../../lib/bcrypt';
 
 export default async function handler(req, res) {
   await connect();
   if (req.method === 'POST') {
     const { nome, email, senha } = req.body;
-    const user = new User({ nome, email, senha });
+    const hashedPassword = await hashPassword(senha);
+    const user = new User({ 
+      nome, 
+      email, 
+      senha: hashedPassword
+     });  
     await user.save();
     res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
   } else {

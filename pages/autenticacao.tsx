@@ -19,7 +19,7 @@ export default function Login(){
         }
     }
 
-     function SenhasIguais(){
+     function senhasNaoIguais(){
         if(senha !== confirmarSenha){
             alert("Senha nao é igual")
             return;
@@ -29,7 +29,7 @@ export default function Login(){
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         
-        SenhasIguais();
+        senhasNaoIguais();
         const userData = { nome, email, senha };
         const res = await fetch('/api/cadastrar', {
           method: 'POST',
