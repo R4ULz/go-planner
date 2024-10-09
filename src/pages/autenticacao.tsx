@@ -58,7 +58,7 @@ export default function Login() {
             {modo === "login"
                 ?
                 <div className="w-full h-full flex">
-                    <div className="w-1/2 h-full bg-black/35 rounded-r-3xl flex flex-col justify-center items-center">
+                    <div className="w-1/2 h-full backdrop-blur-sm bg-black/35 rounded-r-3xl flex flex-col justify-center items-center">
                         <i className="flex justify-center"><svg width="356" height="95" viewBox="0 0 356 95" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_197_110)">
                                 <path d="M32.3332 8.81238C18.5813 8.81238 8.65838 18.8361 8.65838 18.8361C8.65838 18.8361 -3.18896 30.2274 0.833152 44.9046C4.6936 58.9918 27.9969 85.7729 32.3332 85.7729C39.0929 85.7729 62.3634 52.4877 63.8894 45.1364C67.2756 28.8227 56.6959 19.1946 56.6959 19.1946C56.6959 19.1946 46.7498 8.81238 32.3332 8.81238ZM32.3774 14.7794C44.0983 14.7794 52.1847 23.2206 52.1847 23.2206C52.1847 23.2206 60.7862 31.0481 58.0331 44.3114C56.7925 50.2881 37.8732 77.3498 32.3774 77.3498C28.852 77.3498 9.9063 55.5763 6.76769 44.1231C3.49766 32.1904 13.1296 22.929 13.1296 22.929C13.1296 22.929 21.197 14.7794 32.3774 14.7794Z" fill="#FF5733" />
@@ -117,7 +117,7 @@ export default function Login() {
                     <div className="flex justify-center items-center w-1/2 p-20">
                         <TxtHome />
                     </div>
-                    <div className="w-1/2 h-full bg-black/35 rounded-l-3xl flex flex-col justify-center items-center">
+                    <div className="w-1/2 h-full backdrop-blur-sm bg-black/35 rounded-l-3xl flex flex-col justify-center items-center">
                         <i className="flex justify-center"><svg width="356" height="95" viewBox="0 0 356 95" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_197_110)">
                                 <path d="M32.3332 8.81238C18.5813 8.81238 8.65838 18.8361 8.65838 18.8361C8.65838 18.8361 -3.18896 30.2274 0.833152 44.9046C4.6936 58.9918 27.9969 85.7729 32.3332 85.7729C39.0929 85.7729 62.3634 52.4877 63.8894 45.1364C67.2756 28.8227 56.6959 19.1946 56.6959 19.1946C56.6959 19.1946 46.7498 8.81238 32.3332 8.81238ZM32.3774 14.7794C44.0983 14.7794 52.1847 23.2206 52.1847 23.2206C52.1847 23.2206 60.7862 31.0481 58.0331 44.3114C56.7925 50.2881 37.8732 77.3498 32.3774 77.3498C28.852 77.3498 9.9063 55.5763 6.76769 44.1231C3.49766 32.1904 13.1296 22.929 13.1296 22.929C13.1296 22.929 21.197 14.7794 32.3774 14.7794Z" fill="#FF5733" />

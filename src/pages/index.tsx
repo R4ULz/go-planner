@@ -16,18 +16,13 @@ export default function Home() {
           <BgImg/>
       </section>
       
-      <section className="flex w-full max-w-2xl">
+      <section className=" w-full flex justify-center">
         <Services/>
-        <hr className="bg-laranjinha h-[10px]" />
       </section>
 
-      <div className="flex justify-center items-center">
-        <hr className="bg-laranjinha h-[2px] w-3/4 " />
-      </div>
 
-      <section className="flex w-full max-w-2xl">
+      <section className="flex justify-center w-full">
         <Services/>                               {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
-        <hr className="bg-laranjinha h-[10px]" /> {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
       </section>
 
       <footer className="w-full">
