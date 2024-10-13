@@ -34,7 +34,10 @@ const config: Config = {
       },
       blur:{
         xs: '1px',
-      }
+      },
+      screens:{
+        'max-hd': {'max': '1366px'}
+      },
     },
   },
 };

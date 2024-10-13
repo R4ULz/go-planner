@@ -6,7 +6,7 @@ export default function Header(){
 
 
     return (
-        <div className="h-20 w-full flex px-20 justify-between items-center gap-10 bg-white">
+        <div className="h-20 w-full flex px-20 justify-between items-center gap-10 bg-white border-b-[1px] border-zinc-400">
             <div className="">
                 {IconeLogo}
             </div>
