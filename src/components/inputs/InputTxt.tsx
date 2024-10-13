@@ -4,7 +4,7 @@ interface InputTxtProps{
     valor: any
     obrigatorio?: boolean
     naoRenderizarQuando?: boolean
-    placeholder?: string
+    placeholder?: any
     tipo: 'text' | 'email' | 'password'
     valorMudou: (novoValor: any) => void
 }
