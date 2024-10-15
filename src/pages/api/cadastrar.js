@@ -1,4 +1,4 @@
-import { hashData, hashPassword } from '../../lib/bcrypt';
+import { hashPassword } from '../../lib/bcrypt';
 import connect from '../../lib/mongoose';
 import User from '../../models/User';
 
