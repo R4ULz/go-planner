@@ -1,3 +1,4 @@
+import Footer from "../components/Home/Footer/footer";
 import Header from "../components/Home/Header/Header";
 import DadosPessoais from "../components/perfil/DadosPessoais";
 import HistoricoViagens from "../components/perfil/HistoricoViagens";
@@ -24,11 +25,11 @@ export default function Perfil(){
     
 
     return(
-        <div className="flex h-screen w-screen bg-gray-100">
+        <div className="flex h-screen w-screen bg-gray-100 flex-col">
             <header className="fixed z-50 w-full flex justify-center">
                 <Header />
             </header>
-            <div className="flex w-full gap-10 mt-5">
+            <div className="flex w-full h-[1000px] gap-10 mt-5">
                 <div className="flex w-1/5 p-20 max-w-screen-2xl">
                     <MenuLateral setSelectedComponent={setSelectedComponent}/>
                 </div>
@@ -36,6 +37,9 @@ export default function Perfil(){
                     {renderComponent()}
                 </div>
             </div>
+            <footer className="w-full">
+              <Footer/>
+            </footer>
         </div>
     )
 }

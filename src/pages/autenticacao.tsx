@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { arrow } from "../components/icons/arrow";
 import { Email, IconeLogo } from "../components/icons";
+import Link from "next/link";
 
 export default function Login() {
     const router = useRouter()
@@ -59,6 +60,7 @@ export default function Login() {
                 ?
                 <div className="w-full h-full flex">
                     <div className="w-1/2 h-full bg-black/35 rounded-r-3xl flex flex-col justify-center items-center">
+                        <Link href="/">
                         <i className="flex justify-center"><svg width="356" height="95" viewBox="0 0 356 95" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_197_110)">
                                 <path d="M32.3332 8.81238C18.5813 8.81238 8.65838 18.8361 8.65838 18.8361C8.65838 18.8361 -3.18896 30.2274 0.833152 44.9046C4.6936 58.9918 27.9969 85.7729 32.3332 85.7729C39.0929 85.7729 62.3634 52.4877 63.8894 45.1364C67.2756 28.8227 56.6959 19.1946 56.6959 19.1946C56.6959 19.1946 46.7498 8.81238 32.3332 8.81238ZM32.3774 14.7794C44.0983 14.7794 52.1847 23.2206 52.1847 23.2206C52.1847 23.2206 60.7862 31.0481 58.0331 44.3114C56.7925 50.2881 37.8732 77.3498 32.3774 77.3498C28.852 77.3498 9.9063 55.5763 6.76769 44.1231C3.49766 32.1904 13.1296 22.929 13.1296 22.929C13.1296 22.929 21.197 14.7794 32.3774 14.7794Z" fill="#FF5733" />
@@ -75,20 +77,21 @@ export default function Login() {
                             </defs>
                         </svg>
                         </i>
+                        </Link>
                         <div className="w-1/2">
                             <InputTxt placeholder="Email:" valor={email} valorMudou={setEmail} tipo="text" obrigatorio />
                             <InputTxt placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
                             <p className="text-zinc-300 text-sm font-inter float-end">Esqueceu a senha?</p>
-                            <div className="mt-10">
+                            <div className="mt-10 space-y-3">
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Não tem login? Clique em <a onClick={() => setModo("cadastro")} className="text-laranja cursor-pointer"> Cadastrar</a></p>
                                 <button className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm">Fazer Login <i className="pi pi-arrow-right"></i></button>
                             </div>
-                            <div className="flex flex-row justify-between items-center gap-3">
+                            <div className="flex flex-row justify-between items-center gap-3 mt-3">
                                 <hr className="bg-zinc-300 h-[1px] w-full" />
                                 <p className="text-zinc-300">Ou</p>
                                 <hr className="bg-zinc-300 h-[1px] w-full" />
                             </div>
-                            <div>
+                            <div className="mt-3">
                                 <button className="w-full flex gap-2 items-center font-inter justify-center bg-white px-7  text-zinc-500 py-3 rounded-xl text-sm">
                                     <i><svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_197_99)">
@@ -118,6 +121,7 @@ export default function Login() {
                         <TxtHome />
                     </div>
                     <div className="w-1/2 h-full bg-black/35 rounded-l-3xl flex flex-col justify-center items-center">
+                    <Link href="/">
                         <i className="flex justify-center"><svg width="356" height="95" viewBox="0 0 356 95" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_197_110)">
                                 <path d="M32.3332 8.81238C18.5813 8.81238 8.65838 18.8361 8.65838 18.8361C8.65838 18.8361 -3.18896 30.2274 0.833152 44.9046C4.6936 58.9918 27.9969 85.7729 32.3332 85.7729C39.0929 85.7729 62.3634 52.4877 63.8894 45.1364C67.2756 28.8227 56.6959 19.1946 56.6959 19.1946C56.6959 19.1946 46.7498 8.81238 32.3332 8.81238ZM32.3774 14.7794C44.0983 14.7794 52.1847 23.2206 52.1847 23.2206C52.1847 23.2206 60.7862 31.0481 58.0331 44.3114C56.7925 50.2881 37.8732 77.3498 32.3774 77.3498C28.852 77.3498 9.9063 55.5763 6.76769 44.1231C3.49766 32.1904 13.1296 22.929 13.1296 22.929C13.1296 22.929 21.197 14.7794 32.3774 14.7794Z" fill="#FF5733" />
@@ -134,6 +138,7 @@ export default function Login() {
                             </defs>
                         </svg>
                         </i>
+                        </Link>
                         <p className="flex text-lg text-zinc-300 font-bold">Cadastro</p>
                         <div className="w-1/2">
                             <InputTxt label="" placeholder="Nome" valor={nome} valorMudou={setNome} tipo="text" obrigatorio />
@@ -144,13 +149,13 @@ export default function Login() {
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Já possui uma conta? Clique em<a onClick={() => setModo("login")} className="text-laranja cursor-pointer">Login</a></p>
                                 <button className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm" onClick={handleSubmit}>Cadastrar <i className="pi pi-arrow-right"></i></button>
                             </div>
-                            <div className="flex flex-row justify-between items-center gap-3">
+                            <div className="flex flex-row justify-between items-center gap-3 mt-3">
                                 <hr className="bg-zinc-300 h-[1px] w-full" />
                                 <p className="text-zinc-300">Ou</p>
                                 <hr className="bg-zinc-300 h-[1px] w-full" />
                             </div>
                             <div>
-                                <button className="w-full flex gap-2 items-center font-inter justify-center bg-white px-7  text-zinc-500 py-3 rounded-xl text-sm">
+                                <button className="w-full flex gap-2 items-center font-inter justify-center mt-3 bg-white px-7  text-zinc-500 py-3 rounded-xl text-sm">
                                     <i><svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_197_99)">
                                         <path d="M25.9492 13.5135C25.9492 12.4266 25.861 11.6334 25.6702 10.8109H13.2583V15.7168H20.5438C20.397 16.936 19.6038 18.7721 17.8411 20.0058L17.8164 20.1701L21.7408 23.2103L22.0127 23.2374C24.5097 20.9313 25.9492 17.5382 25.9492 13.5135Z" fill="#4285F4" />
