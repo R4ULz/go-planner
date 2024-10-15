@@ -21,6 +21,7 @@ export default function Home() {
         <Services/>
       </section>
 
+        <hr className="bg-laranjinha h-[2px] w-3/4 " />
 
       <section className="flex justify-center w-full">
         <TripsSection/>                               {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}

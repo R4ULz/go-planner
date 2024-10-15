@@ -1,59 +1,59 @@
-import Image from "next/image"
+import Brasil from "@/public/imgs/country-Brazil.png";
+import EUA from "@/public/imgs/country-EUA-edit.png";
+import Italia from "@/public/imgs/country-Italia.png";
+import Espanha from "@/public/imgs/country-Espanha.png";
+import Paris from "@/public/imgs/country-França.png";
+import Tokyo from "@/public/imgs/country-Tokyo-edit.png";
+import Image from "next/image"; 
 
 export default function TripsSection() {
-    const trips = [
-        {
-            image: '/imgs/country-Brazil.png',
-            title: 'Rio de Janeiro, Brasil',
-            style: 'col-span-1 row-span-2'
-          },
-          {
-            image: '/imgs/country-Italia.png',
-            title: 'Ponte de Algum Lugar',
-            style: 'col-span-1'
-          },
-          {
-            image: '/imgs/country-EUA.png',
-            title: 'Estados Unidos, Disney',
-            style: 'col-span-1'
-          },
-          {
-            image: '/imgs/country-Espanha.png',
-            title: 'Praia Paradisíaca',
-            style: 'col-span-1 row-span-2'
-          },
-          {
-            image: '/imgs/country-Tokyo.png',
-            title: 'Cidade Luzes Noturnas',
-            style: 'col-span-1'
-          },
-          {
-            image: '/imgs/country-França.png',
-            description: 'Uma curiosidade interessante sobre Paris é que a cidade tem uma Estátua da Liberdade...',
-            title: 'Paris, França',
-            style: 'col-span-1'
-          }
-    ]
-
     return (
-      <div className="max-w-screen-xl w-full justify-center flex flex-col">
-          <div className="flex flex-row">
-                <h1 className="font-rubik font-bold text-black text-4xl md:text-3xl ">Viagens populares</h1><span className="flex flex-row bg-roxo size-2 rounded-full p-1 relative top-6 mx-1"></span>
-          </div>
+      <div className="flex flex-col w-full max-w-screen-xl pt-10">
+           <div className="">
+                <div className="flex">
+                     <h1 className="font-rubik font-bold text-black text-4xl md:text-3xl ">Viajens populares</h1><span className="flex flex-row bg-rosinha w-2 h-2 rounded-full p-1 relative top-6 mx-1"></span>
+                </div>
+            </div>
 
-          <div id="container" className="w-full">
-            <div id="coluna01" className="w-4/12 h-96">
-            
-              <div className="w-full h-8/12 bg-zinc-500">
-                  a
+            <div className="flex">
+
+              <div className="flex flex-col gap-10 m-10">
+                <div className="flex flex-col gap-10">
+                  <div>
+                    <Image src={Brasil} alt="Imagem referente ao Brasil" width={200} height={200}/>                
+                  </div>
+
+                  <div>
+                    <Image src={EUA} alt="Imagem referente aos Estados Unidos" width={200} height={200}/>
+                  </div>
+                </div>
               </div>
+
+              <div className="flex flex-col m-10">
+                <div className="flex flex-col gap-20">
+                  <div>
+                    <Image src={Italia} alt="Imagem referente a Itália" width={300} height={200}/>                
+                  </div>
+
+                  <div>
+                    <Image src={Espanha} alt="Imagem referente a Espanha" width={300} height={200}/>
+                  </div>
+
+                  <div className="flex">
+                  <Image src={Tokyo} alt="Imagem referente a Tokyo" width={200}/>
+                </div>
+
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-10 m-10">
+                <div className="flex">
+                  <Image src={Paris} alt="Imagem referente a Paris" width={600} height={398}/>
+                </div>
+              </div>
+
             </div>
 
-
-            <div id="coluna02"  className="w-8/12">
-
-            </div>
-          </div>
       </div>
     );
 }
