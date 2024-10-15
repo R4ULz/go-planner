@@ -30,7 +30,7 @@ export default function Login() {
         }
     }
 
-    function SenhasIguais() {
+    function senhasNaoIguais() {
         if (senha !== confirmarSenha) {
             alert("Senha nao é igual")
             return;
@@ -40,7 +40,7 @@ export default function Login() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
-        SenhasIguais();
+        senhasNaoIguais();
         const userData = { nome, email, senha };
         const res = await fetch('/api/cadastrar', {
             method: 'POST',
@@ -59,6 +59,7 @@ export default function Login() {
             {modo === "login"
                 ?
                 <div className="w-full h-full flex">
+
                     <div className="w-1/2 h-full bg-black/35 rounded-r-3xl flex flex-col justify-center items-center">
                         <Link href="/">
                         <i className="flex justify-center"><svg width="356" height="95" viewBox="0 0 356 95" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -3,6 +3,7 @@ import Services from "../components/Home/Section2/SectionServices";
 import Header from "../components/Home/Header/Header";
 import BgImg from "@/src/components/icons/BgImgs";
 import Footer from "../components/Home/Footer/footer";
+import TripsSection from "../components/Home/Section3/TripsSection";
 
 export default function Home() {
   return (
@@ -13,21 +14,17 @@ export default function Home() {
       </header>
 
       <section className="z-0 h-full w-full mt-20  ">
-          <BgImg/>
+        <BgImg/>
       </section>
       
-      <section className="flex w-full max-w-2xl">
+      <section className=" w-full flex justify-center">
         <Services/>
-        <hr className="bg-laranjinha h-[10px]" />
       </section>
 
-      <div className="flex justify-center items-center">
         <hr className="bg-laranjinha h-[2px] w-3/4 " />
-      </div>
 
-      <section className="flex w-full max-w-2xl">
-        <Services/>                               {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
-        <hr className="bg-laranjinha h-[10px]" /> {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
+      <section className="flex justify-center w-full">
+        <TripsSection/>                               {/*Dupliquei a section2 aqui na terceira apenas para testar.*/}
       </section>
 
       <footer className="w-full">
