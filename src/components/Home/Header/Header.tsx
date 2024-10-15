@@ -7,8 +7,8 @@ export default function Header(){
 
     return (
         <div className="h-20 w-full flex px-20 justify-between items-center gap-10 bg-white border-b-[1px] border-zinc-400">
-            <div className="">
-                {IconeLogo}
+            <div>
+                <Link href="/">{IconeLogo}</Link>
             </div>
             <nav className="hidden sm:flex space-x-8 font-inter">
                 <Link href="/sobre" className="text-gray-500 hover:text-gray-900"> Sobre</Link>
