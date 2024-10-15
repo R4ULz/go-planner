@@ -8,11 +8,11 @@ export default async function getUserByEmail(req, res) {
 
   await connect();
 
-  const { email } = req.body;
+  const { id } = req.body;
 
   try {
     // Busca o usuário pelo email no MongoDB
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ id });
 
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
@@ -21,6 +21,7 @@ export default async function getUserByEmail(req, res) {
     // Se o usuário for encontrado, retorna os dados
     return res.status(200).json({
       user: {
+        id: user.id,
         nome: user.nome,
         email: user.email,
       },

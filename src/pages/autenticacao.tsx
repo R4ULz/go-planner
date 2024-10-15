@@ -46,13 +46,14 @@ export default function Login() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, senha }),
+            body: JSON.stringify
+            ({ 
+                email, 
+                senha }),
           });
       
           const data = await res.json();
-      
-          console.log('Resposta da API:', data); // Verifique o que está sendo retornado
-      
+
           if (res.ok) {
             // Se a resposta for OK, faça o login e redirecione
             login(data.user);
@@ -80,7 +81,6 @@ export default function Login() {
             },
             body: JSON.stringify(userData),
         });
-        const result = await res.json();
         // Trate a resposta aqui
     };
 

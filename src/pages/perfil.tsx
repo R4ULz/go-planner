@@ -36,7 +36,8 @@ export default function Perfil() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email,
+          id: user.id,
+          novoEmail: email,
           nome: nome,
           senha: senha || undefined,
         }),
