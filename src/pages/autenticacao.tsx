@@ -15,7 +15,6 @@ export default function Login() {
     const [senha, setSenha] = useState("")
     const [nome, setNome] = useState("")
     const [confirmarSenha, setConfirmarSenha] = useState("")
-    const [erro, setErro] = useState(null);
     const [modo, setModo] = useState<"login" | "cadastro">("login");
 
     useEffect(() => {
@@ -24,13 +23,6 @@ export default function Login() {
         }
     }, [router.query.modo]);
 
-    function submeter() {
-        if (modo === "login") {
-            console.log("login")
-        } else {
-            console.log("cadastro")
-        }
-    }
 
     function senhasNaoIguais() {
         if (senha !== confirmarSenha) {
@@ -91,7 +83,7 @@ export default function Login() {
                 ?
                 <div className="w-full h-full flex">
 
-                    <div className="w-1/2 h-full bg-black/35 rounded-r-3xl flex flex-col justify-center items-center">
+                    <div className="w-1/2 h-full bg-black/35 backdrop-blur-sm rounded-r-3xl flex flex-col justify-center items-center">
                         <Link href="/">
                         <i className="flex justify-center"><svg width="356" height="95" viewBox="0 0 356 95" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_197_110)">
@@ -152,7 +144,7 @@ export default function Login() {
                     <div className="flex justify-center items-center w-1/2 p-20">
                         <TxtHome />
                     </div>
-                    <div className="w-1/2 h-full bg-black/35 rounded-l-3xl flex flex-col justify-center items-center">
+                    <div className="w-1/2 h-full bg-black/35 backdrop-blur-sm rounded-l-3xl flex flex-col justify-center items-center">
                     <Link href="/">
                         <i className="flex justify-center"><svg width="356" height="95" viewBox="0 0 356 95" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_197_110)">
