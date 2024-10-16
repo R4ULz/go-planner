@@ -1,5 +1,6 @@
 
 import React, {useState} from "react";
+
 import ServiceCard1 from "./ServiceCard1"
 import {iconeCalendario} from "../../icons/Schedule"
 
@@ -58,11 +59,15 @@ export default function Services(){
                         ) : (
                             <p>oi</p>
                         )}
+                        />
+                    </div>
+                </div>
                     </div>
                 
                     <div className="ml-72 mt-10 flex justify-center">
                         <button className="bg-gradient-to-r from-RosinhaEscurinho to-laranjinha text-white border w-[15em] h-[3em] rounded-xl flex flex-row text-xl items-center text-center justify-center ">
                             {iconeCalendario} Planejar agora
+
                         </button>
                     </div>
                 </div>

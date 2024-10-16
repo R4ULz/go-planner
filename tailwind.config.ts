@@ -5,7 +5,9 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}"
   ],
+  plugins: [],
   theme: {
     extend: {
       boxShadow:{
@@ -23,13 +25,20 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         rosinha: "#C70039",
+
         roxo: "#511845",
         laranja: "#FF5733",
         laranjinha: "#ff5833",
         RosinhaEscurinho: "#c70038",
+  
+      },
+      blur:{
+        xs: '1px',
+      },
+      screens:{
+        'max-hd': {'max': '1366px'}
       },
     },
   },
-  plugins: [],
 };
 export default config;
