@@ -6,6 +6,7 @@ import LoginESenha from "../components/perfil/LoginESenha";
 import MenuLateral from "../components/perfil/MenuLateral";
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
+import { useRouter } from "next/router";
 
 type ComponentType = "DadosPessoais" | "HistoricoViagens" | "LoginSenha";
 
@@ -16,6 +17,20 @@ export default function Perfil() {
   const [email, setEmail] = useState(user?.email || "");
   const [senha, setSenha] = useState("");
   const [confirmSenha, setConfirmSenha] = useState("");
+  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+      setShowModal(true);
+  },[user, router])
+
+  const handleRedirect = () => {
+    setShowModal(false);
+    router.push({
+        pathname: '/autenticacao',
+        query: { modo: 'login' } // Redireciona ao login
+    });
+};
 
   useEffect(() => {
     if (user) {
@@ -86,7 +101,10 @@ export default function Perfil() {
 
 
   return (
-    <div className="flex h-screen w-screen bg-gray-100 flex-col">
+    <div>
+      {user
+        ?
+        <div className="flex h-screen w-screen bg-gray-100 flex-col">
       <header className="fixed z-50 w-full flex justify-center">
         <Header />
       </header>
@@ -94,13 +112,30 @@ export default function Perfil() {
         <div className="flex w-1/5 p-20 max-w-screen-2xl">
           <MenuLateral setSelectedComponent={setSelectedComponent} handleSave={handleUpdate} />
         </div>
-        <div className="w-4/5 p-20 max-w-screen-2xl">
+        <div className="w-4/5 h-[750px] p-20 max-w-screen-2xl">
           {renderComponent()}
         </div>
       </div>
       <footer className="w-full">
         <Footer />
       </footer>
+    </div>
+    :
+    showModal && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm">
+          <div className="bg-white p-8 rounded-lg shadow-lg p-24">
+              <h2 className="text-xl font-bold mb-4">Acesso não permitido</h2>
+              <p className="mb-4 text-lg">Você precisa estar logado para acessar o perfil.</p>
+              <button
+                  onClick={handleRedirect}
+                  className="bg-gradient-to-r to-rosinha from-laranja text-white px-4 py-2 rounded-lg"
+              >
+                  Fazer login
+              </button>
+          </div>
+      </div>
+  )
+      }
     </div>
   );
 }
