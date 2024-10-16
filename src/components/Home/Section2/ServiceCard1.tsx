@@ -1,4 +1,5 @@
-export default function ServiceCard1({title, description}){
+
+export default function ServiceCard1({title, description, onClick}){
     return(
     <div className="flex flex-row group hover:border-solid hover:border-black hover:rounded-xl hover:shadow-border-shadow hover:cursor-pointer"> 
         <div className="flex flex-row p-3">
@@ -7,7 +8,7 @@ export default function ServiceCard1({title, description}){
             </div>
         </div>
 
-        <div className="mt-2">
+        <div className="mt-2" onClick={onClick}>
             <strong>
                 {title}
             </strong>

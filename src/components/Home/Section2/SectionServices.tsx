@@ -1,8 +1,16 @@
 
+import React, {useState} from "react";
+
 import ServiceCard1 from "./ServiceCard1"
 import {iconeCalendario} from "../../icons/Schedule"
 
 export default function Services(){
+    const [selectedContent, setSelectedContent] = useState(null);
+
+    const handleCardClick = (title, description) =>{
+        setSelectedContent({title, description});
+    };
+
     return(
     <div className="flex flex-col w-full max-w-screen-xl pt-10">
            <div className="h-[100px] w-[500px]">
@@ -20,29 +28,46 @@ export default function Services(){
                             description="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Quaerat sit earum magnam cum ipsam voluptate distinctio
                             asperiores odio delectus voluptatum."
+                            onClick={() => handleCardClick("Organize suas tarefas", "Atvidades")} 
                         />
                         <ServiceCard1
                             title="Convide seus amigos"
                             description="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Quaerat sit earum magnam cum ipsam voluptate distinctio
                             asperiores odio delectus voluptatum."
+                            onClick={() => handleCardClick("Convide seus amigos", "Amigos")} 
+
                         />
                         <ServiceCard1
                             title="Convide seus amigos"
                             description="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Quaerat sit earum magnam cum ipsam voluptate distinctio
                             asperiores odio delectus voluptatum."
+                            onClick={() => handleCardClick("Acompanhe seu progresso", "Dados")} 
+
                         />
                     </div>
                 </div>
+
                 <div className="flex flex-col items-end justify-center w-3/5">
                     <div className="flex justify-center bg-gray-300 rounded-lg w-[40rem] h-[30rem]">
-                        <p>oi</p>
+                        {selectedContent ?(
+                            <div>
+                                <h2 className="text-2xl font-bold">{setSelectedContent.title}</h2>
+                                <p className="text=lg">{selectedContent.description}</p>
+                            </div>
+                        ) : (
+                            <p>oi</p>
+                        )}
+                        />
+                    </div>
+                </div>
                     </div>
                 
                     <div className="ml-72 mt-10 flex justify-center">
                         <button className="bg-gradient-to-r from-RosinhaEscurinho to-laranjinha text-white border w-[15em] h-[3em] rounded-xl flex flex-row text-xl items-center text-center justify-center ">
-                            {iconeCalendario} Planejar agora {/*Não sei pq mas o gradient n ta funcionando */}
+                            {iconeCalendario} Planejar agora
+
                         </button>
                     </div>
                 </div>
