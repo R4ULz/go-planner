@@ -6,9 +6,11 @@ import { useRouter } from "next/router";
 import { arrow } from "../components/icons/arrow";
 import { Email, IconeLogo } from "../components/icons";
 import Link from "next/link";
+import { useUser } from '../contexts/UserContext';
 
 export default function Login() {
     const router = useRouter()
+    const { login } = useUser(); // Obtém a função login do contexto
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [nome, setNome] = useState("")
@@ -37,6 +39,36 @@ export default function Login() {
         }
     }
 
+    const handleLogin = async () => {
+        try {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify
+            ({ 
+                email, 
+                senha }),
+          });
+      
+          const data = await res.json();
+
+          if (res.ok) {
+            // Se a resposta for OK, faça o login e redirecione
+            login(data.user);
+            router.push('/perfil');
+          } else {
+            alert('Não deu certo: ' + data.message); // Mostra a mensagem de erro do servidor
+            console.log('Erro no login:', data.message);
+          }
+        } catch (error) {
+          console.log('Erro ao se conectar ao servidor', error);
+        }
+      };
+      
+
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
@@ -49,7 +81,6 @@ export default function Login() {
             },
             body: JSON.stringify(userData),
         });
-        const result = await res.json();
         // Trate a resposta aqui
     };
 
@@ -85,7 +116,7 @@ export default function Login() {
                             <p className="text-zinc-300 text-sm font-inter float-end">Esqueceu a senha?</p>
                             <div className="mt-10 space-y-3">
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Não tem login? Clique em <a onClick={() => setModo("cadastro")} className="text-laranja cursor-pointer"> Cadastrar</a></p>
-                                <button className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm">Fazer Login <i className="pi pi-arrow-right"></i></button>
+                                <button onClick={handleLogin} className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm">Fazer Login <i className="pi pi-arrow-right"></i></button>
                             </div>
                             <div className="flex flex-row justify-between items-center gap-3 mt-3">
                                 <hr className="bg-zinc-300 h-[1px] w-full" />
