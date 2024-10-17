@@ -1,14 +1,17 @@
-
+import Image from "next/image";
 import React, { useState } from "react";
 
 import ServiceCard1 from "./ServiceCard1"
 import { iconeCalendario } from "../../icons/Schedule"
+import EX1 from "../../../../public/imgs/EXEMPLO1.png"
+import EX2 from "../../../../public/imgs/Atividades.png"
+import EX3 from "../../../../public/imgs/Convidar amigos.png"
 
 export default function Services() {
     const [selectedContent, setSelectedContent] = useState(null);
 
-    const handleCardClick = (title, description) => {
-        setSelectedContent({ title, description });
+    const handleCardClick = (imagePath) => {
+        setSelectedContent({ imagePath });
     };
 
     
@@ -24,47 +27,38 @@ export default function Services() {
             <div className="w-full flex justify-between items-start">
                 <div className="flex flex-col w-2/5">
 
-                    <div className="p-4 gap-10 flex flex-col text-lg">
+                    <div className="p-7 gap-10 flex flex-col items-center">
                         <ServiceCard1
-                            title="Convide seus amigos"
-                            description="Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Quaerat sit earum magnam cum ipsam voluptate distinctio
-                            asperiores odio delectus voluptatum."
-                            onClick={() => handleCardClick("Organize suas tarefas", "Atvidades")}
+                            title="Crie sua viajem"
+                            description="Transforme seu sonho em realidade! No Go.planner, você pode criar sua viagem dos sonhos, escolhendo as datas, o local perfeito e até adicionando uma imagem inspiradora para ilustrar. Tudo do jeito que você imaginou! "
+                            onClick={() => handleCardClick(EX1)}
                         />
                         <ServiceCard1
-                            title="Convide seus amigos"
-                            description="Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Quaerat sit earum magnam cum ipsam voluptate distinctio
-                            asperiores odio delectus voluptatum."
-                            onClick={() => handleCardClick("Convide seus amigos", "Amigos")}
+                            title="Adicione atividades"
+                            description="Não perca nenhum momento especial! Adicione as atividades da sua viagem, definindo o que vai fazer em cada dia e horário. Deixe tudo registrado para que sua aventura seja inesquecível e organizada. Com o Go.planner, cada etapa do seu roteiro fácil!"
+                            onClick={() => handleCardClick(EX2)}
 
                         />
                         <ServiceCard1
                             title="Convide seus amigos"
-                            description="Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Quaerat sit earum magnam cum ipsam voluptate distinctio
-                            asperiores odio delectus voluptatum."
-                            onClick={() => handleCardClick("Acompanhe seu progresso", "Dados")}
+                            description="Viajar é ainda mais divertido com amigos! Com o Go.planner, você pode convidar seus amigos por e-mail para visualizarem ou colaborarem no planejamento. Todos juntos, criando memórias que vão durar para sempre! "
+                            onClick={() => handleCardClick(EX3)}
 
                         />
                     </div>
                 </div>
 
                 <div className="flex flex-col items-end justify-center w-3/5">
-                    <div className="flex justify-center bg-gray-300 rounded-lg w-[40rem] h-[30rem]">
-                        {selectedContent ? (
-                            <div>
-                                <h2 className="text-2xl font-bold">{setSelectedContent.title}</h2>
-                                <p className="text=lg">{selectedContent.description}</p>
-                            </div>
+                    <div className="flex justify-center rounded-lg">
+                            {selectedContent ? (
+                                <Image src= {selectedContent.imagePath} className="rounded-xl py-10" alt="Selected Content"/>
                         ) : (
-                            <p>oi</p>
+                            <Image src= {EX1} className="rounded-xl" alt="Selected Content"/>
                         )}
                     </div>
                 </div>
             </div>
-            <div className="ml-72 flex justify-center mb-10">
+            <div className="ml-32 flex justify-center mb-20 -mt-28">
                 <button className="bg-gradient-to-r from-RosinhaEscurinho to-laranjinha text-white border w-[15em] h-[3em] rounded-xl flex flex-row text-xl items-center text-center justify-center ">
                     {iconeCalendario} Planejar agora
                 </button>
