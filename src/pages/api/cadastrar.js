@@ -1,8 +1,10 @@
+
 import { hashPassword } from '../../lib/bcrypt';
 import connect from '../../lib/mongoose';
 import User from '../../models/User';
 
 export default async function handler(req, res) {
+
   await connect();
   if (req.method === 'POST') {
     const { nome, email, senha } = req.body;
