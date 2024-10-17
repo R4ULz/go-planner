@@ -17,18 +17,33 @@ export default function TripsSection() {
             </div>
 
             <div className="grid grid-cols-4 grid-rows-3 gap-4 p-6">
-              <div className="relative w-full h-60">
-                  <Image
-                      src={Brasil}
-                      alt="Imagem referente ao Brasil"
-                      layout="fill"
-                      objectFit="cover"
-                      objectPosition="center bottom" 
-                      className="rounded-lg"
-                  />
-              </div>
+                {/* Brasil */}
+                <div className="relative w-full h-60 group">
+                    <Image
+                        src={Brasil}
+                        alt="Imagem referente ao Brasil"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center bottom"
+                        className="rounded-lg"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                        <div className="text-white p-8 space-y-2">
+                        <div className="flex gap-3 items-center">
+                                <h3 className="text-lg font-bold">Rio de Janeiro</h3>
+                                <div className="flex gap-1">
+                                    <div className="size-3 rounded-full bg-green-600"></div>
+                                    <div className="size-3 rounded-full bg-yellow-600"></div>
+                                    <div className="size-3 rounded-full bg-blue-600"></div>
+                                </div>
+                            </div>
+                            <p>O Brasil é o lar da maior floresta tropical do mundo, a Amazônia, que abrange 40% da América do Sul e abriga uma incrível biodiversidade.</p>
+                        </div>
+                    </div>
+                </div>
 
-                <div className="relative col-span-2 row-span-1 ">
+                {/* Espanha */}
+                <div className="relative col-span-2 row-span-1 group">
                     <Image
                         src={Espanha}
                         alt="Imagem referente a Espanha"
@@ -36,8 +51,22 @@ export default function TripsSection() {
                         objectFit="cover"
                         className="rounded-lg"
                     />
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                        <div className="text-white p-8 space-y-2">
+                            <div className="flex gap-3 items-center">
+                                <h3 className="text-lg font-bold">Madrid</h3>
+                                <div className="flex gap-1">
+                                    <div className="size-3 rounded-full bg-red-600"></div>
+                                    <div className="size-3 rounded-full bg-yellow-600"></div>
+                                    <div className="size-3 rounded-full bg-red-600"></div>
+                                </div>
+                            </div>
+                            <p>Madri é uma das cidades mais ensolaradas da Europa, com cerca de 2.769 horas de sol por ano!</p>
+                        </div>
+                    </div>
                 </div>
 
+                {/* Paris */}
                 <div className="relative col-span-1 row-span-2 min-h-[150px] group">
                     <Image
                         src={Paris}
@@ -46,19 +75,23 @@ export default function TripsSection() {
                         objectFit="cover"
                         className="rounded-lg"
                     />
-                        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-                          <div className="text-white text-center p-8">
-                              <h3 className="text-lg font-bold">Paris</h3>
-                              <p>Uma curiosidade interessante sobre Paris é que a cidade tem uma Estátua da Liberdade! 
-                                Localizada na Île aux Cygnes, no rio Sena, essa réplica menor foi um presente dos americanos para a 
-                                França em 1889, comemorando o centenário da Revolução Francesa. 
-                                Ela fica voltada para o oeste, em direção à sua “irmã” maior em Nova York, simbolizando a 
-                                amizade entre as duas nações.</p>
-                          </div>
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                        <div className="text-white p-8 space-y-2">
+                            <div className="flex gap-3 items-center">
+                                <h3 className="text-lg font-bold">Paris</h3>
+                                <div className="flex gap-1">
+                                    <div className="size-3 rounded-full bg-blue-600"></div>
+                                    <div className="size-3 rounded-full bg-white"></div>
+                                    <div className="size-3 rounded-full bg-red-600"></div>
+                                </div>
+                            </div>
+                            <p>Paris possui uma Estátua da Liberdade no rio Sena, presente dos EUA em 1889, em comemoração ao centenário da Revolução Francesa.</p>
                         </div>
-                </div> 
+                    </div>
+                </div>
 
-                <div className="relative col-span-1 row-span-2 w-full">
+                {/* EUA */}
+                <div className="relative col-span-1 row-span-2 w-full group">
                     <Image
                         src={EUA}
                         alt="Imagem referente aos Estados Unidos"
@@ -66,9 +99,23 @@ export default function TripsSection() {
                         objectFit="cover"
                         className="rounded-lg"
                     />
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                        <div className="text-white p-8 space-y-2">
+                        <div className="flex gap-2 items-center">
+                            <h3 className="text-lg font-bold">Dysney</h3>
+                                    <div className="flex gap-1">
+                                        <div className="size-3 rounded-full bg-red-600"></div>
+                                        <div className="size-3 rounded-full bg-white"></div>
+                                        <div className="size-3 rounded-full bg-blue-600"></div>
+                                    </div>
+                        </div>
+                            <p>O Magic Kingdom, em Orlando, é o parque temático mais visitado do mundo, atraindo milhões de visitantes todos os anos.</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="relative col-span-2 row-span-1 w-full">
+                {/* Itália */}
+                <div className="relative col-span-2 row-span-1 w-full group">
                     <Image
                         src={Italia}
                         alt="Imagem referente a Itália"
@@ -76,9 +123,23 @@ export default function TripsSection() {
                         objectFit="cover"
                         className="rounded-lg"
                     />
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                        <div className="text-white p-8 space-y-2">
+                            <div className="flex gap-2 items-center">
+                                <h3 className="text-lg font-bold">Itália</h3>
+                                    <div className="flex gap-1">
+                                        <div className="size-3 rounded-full bg-green-600"></div>
+                                        <div className="size-3 rounded-full bg-white"></div>
+                                        <div className="size-3 rounded-full bg-red-600"></div>
+                                    </div>
+                            </div>
+                            <p>Veneza é composta por mais de 100 pequenas ilhas e tem cerca de 400 pontes!</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="relative w-full col-span-3 row-span-1">
+                {/* Tokyo */}
+                <div className="relative w-full col-span-3 row-span-1 group">
                     <Image
                         src={Tokyo}
                         alt="Imagem referente a Tokyo"
@@ -86,6 +147,19 @@ export default function TripsSection() {
                         objectFit="cover"
                         className="rounded-lg"
                     />
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                        <div className="text-white p-8 space-y-2">
+                        <div className="flex gap-2 items-center">
+                            <h3 className="text-lg font-bold">Tóquio</h3>
+                                    <div className="flex gap-1">
+                                        <div className="size-3 rounded-full bg-white"></div>
+                                        <div className="size-3 rounded-full bg-red-600"></div>
+                                        <div className="size-3 rounded-full bg-white"></div>
+                                    </div>
+                        </div>
+                            <p>Tóquio tem o cruzamento mais movimentado do mundo, em Shibuya, onde milhares de pessoas atravessam ao mesmo tempo!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
