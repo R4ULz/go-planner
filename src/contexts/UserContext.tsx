@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Definição do tipo User
 interface User {
@@ -33,11 +33,20 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
   const login = (userData: User) => {
     setUser(userData); // Armazena as informações do usuário
+    sessionStorage.setItem('user', JSON.stringify(userData))
   };
 
   const logout = () => {
     setUser(null); // Remove as informações do usuário ao deslogar
+    sessionStorage.removeItem('user')
   };
+
+  useEffect(() =>{
+    const storedUser = sessionStorage.getItem('user');
+    if(storedUser){
+      setUser(JSON.parse(storedUser));
+    }
+  }, [])
 
   return (
     <UserContext.Provider value={{ user, login, logout }}>

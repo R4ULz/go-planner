@@ -11,6 +11,8 @@ export default function Services() {
         setSelectedContent({ title, description });
     };
 
+    
+
     return (
         <div className="flex flex-col w-full max-w-screen-xl pt-10">
             <div className="h-[100px] w-[500px]">
@@ -22,7 +24,7 @@ export default function Services() {
             <div className="w-full flex justify-between items-start">
                 <div className="flex flex-col w-2/5">
 
-                    <div className="h-[664px] gap-10 flex flex-col text-lg">
+                    <div className="p-4 gap-10 flex flex-col text-lg">
                         <ServiceCard1
                             title="Convide seus amigos"
                             description="Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -62,10 +64,9 @@ export default function Services() {
                     </div>
                 </div>
             </div>
-            <div className="ml-72 flex justify-center">
+            <div className="ml-72 flex justify-center mb-10">
                 <button className="bg-gradient-to-r from-RosinhaEscurinho to-laranjinha text-white border w-[15em] h-[3em] rounded-xl flex flex-row text-xl items-center text-center justify-center ">
                     {iconeCalendario} Planejar agora
-
                 </button>
             </div>
         </div>

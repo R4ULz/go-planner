@@ -105,7 +105,7 @@ export default function Login() {
                         <div className="w-1/2">
                             <InputTxt placeholder="Email:" valor={email} valorMudou={setEmail} tipo="text" obrigatorio />
                             <InputTxt placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
-                            <p className="text-zinc-300 text-sm font-inter float-end">Esqueceu a senha?</p>
+                            <Link className="text-zinc-300 text-sm font-inter float-end" href={'/recuperarSenha'}>Esqueceu a senha?</Link>
                             <div className="mt-10 space-y-3">
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Não tem login? Clique em <a onClick={() => setModo("cadastro")} className="text-laranja cursor-pointer"> Cadastrar</a></p>
                                 <button onClick={handleLogin} className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm">Fazer Login <i className="pi pi-arrow-right"></i></button>
