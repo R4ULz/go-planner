@@ -136,3 +136,19 @@ export const LogoAutent = (
                             </defs>
                         </svg>
 )
+
+export const canetinha = (
+    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_268_141)">
+<path d="M5.54175 5.54163H4.75008C4.33016 5.54163 3.92743 5.70844 3.6305 6.00537C3.33356 6.30231 3.16675 6.70503 3.16675 7.12496V14.25C3.16675 14.6699 3.33356 15.0726 3.6305 15.3695C3.92743 15.6665 4.33016 15.8333 4.75008 15.8333H11.8751C12.295 15.8333 12.6977 15.6665 12.9947 15.3695C13.2916 15.0726 13.4584 14.6699 13.4584 14.25V13.4583" stroke="#A1A1AA" stroke-width="1.58333" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M16.1381 5.21309C16.4499 4.90129 16.6251 4.47841 16.6251 4.03746C16.6251 3.59652 16.4499 3.17363 16.1381 2.86184C15.8263 2.55004 15.4034 2.37488 14.9625 2.37488C14.5216 2.37488 14.0987 2.55004 13.7869 2.86184L7.125 9.49996V11.875H9.5L16.1381 5.21309Z" stroke="#A1A1AA" stroke-width="1.58333" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.6667 3.95837L15.0417 6.33337" stroke="#A1A1AA" stroke-width="1.58333" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_268_141">
+<rect width="19" height="19" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+
+)
