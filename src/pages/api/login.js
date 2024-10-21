@@ -26,8 +26,8 @@ export default async function handler(req, res) {
     const isMatch = await bcrypt.compare(senha, user.senha);
 
     if (!isMatch) {
-      console.log('Senha incorreta');
-      return res.status(401).json({ message: 'Senha incorreta' });
+      console.log('Usuario ou senha incorretos');
+      return res.status(401).json({ message: 'Usuario ou senha incorretos' });
     }
 
     // Se tudo está correto, retorna os dados do usuário

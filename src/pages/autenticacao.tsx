@@ -13,7 +13,9 @@ export default function Login() {
     const [senha, setSenha] = useState("")
     const [nome, setNome] = useState("")
     const [confirmarSenha, setConfirmarSenha] = useState("")
-    const [modo, setModo] = useState<"login" | "cadastro">("login");
+    const [modo, setModo] = useState<"login" | "cadastro">("cadastro");
+    const [message, setMessage] = useState("")
+    const [showMessage, setShowMessage] = useState(false)
 
     useEffect(() => {
         if (router.query.modo) {
@@ -24,9 +26,21 @@ export default function Login() {
 
     function senhasNaoIguais() {
         if (senha !== confirmarSenha) {
-            alert("Senha nao é igual")
-            return;
+            setMessage("As senhas não são iguais");
+            setShowMessage(true)
+            return true;
         }
+        return false;
+    }
+
+    function camposVazios(){
+        if(!nome || !email || !senha){
+            setMessage("Todos os campos são obrigatórios!")
+            setShowMessage(true)
+            return true;
+        }
+        setShowMessage(false)
+        return false
     }
 
     const handleLogin = async () => {
@@ -45,11 +59,11 @@ export default function Login() {
           const data = await res.json();
 
           if (res.ok) {
-            // Se a resposta for OK, faça o login e redirecione
             login(data.user);
             router.push('/perfil');
           } else {
-            alert('Não deu certo: ' + data.message); // Mostra a mensagem de erro do servidor
+            setMessage(data.message);
+            setShowMessage(true);
             console.log('Erro no login:', data.message);
           }
         } catch (error) {
@@ -59,10 +73,17 @@ export default function Login() {
       
 
 
-    const handleSubmit = async (e: any) => {
+      const handleSubmit = async (e: any) => {
         e.preventDefault();
+    
+        if (senhasNaoIguais()) {
+            return;
+        }
 
-        senhasNaoIguais();
+        if(camposVazios()){
+            return
+        }
+    
         try {
             const userData = { nome, email, senha };
             const res = await fetch('/api/cadastrar', {
@@ -76,11 +97,9 @@ export default function Login() {
             const data = await res.json();
     
             if (res.ok) {
-                // Se o cadastro for bem-sucedido, redireciona para a página de login
                 alert('Cadastro realizado com sucesso! Redirecionando para o login...');
                 router.push('/autenticacao?modo=login');
             } else {
-                // Se houver um erro, exibe a mensagem
                 alert('Erro ao cadastrar: ' + data.message);
             }
         } catch (error) {
@@ -88,6 +107,7 @@ export default function Login() {
             alert('Ocorreu um erro ao tentar cadastrar');
         }
     };
+    
 
 
     return (
@@ -103,6 +123,11 @@ export default function Login() {
                         </i>
                         </Link>
                         <div className="w-1/2">
+                        {showMessage && (
+                            <p className="text-red-800 p-3 mt-5 border flex justify-center rounded-lg bg-red-300 border-red-700">
+                                {message}
+                            </p>
+                        )}
                             <InputTxt placeholder="Email:" valor={email} valorMudou={setEmail} tipo="text" obrigatorio />
                             <InputTxt placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
                             <Link className="text-zinc-300 text-sm font-inter float-end" href={'/recuperarSenha'}>Esqueceu a senha?</Link>
@@ -150,7 +175,12 @@ export default function Login() {
                             {LogoAutent}
                         </i>
                         </Link>
-                        <p className="flex text-lg text-zinc-300 font-bold">Cadastro</p>
+                        <p className="flex text-lg text-zinc-300 font-bold p-3">Cadastro</p>
+                        {showMessage && (
+                            <p className="text-red-800 p-3 mt-5 border rounded-lg bg-red-300 border-red-700">
+                                {message}
+                            </p>
+                        )}
                         <div className="w-1/2">
                             <InputTxt label="" placeholder="Nome" valor={nome} valorMudou={setNome} tipo="text" obrigatorio />
                             <InputTxt label="" placeholder="Email:" valor={email} valorMudou={setEmail} tipo="email" obrigatorio />
