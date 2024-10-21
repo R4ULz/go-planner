@@ -1,5 +1,4 @@
 import MenuItemV from "./MenuItemV";
-import { useRouter } from "next/router";
 
 export default function MenuLateralV({ setSelectedComponent}) {
 
@@ -9,15 +8,15 @@ export default function MenuLateralV({ setSelectedComponent}) {
         <ul>
           <MenuItemV
             texto="Dados Principais"
-            onclick={() => setSelectedComponent("DadosPessoais")}
+            onclick={() => setSelectedComponent("")}
           />
           <MenuItemV
             texto="Atividades"
-            onclick={() => setSelectedComponent("HistoricoViagens")}
+            onclick={() => setSelectedComponent("")}
           />
           <MenuItemV
             texto="Convidar"
-            onclick={() => setSelectedComponent("LoginSenha")}
+            onclick={() => setSelectedComponent("")}
           />
         </ul>
       </div>

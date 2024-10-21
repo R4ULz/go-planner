@@ -9,6 +9,7 @@ export default function DadosPrincipais() {
     const [destino, setDestino] = useState("")
     const [dataIda, setDataIda] = useState("")
     const [dataVolta, setDataVolta] = useState('')
+    const [descricao, setDescricao] = useState("")
 
     return (
         <div className="w-full">
@@ -19,11 +20,11 @@ export default function DadosPrincipais() {
                 <div className="mt-8 space-y-7 w-1/2">
                     <div className="flex flex-col">
                         <label className="text-zinc-700 font-inter pl-1">Nome da sua viagem:</label>
-                        <input type="text" className="border border-zinc-300 rounded-lg p-[4px]" value={nomeViagem} onChange={(e) => setNomeViagem(e.target.value)}/>
+                        <input type="text" className="border border-zinc-300 rounded-lg p-3 focus:outline-none" value={nomeViagem} onChange={(e) => setNomeViagem(e.target.value)}/>
                     </div>
                     <div className="flex flex-col">
                         <label className="text-zinc-700 font-inter pl-1">Destino:</label>
-                        <input type="text" className="border border-zinc-300 rounded-lg p-[4px]" value={destino} onChange={(e) => setDestino(e.target.value)} />
+                        <input type="text" className="border border-zinc-300 rounded-lg p-3 focus:outline-none" value={destino} onChange={(e) => setDestino(e.target.value)} />
                     </div>
                     <hr className="border-zinc-300" />
                     <div className="gap-10 flex justify-between">
@@ -42,12 +43,12 @@ export default function DadosPrincipais() {
                     </div>
                     <div>
                         <label className="text-zinc-700 font-inter pl-1">Descrição:</label>
-                        <textarea className="h-32 w-full rounded-xl border resize-none"></textarea>
+                        <textarea className="h-32 w-full rounded-xl border resize-none focus:outline-none px-2" value={descricao} onChange={(e) => setDescricao(e.target.value)}></textarea>
                     </div>
                 </div>
                 <div className="w-1/2">
                     <div className="flex items-center flex-col">
-                        <hr className="size-72 bg-zinc-700 rounded-xl"/>
+                        <hr className="size-80 bg-zinc-700 rounded-xl"/>
                         <button>
                             <p className="text-zinc-700 text-center flex items-center gap-2">{canetinha}Editar Imagem</p>
                         </button>
