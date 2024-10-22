@@ -9,15 +9,15 @@ export default function MenuLateralV({ setSelectedComponent}) {
         <ul>
           <MenuItemV
             texto="Dados Principais"
-            onclick={() => setSelectedComponent("")}
+            onclick={() => setSelectedComponent()}
           />
           <MenuItemV
             texto="Atividades"
-            onclick={() => setSelectedComponent("")}
+            onclick={() => setSelectedComponent()}
           />
           <MenuItemV
             texto="Convidar"
-            onclick={() => setSelectedComponent("")}
+            onclick={() => setSelectedComponent()}
           />
 
           <div className="flex justify-center mt-5">

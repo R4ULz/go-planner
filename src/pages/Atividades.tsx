@@ -1,4 +1,4 @@
-import MenuLateral from "../components/perfil/MenuLateral"
+import ModalAtividade from "../components/Atividades/modalAtividade"
 import Header from "../components/Home/Header/Header"
 import Footer from "../components/Home/Footer/footer"
 import { useState } from "react"
@@ -10,13 +10,16 @@ import MenuLateralV from "../components/criarViagem/MenuLateralV"
 type Atividade ={
     id:number;
     name: string;
+    date: string;
+    time: string;
 };
 
 export default function Atividades(){
     const [atividades, setAtividades] = useState<Atividade[]>([]); //Éo estado para armazenar as ativiadades
-    
-    const addAtividade = () =>{
-        const newAtividade = {id: atividades.length + 1, name: `Atividade ${atividades.length + 1}` };
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const addAtividade = (name: string, date: string, time: string) =>{
+        const newAtividade = {id: atividades.length + 1, name, date, time };
         setAtividades([...atividades, newAtividade]);
     }
     return(
@@ -28,7 +31,7 @@ export default function Atividades(){
 
             <div className="flex flex-row p-16">
                 <div className="px-24">
-                    <MenuLateralV />
+                    <MenuLateralV/>
                 </div> 
                         
                 <div className="pr-20 w-full">
@@ -57,9 +60,15 @@ export default function Atividades(){
                 </div>
 
                 <div className="mt-4">
-                    <button onClick={addAtividade} className="text-white border-solid bg-laranjinha p-3 rounded-2xl w-[200px]">Adicionar Atividades +</button>
+                    <button onClick={() => setIsModalOpen(true)} className="text-white border-solid bg-laranjinha p-3 rounded-2xl w-[200px]">Adicionar Atividades +</button>
                 </div>
             </div>
+
+            <ModalAtividade
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={addAtividade}
+            />
             
 
             <Footer/>
