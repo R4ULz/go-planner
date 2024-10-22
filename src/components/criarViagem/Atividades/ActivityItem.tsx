@@ -1,5 +1,5 @@
-import { location } from "../icons/location";
-import {iconeCalendario2} from "../icons/Schedule2"
+import { location } from "../../icons/location";
+import {iconeCalendario2} from "../../icons/Schedule2"
 type ActivityItemProps = {
     activity: {
       id: number;
@@ -11,7 +11,7 @@ type ActivityItemProps = {
   
   export default function ActivityItem({ activity }: ActivityItemProps) {
     return (
-      <div className="mb-2 p-2 border border-gray-300 rounded-xl border-rosinha flex flex-row justify-between font-medium">
+      <div className="mb-2 p-2 border rounded-xl border-rosinha flex flex-row justify-between font-medium">
         <p className="flex flex-row gap-2 items-center">{location} {activity.name}</p>
 
         <div className="flex gap-10">

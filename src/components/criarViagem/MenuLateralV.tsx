@@ -9,11 +9,11 @@ export default function MenuLateralV({ setSelectedComponent}) {
         <ul>
           <MenuItemV
             texto="Dados Principais"
-            onclick={() => setSelectedComponent()}
+            onclick={() => setSelectedComponent("DadosPrincipais")}
           />
           <MenuItemV
             texto="Atividades"
-            onclick={() => setSelectedComponent()}
+            onclick={() => setSelectedComponent("Atividades")}
           />
           <MenuItemV
             texto="Convidar"
