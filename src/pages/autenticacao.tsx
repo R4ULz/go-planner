@@ -61,7 +61,6 @@ export default function Login() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-
         senhasNaoIguais();
         try {
             const userData = { nome, email, senha };
