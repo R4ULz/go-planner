@@ -4,7 +4,7 @@ import Header from "../components/Home/Header/Header";
 
 export default function CriarViagem(){
     return(
-        <div className="flex h-screen w-screen flex-col">
+        <div className="flex h-screen flex-col">
             <header>
                 <Header></Header>
             </header>

@@ -26,7 +26,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         rosinha: "#C70039",
 
-        roxo: "#511845",
+        roxo: "#3F0098",
         laranja: "#FF5733",
         laranjinha: "#ff5833",
         RosinhaEscurinho: "#c70038",
