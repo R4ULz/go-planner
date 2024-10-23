@@ -6,7 +6,7 @@ type ActivityItemProps = {
     activity: {
       id: number;
       name: string;
-      date: Date;
+      date: string;
       time: string;
     };
     onRemove: (id: number) => void;
@@ -27,4 +27,3 @@ type ActivityItemProps = {
       </div>
     );
   }
-  

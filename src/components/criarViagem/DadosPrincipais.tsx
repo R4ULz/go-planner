@@ -1,71 +1,11 @@
-import React, { useState, useEffect } from "react";
 import { calendariu } from "../icons/teste";
 import { canetinha } from "../icons";
 
-export default function DadosPrincipais({ setTripId }) {
-  const [nomeViagem, setNomeViagem] = useState("");
-  const [destino, setDestino] = useState("");
-  const [dataIda, setDataIda] = useState("");
-  const [dataVolta, setDataVolta] = useState("");
-  const [descricao, setDescricao] = useState("");
+export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
+  const { nomeViagem, destino, dataIda, dataVolta, descricao } = tripData;
 
-  // Carregar dados do localStorage ao carregar o componente
-  useEffect(() => {
-    const savedTrip = localStorage.getItem("viagem");
-    if (savedTrip) {
-      const tripData = JSON.parse(savedTrip);
-      setNomeViagem(tripData.titulo);
-      setDestino(tripData.destino);
-      setDataIda(tripData.dataInicio);
-      setDataVolta(tripData.fimViagem);
-      setDescricao(tripData.descricao);
-    }
-  }, []);
-
-  // Função para salvar a viagem no localStorage
-  const handleSaveLocal = () => {
-    const tripData = {
-      titulo: nomeViagem,
-      destino,
-      dataInicio: dataIda,
-      fimViagem: dataVolta,
-      descricao,
-      atividades: [],
-    };
-    localStorage.setItem("viagem", JSON.stringify(tripData));
-    alert("Viagem salva localmente!");
-  };
-
-  // Função para enviar a viagem ao servidor
-  const handleSendToServer = async () => {
-    const tripData = {
-      titulo: nomeViagem,
-      destino,
-      dataInicio: dataIda,
-      fimViagem: dataVolta,
-      descricao,
-      atividades: [],
-    };
-    try {
-      const response = await fetch("/api/createTrip", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(tripData),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert("Viagem enviada ao servidor com sucesso!");
-        localStorage.removeItem("viagem"); // Limpa o localStorage após salvar no servidor
-        setTripId(data.data);
-      } else {
-        alert("Erro ao enviar a viagem: " + data.error);
-      }
-    } catch (error) {
-      console.error("Erro:", error);
-      alert("Ocorreu um erro ao enviar a viagem.");
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    handleUpdateTrip({ [e.target.name]: e.target.value });
   };
 
   return (
@@ -82,18 +22,20 @@ export default function DadosPrincipais({ setTripId }) {
             <label className="text-zinc-700 font-inter pl-1">Nome da sua viagem:</label>
             <input
               type="text"
+              name="nomeViagem"
               className="border border-zinc-300 rounded-lg p-3 focus:outline-none"
               value={nomeViagem}
-              onChange={(e) => setNomeViagem(e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col">
             <label className="text-zinc-700 font-inter pl-1">Destino:</label>
             <input
               type="text"
+              name="destino"
               className="border border-zinc-300 rounded-lg p-3 focus:outline-none"
               value={destino}
-              onChange={(e) => setDestino(e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <hr className="border-zinc-300" />
@@ -102,27 +44,30 @@ export default function DadosPrincipais({ setTripId }) {
               <i className={`absolute left-3`}>{calendariu}</i>
               <input
                 type="date"
+                name="dataIda"
                 className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
                 value={dataIda}
-                onChange={(e) => setDataIda(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className={`text-zinc-700 relative flex items-center border w-full rounded-xl p-3`}>
               <i className={`absolute left-3`}>{calendariu}</i>
               <input
                 type="date"
+                name="dataVolta"
                 className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
                 value={dataVolta}
-                onChange={(e) => setDataVolta(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </div>
           <div>
             <label className="text-zinc-700 font-inter pl-1">Descrição:</label>
             <textarea
+              name="descricao"
               className="h-32 w-full rounded-xl border resize-none focus:outline-none px-2"
               value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
+              onChange={handleChange}
             ></textarea>
           </div>
         </div>
@@ -141,13 +86,13 @@ export default function DadosPrincipais({ setTripId }) {
             </button>
             <button
               className="bg-laranja text-white font-inter text-xl px-5 py-1 rounded-lg"
-              onClick={handleSaveLocal}
             >
               Salvar
             </button>
           </div>
         </div>
       </div>
+
     </div>
   );
 }

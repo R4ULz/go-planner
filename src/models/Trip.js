@@ -6,7 +6,8 @@ const tripSchema = new mongoose.Schema({
   dataInicio: { type: Date, required: true },
   fimViagem:{type: Date, required:true},
   descricao:{type: String},
-  atividades:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Activities' }]
+  atividades:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Activities' }],
+  amigos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 
 export default mongoose.models.Trip || mongoose.model('Trip', tripSchema);
