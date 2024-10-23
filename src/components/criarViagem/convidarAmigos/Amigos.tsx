@@ -8,18 +8,19 @@ import ModalAmigos from "./modalAmigos";
 type Atividade = {
     id: number;
     name: string;
-    date: string;
+    date: Date;
     time: string;
 };
 
-export default function ConvidarAmigos() {
+export default function ConvidarAmigos({tripId}) {
     const [atividades, setAtividades] = useState<Atividade[]>([]); //Éo estado para armazenar as ativiadades
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const addAtividade = (name: string, date: string, time: string) => {
+    const addAtividade = (name: string, date: Date, time: string) => {
         const newAtividade = { id: atividades.length + 1, name, date, time };
         setAtividades([...atividades, newAtividade]);
     }
+
     return (
         <div className="font-rubik">
             <div className="flex flex-row">

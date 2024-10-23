@@ -14,36 +14,35 @@ type Atividade = {
 
 export default function Atividades({tripId}) {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [atividades, setAtividades] = useState<Atividade[]>([]);
+    const [atividades,  setAtividades] = useState<Atividade[]>([]);
 
-    const addAtividade = async (name: string, date: Date, time: string) => {
+    const addAtividade = async (name: string, dateTime: Date) => {
         const activityData = {
-            nome: name,
-            data: date,
-            time: time,
-            viagemId: tripId
+          nome: name,
+          data: dateTime,
+          viagemId: tripId
         };
-
         try {
-            const response = await fetch('/api/createActivity', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(activityData),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                alert('Atividade adicionada com sucesso!');
-                setAtividades([...atividades, { id: data.id, name, date, time }]);
-            } else {
-                alert('Erro ao adicionar atividade: ' + data.error);
-            }
+          const response = await fetch('/api/createActivity', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(activityData),
+          });
+    
+          const data = await response.json();
+          if (response.ok) {
+            alert('Atividade adicionada com sucesso!');
+          } else {
+            // Exibe o erro retornado pelo servidor
+            alert('Erro ao adicionar atividade: ' + data.error);
+          }
         } catch (error) {
-            console.error('Erro:', error);
-            alert('Ocorreu um erro ao adicionar a atividade.');
+          console.error('Erro:', error);
+          alert('Erro inesperado ao adicionar a atividade.');
         }
-    };
+      };
 
     const removeAtividade = (id: number) => {
         setAtividades(atividades.filter(atividade => atividade.id !== id));

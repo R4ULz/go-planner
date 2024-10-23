@@ -21,7 +21,6 @@ export default function ModalAtividade({isOpen, onClose, onSave}: modalAtividade
       setName("");
       setDate("");
       setTime("");
-      
       onClose();
   };
 
