@@ -5,7 +5,6 @@ import ModalAtividade from "./modalAtividade";
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
 
-
 type Atividade = {
     id: number;
     name: string;
@@ -13,14 +12,42 @@ type Atividade = {
     time: string;
 };
 
-export default function Atividades() {
-    const [atividades, setAtividades] = useState<Atividade[]>([]); //Éo estado para armazenar as ativiadades
-    const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const addAtividade = (name: string, date: string, time: string) => {
-        const newAtividade = { id: atividades.length + 1, name, date, time };
-        setAtividades([...atividades, newAtividade]);
-    }
+
+export default function Atividades({tripId}) {
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [atividades, setAtividades] = useState<Atividade[]>([]);
+
+    const addAtividade = async (name: string, date: string, time: string) => {
+        const activityData = {
+            nome: name,
+            descricao: '',  // Não temos um campo de descrição aqui, pode adicionar se necessário
+            data: date,
+            time: time,
+            viagemId: tripId
+        };
+
+        try {
+            const response = await fetch('/api/createActivity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(activityData),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                alert('Atividade adicionada com sucesso!');
+                setAtividades([...atividades, { id: data.id, name, date, time }]);
+            } else {
+                alert('Erro ao adicionar atividade: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Ocorreu um erro ao adicionar a atividade.');
+        }
+    };
+    
     return (
         <div className="font-rubik">
             <div className="flex flex-row">
