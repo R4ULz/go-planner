@@ -26,10 +26,10 @@ export default function Layout(){
             <aside className="w-1/5 flex justify-center ml-10">
                 <MenuLateralV setSelectedComponent={setSelectedComponent}/>
             </aside>
-            <div className="w-4/5 max-w-screen-2xl">
-            <p className="text-black font-inter font-bold">
-                        CRIANDO SUA VIAGEM!
-                    </p>
+            <div className="w-full">
+              <p className="text-black font-inter font-medium">
+                          CRIANDO SUA VIAGEM!
+              </p>
                 {renderComponent()}
             </div>
         </div>
