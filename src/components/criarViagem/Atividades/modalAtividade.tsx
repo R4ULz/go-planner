@@ -3,7 +3,7 @@ import {useState} from "react"
 type modalAtividadeProps = {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (name: string, date: string, time: string) => void;
+    onSave: (name: string, dateTime: Date) => void;
 
 };
 
@@ -14,10 +14,15 @@ export default function ModalAtividade({isOpen, onClose, onSave}: modalAtividade
 
     if(!isOpen) return null;
 
-    const handleSave = () =>{
-        onSave(name, date, time);
-        onClose();
-    };
+    const handleSave = () => {
+      const combinedDateTime = new Date(`${date}T${time}`);
+
+      onSave(name, combinedDateTime);
+      setName("");
+      setDate("");
+      setTime("");
+      onClose();
+  };
 
     return(
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

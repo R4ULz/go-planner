@@ -8,15 +8,16 @@ type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos";
 
 export default function Layout(){
     const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPrincipais");
-    
+    const [tripId, setTripId] = useState<string | null>(null);  
+
     const renderComponent = () => {
         switch (selectedComponent) {
           case "DadosPrincipais":
-            return <DadosPrincipais />; 
+            return <DadosPrincipais setTripId={setTripId}/>; 
           case "Atividades":
-            return <Atividades />;
+            return <Atividades tripId={tripId}/>;
           case "ConvidarAmigos":
-            return <ConvidarAmigos />;
+            return <ConvidarAmigos tripId={tripId}/>;
           default:           
         }
       };

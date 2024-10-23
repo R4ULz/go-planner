@@ -28,7 +28,7 @@ export default function Perfil() {
     setShowModal(false);
     router.push({
         pathname: '/autenticacao',
-        query: { modo: 'login' } // Redireciona ao login
+        query: { modo: 'login' }  
     });
 };
 

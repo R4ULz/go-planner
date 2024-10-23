@@ -5,26 +5,49 @@ import ModalAtividade from "./modalAtividade";
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
 
-
 type Atividade = {
     id: number;
     name: string;
-    date: string;
+    date: Date;
     time: string;
 };
 
-export default function Atividades() { 
-    const [atividades, setAtividades] = useState<Atividade[]>([]); //Éo estado para armazenar as ativiadades
+export default function Atividades({tripId}) {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [atividades,  setAtividades] = useState<Atividade[]>([]);
 
-    const addAtividade = (name: string, date: string, time: string) => {
-        const newAtividade = { id: atividades.length + 1, name, date, time };
-        setAtividades([...atividades, newAtividade]);
-    }
+    const addAtividade = async (name: string, dateTime: Date) => {
+        const activityData = {
+          nome: name,
+          data: dateTime,
+          viagemId: tripId
+        };
+        try {
+          const response = await fetch('/api/createActivity', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(activityData),
+          });
+    
+          const data = await response.json();
+          if (response.ok) {
+            alert('Atividade adicionada com sucesso!');
+          } else {
+            // Exibe o erro retornado pelo servidor
+            alert('Erro ao adicionar atividade: ' + data.error);
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert('Erro inesperado ao adicionar a atividade.');
+        }
+      };
+
     const removeAtividade = (id: number) => {
         setAtividades(atividades.filter(atividade => atividade.id !== id));
     };
-
+    
     return (
         <div className="font-rubik flex flex-col justify-center">
             <div className="flex flex-row">
