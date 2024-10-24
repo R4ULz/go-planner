@@ -9,11 +9,11 @@ export default function Home() {
   return (
     <div className="flex flex-col relative w-full items-center">
 
-      <header className="fixed z-50 w-full flex justify-center">
+      <header className="fixed z-50 w-full flex justify-center border-b bg-white">
         <Header />
       </header>
 
-      <section className="z-0 h-full w-full mt-20  ">
+      <section className="z-0 h-full w-full mt-20 ">
         <BgImg/>
       </section>
       
