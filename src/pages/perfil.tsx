@@ -15,6 +15,8 @@ export default function Perfil() {
   const { user } = useUser();
   const [nome, setNome] = useState(user?.nome);
   const [email, setEmail] = useState(user?.email);
+  const [senha, setSenha] = useState("");
+  const [confirmSenha, setConfirmSenha] = useState("");
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
