@@ -25,7 +25,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
   };
 
   const handleSave = () => {
-    localStorage.setItem("tripData", JSON.stringify(tripData));
+    sessionStorage.setItem("tripData", JSON.stringify(tripData));
     alert("Viagem salva no LocalStorage!");
   };
 
