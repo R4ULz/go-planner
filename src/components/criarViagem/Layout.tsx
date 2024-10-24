@@ -16,6 +16,7 @@ export default function Layout() {
     descricao: "",
     atividades: [],
     amigos: [],
+    imagem: null,
   });
 
   const handleUpdateTrip = (updatedData: Partial<typeof tripData>) => {

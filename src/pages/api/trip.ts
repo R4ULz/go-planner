@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'POST') {
     try {
-      const { titulo, destino, dataInicio, fimViagem, descricao, atividades, amigos } = req.body;
+      const { titulo, destino, dataInicio, fimViagem, descricao, atividades, amigos, imagem } = req.body;
 
       if (!titulo || !destino || !dataInicio || !fimViagem) {
         return res.status(400).json({ error: 'Dados obrigatórios não fornecidos' });
@@ -20,7 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         fimViagem,
         descricao,
         atividades,
-        amigos
+        amigos,
+        imagem
       });
 
       const savedTrip = await novaViagem.save();

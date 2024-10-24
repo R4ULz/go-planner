@@ -1,11 +1,32 @@
 import { calendariu } from "../icons/teste";
 import { canetinha } from "../icons";
+import Image from "next/image";
 
 export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
-  const { nomeViagem, destino, dataIda, dataVolta, descricao } = tripData;
+  const { nomeViagem, destino, dataIda, dataVolta, descricao, imagem } = tripData;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     handleUpdateTrip({ [e.target.name]: e.target.value });
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const imageURL = URL.createObjectURL(file); // Cria um URL temporário para a imagem
+      handleUpdateTrip({ imagem: imageURL }); // Atualiza o campo imagem nos dados da viagem
+    }
+  };
+
+  const handleClick = () => {
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const handleSave = () => {
+    localStorage.setItem("tripData", JSON.stringify(tripData));
+    alert("Viagem salva no LocalStorage!");
   };
 
   return (
@@ -73,14 +94,36 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
         </div>
         <div className="w-1/2">
           <div className="flex items-center flex-col">
-            <hr className="size-80 bg-zinc-700 rounded-xl" />
-            <button>
-              <p className="text-zinc-700 text-center flex items-center gap-2">
-                {canetinha}Editar Imagem
-              </p>
-            </button>
+          {imagem ? (
+          <Image
+            src={imagem}
+            alt="Imagem Selecionada"
+            width={500}
+            height={500}
+            className="rounded-xl size-96"
+          />
+        ) : (
+          <Image
+            src="/imgs/rio.jpg"
+            alt="Imagem Selecionada"
+            width={500}
+            height={500}
+            className="rounded-xl size-96"
+          />
+        )}
+            <button onClick={handleClick} className="text-zinc-700 text-center flex items-center gap-2">
+            {canetinha}
+            Editar Imagem
+        </button>
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={{ display: "none" }} 
+        />
           </div>
-          <div className="space-x-10 flex justify-center pt-24">
+          <div className="space-x-10 flex justify-center pt-6">
             <button className="bg-rosinha text-white font-inter text-xl px-5 py-1 rounded-lg">
               Cancelar
             </button>
@@ -92,7 +135,6 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

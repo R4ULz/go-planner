@@ -12,11 +12,9 @@ type ComponentType = "DadosPessoais" | "HistoricoViagens" | "LoginSenha";
 
 export default function Perfil() {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPessoais");
-  const { user } = useUser(); // Obtém o usuário logado
-  const [nome, setNome] = useState(user?.nome || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [senha, setSenha] = useState("");
-  const [confirmSenha, setConfirmSenha] = useState("");
+  const { user } = useUser();
+  const [nome, setNome] = useState(user?.nome);
+  const [email, setEmail] = useState(user?.email);
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
