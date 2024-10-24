@@ -90,7 +90,7 @@ export default function Layout() {
   };
 
   return (
-    <div className="flex gap-10 w-full min-h-[700px]">
+    <div className="flex gap-10 w-full min-h-[700px] px-24 justify-center">
       <aside className="w-1/5 flex justify-center ml-10">
         <MenuLateralV setSelectedComponent={setSelectedComponent} salvarViagem={salvarViagem} />
       </aside>

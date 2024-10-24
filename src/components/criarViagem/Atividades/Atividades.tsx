@@ -64,7 +64,7 @@ export default function Atividades({ tripData, handleUpdateTrip }: AtividadesPro
                 </div>
               </div>
             </div>
-            <div className="w-1/6 flex justify-end items-center">
+            <div className="w-1/6 flex justify-end items-center mr-7">
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="text-white font-inter font-bold border-solid margin-0 bg-laranjinha px-5 py-3 rounded-2xl flex gap-2 items-center"

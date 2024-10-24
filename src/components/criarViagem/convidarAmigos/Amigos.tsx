@@ -68,7 +68,7 @@ export default function ConvidarAmigos({
           </div>
           <div className="mt-4 flex w-full gap-16">
             <div className="w-5/6 items-center">
-              <div className="border rounded-xl py-1 border-rosinha flex flex-row justify-between font-bold font-inter px-4 max-w-screen-2xl">
+              <div className="border rounded-xl py-1 border-rosinha flex flex-row justify-between font-bold font-inter px-4">
               <p className="flex flex-row gap-2 items-center">{location}{destino}</p>
                 <div className="flex gap-2">
                   <p className="flex flex-row gap-2 items-center">{iconeCalendario2}{dataIda}</p>
@@ -77,7 +77,7 @@ export default function ConvidarAmigos({
                 </div>
               </div>
             </div>
-            <div className="w-1/6 flex justify-end items-center">
+            <div className="w-1/6 flex justify-end items-center mr-7">
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="text-white font-inter font-bold border-solid margin-0 bg-laranjinha px-5 py-3 rounded-2xl flex gap-2 items-center"

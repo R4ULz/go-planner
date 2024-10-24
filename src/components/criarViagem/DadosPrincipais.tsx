@@ -142,6 +142,14 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
               value={descricao}
               onChange={handleChange}
             ></textarea>
+             <div className="space-x-10 flex justify-end pt-6">
+            <button
+              className="bg-laranja text-white font-inter px-5 py-2 rounded-lg"
+              onClick={handleSave}
+            >
+              Salvar Viagem
+            </button>
+          </div>
           </div>
         </div>
         <div className="w-1/2">
@@ -174,17 +182,6 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
               onChange={handleImageChange}
               style={{ display: "none" }}
             />
-          </div>
-          <div className="space-x-10 flex justify-center pt-6">
-            <button className="bg-rosinha text-white font-inter text-xl px-5 py-1 rounded-lg">
-              Cancelar
-            </button>
-            <button
-              className="bg-laranja text-white font-inter text-xl px-5 py-1 rounded-lg"
-              onClick={handleSave}
-            >
-              Salvar
-            </button>
           </div>
         </div>
       </div>

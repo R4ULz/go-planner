@@ -104,7 +104,7 @@ export default function Perfil() {
     <div>
       {user
         ?
-        <div className="flex h-screen w-screen bg-gray-100 flex-col">
+        <div className="flex h-screen overflow-x-hidden bg-gray-100 flex-col">
       <header className="fixed z-50 w-full flex justify-center">
         <Header />
       </header>

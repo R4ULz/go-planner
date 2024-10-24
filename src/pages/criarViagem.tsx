@@ -32,7 +32,7 @@ export default function CriarViagem(){
                 <header>
                     <Header></Header>
                 </header>
-                <div className="p-5 w-full">
+                <div className="p-5 w-full flex justify-center">
                     <Layout></Layout>
                 </div>
                 <footer>
