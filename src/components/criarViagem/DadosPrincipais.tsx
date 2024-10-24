@@ -23,6 +23,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
             },
           }
         );
+        //aaa
         setSuggestions(response.data);
       } catch (error) {
         console.error("Erro ao buscar sugestões de localizações:", error);
