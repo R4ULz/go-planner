@@ -13,7 +13,6 @@ const tripSchema = new mongoose.Schema({
   }],
   amigos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   imagem: { type: String },
-  usuarioLogado: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 
