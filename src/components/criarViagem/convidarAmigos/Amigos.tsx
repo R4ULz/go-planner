@@ -24,7 +24,7 @@ export default function ConvidarAmigos({
   tripData,
   handleUpdateTrip,
 }: ConvidarAmigosProps) {
-  const { amigos } = tripData;
+  const { amigos, destino, dataIda ,dataVolta } = tripData;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -69,11 +69,11 @@ export default function ConvidarAmigos({
           <div className="mt-4 flex w-full gap-16">
             <div className="w-5/6 items-center">
               <div className="border rounded-xl py-1 border-rosinha flex flex-row justify-between font-bold font-inter px-4 max-w-screen-2xl">
-                <p className="flex flex-row gap-2 items-center">{location}Japão, Tokyo</p>
+              <p className="flex flex-row gap-2 items-center">{location}{destino}</p>
                 <div className="flex gap-2">
-                  <p className="flex flex-row gap-2 items-center">{iconeCalendario2}20/12/2024</p>
+                  <p className="flex flex-row gap-2 items-center">{iconeCalendario2}{dataIda}</p>
                   <p className="flex items-center">-</p>
-                  <p className="flex items-center">25/12/2024</p>
+                  <p className="flex items-center">{dataVolta}</p>
                 </div>
               </div>
             </div>
