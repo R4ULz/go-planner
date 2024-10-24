@@ -6,6 +6,7 @@ type ItemAmigoProps = {
     amigo:{
         id: number,
         email: string;
+        nome: string;
       };
     onRemove: (id: number) => void;
   };
@@ -15,7 +16,7 @@ type ItemAmigoProps = {
 
     return (
       <div className="mb-2 p-2 border rounded-xl border-rosinha flex flex-row justify-between font-medium w-[59.5em]">
-        <p className="flex flex-row gap-2 items-center">{location} {amigo.email}</p>
+        <p className="flex flex-row gap-2 items-center">{amigo.email}</p>
 
         <div className="flex gap-3">
             {/* <p className="flex items-center w-full">{activity.time}</p> */}

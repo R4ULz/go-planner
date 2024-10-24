@@ -8,7 +8,7 @@ import { useState } from "react";
 type Atividade = {
   id: number;
   name: string;
-  date: string;
+  date: string; 
   time: string;
 };
 
@@ -20,7 +20,7 @@ interface AtividadesProps {
 }
 
 export default function Atividades({ tripData, handleUpdateTrip }: AtividadesProps) {
-  const { atividades } = tripData; 
+  const { atividades } = tripData;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const addAtividade = (name: string, date: string, time: string) => {
@@ -32,6 +32,16 @@ export default function Atividades({ tripData, handleUpdateTrip }: AtividadesPro
     const updatedAtividades = atividades.filter((atividade) => atividade.id !== id);
     handleUpdateTrip({ atividades: updatedAtividades }); // Atualizando o estado no Layout
   };
+
+  // Agrupando atividades por dia
+  const atividadesPorDia = atividades.reduce((acc: Record<string, Atividade[]>, atividade) => {
+    const { date } = atividade; 
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(atividade);
+    return acc;
+  }, {});
 
   return (
     <div className="font-rubik flex flex-col justify-center">
@@ -67,10 +77,15 @@ export default function Atividades({ tripData, handleUpdateTrip }: AtividadesPro
         </div>
       </div>
 
-      <div className="custom-scrollbar w-3/4 pt-5 overflow-y-auto max-h-[calc(75vh-150px)]">
+      <div className="custom-scrollbar pr-14 pt-5 overflow-y-auto max-h-[calc(75vh-150px)]">
         {atividades.length > 0 ? (
-          atividades.map((atividade) => (
-            <ActivityItem key={atividade.id} activity={atividade} onRemove={removeAtividade} />
+          Object.keys(atividadesPorDia).map((dia) => (
+            <div key={dia} className="mb-6">
+              <h3 className="text-lg font-bold mb-3">Dia {dia.split("-")[2]}</h3> 
+              {atividadesPorDia[dia].map((atividade) => (
+                <ActivityItem key={atividade.id} activity={atividade} onRemove={removeAtividade}/>
+              ))}
+            </div>
           ))
         ) : (
           <div className="flex flex-col items-center justify-center">

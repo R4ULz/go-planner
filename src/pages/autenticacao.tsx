@@ -23,6 +23,15 @@ export default function Login() {
         }
     }, [router.query.modo]);
 
+    useEffect(() => {
+        if (modo === "login") {
+            setEmail("");
+            setSenha("");
+            setShowMessage(false);
+        }
+    }, [modo]);
+
+
 
     function senhasNaoIguais() {
         if (senha !== confirmarSenha) {
