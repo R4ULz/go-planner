@@ -3,7 +3,7 @@ import MenuItemV from "./MenuItemV";
 
 interface MenuLateralVProps {
   setSelectedComponent: (component: string) => void;
-  salvarViagem: () => void; // Recebe a função para salvar os dados
+  salvarViagem: () => void; 
 }
 
 export default function MenuLateralV({ setSelectedComponent, salvarViagem }: MenuLateralVProps) {
@@ -37,7 +37,7 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem }: Men
         <button className="py-1 border-2 border-zinc-400 text-zinc-700 rounded-xl">Sair</button>
         <button
           className="py-1 bg-gradient-to-r to-rosinha from-laranja rounded-xl text-white"
-          onClick={salvarViagem} // Chama a função salvarViagem quando o botão Confirmar é pressionado
+          onClick={salvarViagem}
         >
           Confirmar
         </button>

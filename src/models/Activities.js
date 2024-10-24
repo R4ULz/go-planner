@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const activitiesSchema = new mongoose.Schema({
   nome: { type: String, required: true },
-  data: {type: Date, required:true},
+  date: {type: Date, required:true},
   viagem: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip', required: true }
 });
 

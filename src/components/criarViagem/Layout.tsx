@@ -20,22 +20,44 @@ export default function Layout() {
   });
 
   const handleUpdateTrip = (updatedData: Partial<typeof tripData>) => {
-    setTripData((prevData) => ({
-      ...prevData,
-      ...updatedData,
-    }));
+    const newTripData = { ...tripData, ...updatedData };
+    setTripData(newTripData);
+
+    // Salvar os dados no sessionStorage
+    sessionStorage.setItem("tripData", JSON.stringify(newTripData));
   };
 
-  // Função para salvar os dados da viagem no localStorage
-  const salvarViagemLocalStorage = () => {
-    try {
-      const tripDataString = JSON.stringify(tripData); // Converte os dados da viagem para string JSON
-      localStorage.setItem("tripData", tripDataString); // Salva no localStorage com a chave 'tripData'
-      alert("Viagem salva com sucesso!"); // Alerta de sucesso
-    } catch (error) {
-      console.error("Erro ao salvar os dados da viagem:", error);
+  const salvarViagem = async () => {
+    const tripDataString = sessionStorage.getItem("tripData");
+
+    if (!tripDataString) {
+      alert("Nenhum dado de viagem encontrado para salvar.");
+      return;
     }
-  };
+
+    const tripData = JSON.parse(tripDataString);
+
+    try {
+      const response = await fetch("/api/trip", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(tripData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao enviar os dados para o banco de dados.");
+      }
+
+      const result = await response.json();
+      alert("Viagem salva com sucesso no banco de dados!");
+      console.log(result);
+    } catch (error) {
+      console.error("Erro ao enviar os dados:", error);
+      alert("Falha ao confirmar a viagem.");
+    }
+  };;
 
   const renderComponent = () => {
     switch (selectedComponent) {
@@ -53,7 +75,7 @@ export default function Layout() {
   return (
     <div className="flex gap-10 w-full">
       <aside className="w-1/5 flex justify-center ml-10">
-        <MenuLateralV setSelectedComponent={setSelectedComponent} salvarViagem={salvarViagemLocalStorage} />
+        <MenuLateralV setSelectedComponent={setSelectedComponent} salvarViagem={salvarViagem} />
       </aside>
       <div className="w-full">
         <p className="text-black font-inter font-medium">CRIANDO SUA VIAGEM!</p>
