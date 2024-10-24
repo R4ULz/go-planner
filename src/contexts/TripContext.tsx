@@ -7,6 +7,7 @@ interface Viagem{
     fimViagem: string;
     atividades: Atividade[];
     amigos:string[];
+    imagem: string | null;
 }
 
 interface Atividade{
@@ -30,6 +31,7 @@ export const ViagemProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       fimViagem: '',
       atividades: [],
       amigos: [],
+      imagem:null,
     });
 
     return (

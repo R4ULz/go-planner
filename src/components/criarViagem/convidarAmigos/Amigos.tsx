@@ -5,7 +5,6 @@ import { adicionarFriend } from "../../icons/addFriend";
 import ModalAmigos from "./modalAmigos";
 import { User } from "../../icons/user";
 import { lixeira } from "../../icons/lixeira";
-import { Frame } from "../../icons/Frame"; // Supondo que o ícone Frame já está importado como no arquivo Atividades.
 import { frameUser } from "../../icons/FrameUser";
 
 type Amigo = {

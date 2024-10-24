@@ -24,7 +24,7 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem }: Men
             onclick={() => setSelectedComponent("ConvidarAmigos")}
           />
 
-          <div className="flex justify-center mt-5">
+          <div className="flex justify-center mt-5 hidden">
             <button className="px-7 flex flex-row items-center text-black border-2 border-laranjinha rounded-xl font-bold">
               Novo Tópico {Plus}
             </button>
