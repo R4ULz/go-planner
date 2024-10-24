@@ -5,6 +5,8 @@ import { adicionarFriend } from "../../icons/addFriend";
 import ModalAmigos from "./modalAmigos";
 import { User } from "../../icons/user";
 import { lixeira } from "../../icons/lixeira";
+import { Frame } from "../../icons/Frame"; // Supondo que o ícone Frame já está importado como no arquivo Atividades.
+import { frameUser } from "../../icons/FrameUser";
 
 type Amigo = {
   email: string;
@@ -87,27 +89,41 @@ export default function ConvidarAmigos({
           </div>
           <div className="py-7">
             <p className="font-inter font-bold text-zinc-700 text-lg">Lista de amigos</p>
-            <ul>
-              {amigos.map((amigo) => (
-                <li key={amigo.id} className="border p-3 mb-2 rounded-lg flex gap-10 text-zinc-500 justify-between text-lg">
+            {amigos.length > 0 ? (
+              <ul>
+                {amigos.map((amigo) => (
+                  <li
+                    key={amigo.id}
+                    className="border p-3 mb-2 rounded-lg flex gap-10 text-zinc-500 justify-between text-lg"
+                  >
+                    <div className="flex flex-row items-center">
+                      <p className="pr-8 gap-2 font-inter font-bold flex items-center border-r-2 pr-2">
+                        {User} {amigo.nome}
+                      </p>
+                      <p className="px-5">{amigo.email}</p>
+                    </div>
 
-                  <div className="flex flex-row items-center">
-                    <p className="pr-8 gap-2 font-inter font-bold flex items-center border-r-2 pr-2">{User} {amigo.nome}</p>
-                    <p className="px-5">{amigo.email}</p>
-                  </div>
-
-                  <div className="flex justify-between ">
-                    <p className="flex items-center px-5 gap-3 font-bold"> 
-                     <span className="bg-laranjinha w-2 h-2 rounded-full p-1 flex mt- ml-1"></span> Convite pendente
-                    </p>
-                    <button onClick={() => removeAmigo(amigo.id)} className="border-l-2 pl-2">
-                      {lixeira}
-                    </button>
-                  </div>
-
-                </li>
-              ))}
-            </ul>
+                    <div className="flex justify-between ">
+                      <p className="flex items-center px-5 gap-3 font-bold">
+                        <span className="bg-laranjinha w-2 h-2 rounded-full p-1 flex mt- ml-1"></span>{" "}
+                        Convite pendente
+                      </p>
+                      <button onClick={() => removeAmigo(amigo.id)} className="border-l-2 pl-2">
+                        {lixeira}
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="flex flex-col items-center justify-center">
+                {frameUser}
+                <p className="font-medium py-5">Opa! Não há amigos aqui!</p>
+                <p className="text-gray-500">Se você quiser adicionar algum amigo para poder </p>
+                <p className="text-gray-500">ajudar no seu planejamento e na viagem, aperte em </p>
+                <p className="text-gray-500">“Adicionar amigo”.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
