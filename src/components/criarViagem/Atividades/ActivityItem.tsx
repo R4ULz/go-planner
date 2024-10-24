@@ -6,7 +6,7 @@ type ActivityItemProps = {
     activity: {
       id: number;
       name: string;
-      date: Date;
+      date: string;
       time: string;
     };
     onRemove: (id: number) => void;
@@ -16,15 +16,14 @@ type ActivityItemProps = {
     const[apagarAtv, setapagarAtv] = useState(false)
 
     return (
-      <div className="mb-2 p-2 border rounded-xl border-rosinha flex flex-row justify-between font-medium w-[59.5em]">
-        <p className="flex flex-row gap-2 items-center">{location} {activity.name}</p>
+      <div className="mb-2 p-2 border rounded-xl border-black border-opacity-[30%] flex flex-row justify-between w-full">
+        <p className="opacity-[70%] flex flex-row px-10 items-center">{activity.name}</p>
 
         <div className="flex gap-3">
-            <p className="flex items-center w-full">{activity.time}</p>
+            <p className="flex items-center w-full opacity-[70%]">{activity.time}</p>
             <button onClick={() => onRemove(activity.id)} className="border-l-2 pl-2 flex items-center">{lixeira}</button>
         </div>
 
       </div>
     );
   }
-  

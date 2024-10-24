@@ -1,4 +1,5 @@
-export const addAmigo = (<svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const adicionarFriend = (
+<svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_422_2)">
     <path d="M9 7.875C9 9.06847 9.47411 10.2131 10.318 11.057C11.1619 11.9009 12.3065 12.375 13.5 12.375C14.6935 12.375 15.8381 11.9009 16.682 11.057C17.5259 10.2131 18 9.06847 18 7.875C18 6.68153 17.5259 5.53693 16.682 4.69302C15.8381 3.84911 14.6935 3.375 13.5 3.375C12.3065 3.375 11.1619 3.84911 10.318 4.69302C9.47411 5.53693 9 6.68153 9 7.875Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M18 21.375H24.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
