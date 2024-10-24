@@ -14,10 +14,9 @@ export default function ModalAmigos({
 }: modalAtividadeProps) {
   const [emailAmigo, setEmailAmigo] = useState("");
 
-  // Limpa o campo de e-mail sempre que o modal é fechado
   useEffect(() => {
     if (!isOpen) {
-      setEmailAmigo(""); // Limpa o estado quando o modal é fechado
+      setEmailAmigo(""); 
     }
   }, [isOpen]);
 
