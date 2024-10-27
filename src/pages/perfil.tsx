@@ -7,6 +7,8 @@ import MenuLateral from "../components/perfil/MenuLateral";
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { useRouter } from "next/router";
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 type ComponentType = "DadosPessoais" | "HistoricoViagens" | "LoginSenha";
 
@@ -61,13 +63,44 @@ export default function Perfil() {
       const data = await res.json();
 
       if (res.ok) {
-        alert('Dados atualizados com sucesso!');
+        Toastify({
+          text: 'Dados atualizados com sucesso!',
+          duration: 2000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style:{
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+          }
+        }).showToast();
+
       } else {
-        alert('Erro ao atualizar os dados: ' + data.message);
+        Toastify({
+          text: `${data.message}`,
+          duration: 2000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style:{
+            background: "#ce1836",
+          }
+        }).showToast();
       }
     } catch (error) {
       console.error('Erro ao atualizar os dados:', error);
-      alert('Erro ao atualizar os dados');
+      Toastify({
+        text: 'Erro ao atualizar os dados!',
+        duration: 2000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        stopOnFocus: true,
+        style:{
+          background: "#ce1836",
+        }
+      }).showToast();
     }
   };
 

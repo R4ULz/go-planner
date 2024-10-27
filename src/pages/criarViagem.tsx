@@ -29,7 +29,7 @@ export default function CriarViagem(){
         <div>
             {user ?
             <div className="flex h-screen flex-col">
-                <header>
+                <header className="">
                     <Header></Header>
                 </header>
                 <div className="p-5 w-full flex justify-center">
