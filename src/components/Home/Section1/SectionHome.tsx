@@ -139,7 +139,6 @@ export default function SectionHome() {
               </ul>
             )}
           </div>
-
           <div className="absolute flex right-[36px] top-8">{LineDestiny}</div>
           <button onClick={swapLocations} className="absolute flex left-[36px] top-24">{Arrows}</button>
         </div>

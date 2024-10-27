@@ -3,14 +3,17 @@ import { canetinha } from "../icons";
 import Image from "next/image";
 import axios from "axios";
 import { useState } from "react";
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
-export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
-  const { nomeViagem, destino, dataIda, dataVolta, descricao, imagem } = tripData;
+export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip }) {
+  const { nomeViagem, destino, dataIda, dataVolta, descricao, imagem, partida } = tripData;
 
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestionsPartida, setSuggestionsPartida] = useState<any[]>([]);
+  const [suggestionsDestino, setSuggestionsDestino] = useState<any[]>([]);
 
   // Função para buscar as sugestões da API LocationIQ
-  const fetchLocationSuggestions = async (inputValue: string) => {
+  const fetchLocationSuggestions = async (inputValue: string, type: string) => {
     if (inputValue.length > 2) {
       try {
         const response = await axios.get(
@@ -23,13 +26,21 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
             },
           }
         );
-        //aaa
-        setSuggestions(response.data);
+        
+        if (type === "partida") {
+          setSuggestionsPartida(response.data);
+        } else if (type === "destino") {
+          setSuggestionsDestino(response.data);
+        }
       } catch (error) {
         console.error("Erro ao buscar sugestões de localizações:", error);
       }
     } else {
-      setSuggestions([]); // Limpa as sugestões se o usuário apagar o texto
+      if (type === "partida") {
+        setSuggestionsPartida([]);
+      } else if (type === "destino") {
+        setSuggestionsDestino([]);
+      }
     }
   };
 
@@ -38,13 +49,20 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
     handleUpdateTrip({ [name]: value });
 
     if (name === "destino") {
-      fetchLocationSuggestions(value);
+      fetchLocationSuggestions(value, "destino");
+    } else if (name === "partida") {
+      fetchLocationSuggestions(value, "partida");
     }
   };
 
-  const handleSuggestionClick = (suggestion: any) => {
-    handleUpdateTrip({ destino: suggestion.display_name });
-    setSuggestions([]); // Limpa as sugestões após a seleção
+  const handleSuggestionClick = (suggestion: any, type: string) => {
+    if (type === "partida") {
+      handleUpdateTrip({ partida: suggestion.display_name });
+      setSuggestionsPartida([]); // Limpa as sugestões após a seleção
+    } else if (type === "destino") {
+      handleUpdateTrip({ destino: suggestion.display_name });
+      setSuggestionsDestino([]); // Limpa as sugestões após a seleção
+    }
   };
   
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,8 +81,37 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
   };
 
   const handleSave = () => {
-    sessionStorage.setItem("tripData", JSON.stringify(tripData));
-    alert("Viagem salva!");
+    if(!tripData.nomeViagem || !tripData.partida || !tripData.destino || !tripData.dataIda || !tripData.dataVolta){
+        Toastify({
+          text: 'Os campos da viagem precisam estar preenchidos',
+          duration: 3000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style:{
+            background: "#ce1836",
+          }
+        }).showToast();
+  
+    }else{
+      sessionStorage.setItem("tripData", JSON.stringify(tripData));
+      onSaveTrip();
+      Toastify({
+        text: 'Viagem Salva!',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        stopOnFocus: true,
+        style:{
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        }
+      }).showToast();
+
+    }
+
+
   };
 
   return (
@@ -75,7 +122,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
           <span className="size-[5px] inline-block rounded-full bg-rosinha ml-1"></span>
         </h1>
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between max-hd:gap-20">
         <div className="mt-8 space-y-7 w-1/2">
           <div className="flex flex-col">
             <label className="text-zinc-700 font-inter pl-1">Nome da sua viagem:</label>
@@ -88,6 +135,30 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
             />
           </div>
           <div className="flex flex-col relative">
+            <label className="text-zinc-700 font-inter pl-1">Ponto de Partida:</label>
+            <input
+              type="text"
+              name="partida"
+              className="border border-zinc-300 rounded-lg p-3 focus:outline-none"
+              value={partida}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+            {suggestionsPartida.length > 0 && (
+              <ul className="absolute z-10 top-full left-0 right-0 border border-zinc-300 mt-2 rounded-lg max-h-40 overflow-y-auto bg-white">
+                {suggestionsPartida.map((suggestion: any, index: number) => (
+                  <li
+                    key={index}
+                    className="p-2 cursor-pointer hover:bg-zinc-200"
+                    onClick={() => handleSuggestionClick(suggestion, "partida")}
+                  >
+                    {suggestion.display_name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="flex flex-col relative">
             <label className="text-zinc-700 font-inter pl-1">Destino:</label>
             <input
               type="text"
@@ -97,13 +168,13 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
               onChange={handleChange}
               autoComplete="off"
             />
-            {suggestions.length > 0 && (
+            {suggestionsDestino.length > 0 && (
               <ul className="absolute z-10 top-full left-0 right-0 border border-zinc-300 mt-2 rounded-lg max-h-40 overflow-y-auto bg-white">
-                {suggestions.map((suggestion: any, index: number) => (
+                {suggestionsDestino.map((suggestion: any, index: number) => (
                   <li
                     key={index}
                     className="p-2 cursor-pointer hover:bg-zinc-200"
-                    onClick={() => handleSuggestionClick(suggestion)}
+                    onClick={() => handleSuggestionClick(suggestion, "destino")}
                   >
                     {suggestion.display_name}
                   </li>
@@ -160,7 +231,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
                 alt="Imagem Selecionada"
                 width={500}
                 height={500}
-                className="rounded-xl size-96"
+                className="rounded-xl size-96 max-hd:size-80"
               />
             ) : (
               <Image
@@ -168,7 +239,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip }) {
                 alt="Imagem Selecionada"
                 width={500}
                 height={500}
-                className="rounded-xl size-96"
+                className="rounded-xl size-96 max-hd:size-80"
               />
             )}
             <button onClick={handleClick} className="text-zinc-700 text-center flex items-center gap-2">
