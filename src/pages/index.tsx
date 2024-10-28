@@ -8,7 +8,6 @@ import TripsSection from "../components/Home/Section3/TripsSection";
 export default function Home() {
   return (
     <div className="flex flex-col relative w-full items-center">
-
       <header className="fixed z-50 w-full flex justify-center border-b bg-white">
         <Header />
       </header>
@@ -27,7 +26,7 @@ export default function Home() {
         <TripsSection/>                               
       </section>
 
-      <footer className="w-full">
+      <footer className="w-full bg-black justify-center flex mt-10">
         <Footer/>
       </footer>
 

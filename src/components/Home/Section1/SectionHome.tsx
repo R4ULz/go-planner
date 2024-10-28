@@ -87,11 +87,13 @@ export default function SectionHome() {
 
   return (
     <section className="h-[664px] flex justify-center items-center max-w-screen-xl w-full px-4">
+
       <div className="flex w-2/3 h-full p-5 flex-col space-y-2 justify-center items-start">
         <TxtHome />
       </div>
+
       <div className="flex relative flex-col backdrop-blur-sm bg-black/40 rounded-2xl px-20 py-12 justify-center items-center text-gray-400 w-[450px]">
-        <div className="space-y-14 w-full flex justify-start flex-col items-center ">
+        <div className="space-y-6 w-full flex justify-start flex-col items-center ">
           <div className="relative w-full ">
             <InputTxt
               label="Ponto de partida:"
@@ -140,11 +142,11 @@ export default function SectionHome() {
             )}
           </div>
 
-          <div className="absolute flex right-[36px] top-8">{LineDestiny}</div>
-          <button onClick={swapLocations} className="absolute flex left-[36px] top-24">{Arrows}</button>
+          <div className="absolute right-[36px] top-[68px] ">{LineDestiny}</div>
+          <button onClick={swapLocations} className="absolute left-[36px] top-32">{Arrows}</button>
         </div>
-        <hr className="mt-5 border-b- border-zinc-600 w-full" />
-        <div className="mt-5 w-60">
+        <hr className="mt-10 border-b- border-zinc-600 w-full" />
+        <div className="mt-8 w-full">
           <BtnGradient text="Criar sua viagem" icon={Viagem} />
         </div>
       </div>
