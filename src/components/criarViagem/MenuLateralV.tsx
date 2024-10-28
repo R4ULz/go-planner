@@ -6,13 +6,13 @@ import "toastify-js/src/toastify.css";
 
 interface MenuLateralVProps {
   setSelectedComponent: (component: string) => void;
-  salvarViagem: () => void; 
+  salvarViagem: () => void;
+  menuEnabled: boolean;
+  selectedComponent: string;
 }
 
-export default function MenuLateralV({ setSelectedComponent, salvarViagem, hasTripData }: MenuLateralVProps) {
+export default function MenuLateralV({ setSelectedComponent, salvarViagem, menuEnabled, selectedComponent }: MenuLateralVProps) {
 
-  const [selectedComponent, setComponenteSelecionado] = useState("DadosPrincipais");
-  
   const handleItemClick = (component: string, isDisabled: boolean) => {
     if (isDisabled) {
       Toastify({
@@ -24,7 +24,6 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem, hasTr
         close: true,
       }).showToast();
     } else {
-      setComponenteSelecionado(component);
       setSelectedComponent(component);
     }
   };
@@ -34,23 +33,23 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem, hasTr
       <div className="overflow-y-auto lg:max-h-none max-h-[200px] flex-grow">
       <ul>
       <MenuItemV
-            texto="Dados Principais"
-            onclick={() => handleItemClick("DadosPrincipais", false)}
-            selected={selectedComponent === "DadosPrincipais"}
-            cor="bg-rosinha" // Define como selecionado
-          />
+          texto="Dados Principais"
+          onclick={() => handleItemClick("DadosPrincipais", false)}
+          selected={selectedComponent === "DadosPrincipais"}
+          cor="bg-rosinha"
+        />
           <MenuItemV
             texto="Atividades"
-            onclick={() => handleItemClick("Atividades", !hasTripData)}
+            onclick={() => handleItemClick("Atividades", !menuEnabled)}
             selected={selectedComponent === "Atividades"}
-            disabled={!hasTripData}
+            disabled={!menuEnabled}
             cor="bg-laranjinha"
           />
           <MenuItemV
             texto="Convidar"
-            onclick={() => handleItemClick("ConvidarAmigos", !hasTripData)}
+            onclick={() => handleItemClick("ConvidarAmigos", !menuEnabled)}
             selected={selectedComponent === "ConvidarAmigos"}
-            disabled={!hasTripData}
+            disabled={!menuEnabled}
             cor="bg-roxo"
           />
           <div className="flex justify-center mt-5 hidden">

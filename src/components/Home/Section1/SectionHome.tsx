@@ -5,88 +5,49 @@ import { Arrows, LineDestiny, Viagem } from "../../icons/index";
 import axios from "axios";
 import TxtHome from "./TxtHome";
 
-export default function SectionHome() {
-  const [pontoPartida, setPontoPartida] = useState("");
-  const [pontoIda, setPontoIda] = useState("");
-  
+export default function SectionHome({pontoPartida, pontoDestino, onPartidaChange, onDestinoChange, onCreateTrip}) {
+
   const [suggestionsPartida, setSuggestionsPartida] = useState([]);
-  const [suggestionsIda, setSuggestionsIda] = useState([]);
+  const [suggestionsDestino, setSuggestionsDestino] = useState([]);
 
   // Função para buscar sugestões de localizações para o ponto de partida
-  const fetchLocationSuggestionsPartida = async (inputValue: string) => {
+  const fetchLocationSuggestions = async (inputValue: string, tipo: "partida" | "destino") => {
     if (inputValue.length > 2) {
       try {
-        const response = await axios.get(
-          `https://eu1.locationiq.com/v1/autocomplete.php`,
-          {
-            params: {
-              key: process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY,
-              q: inputValue,
-              format: "json",
-            },
-          }
-        );
-        setSuggestionsPartida(response.data);
+        const response = await axios.get(`https://eu1.locationiq.com/v1/autocomplete.php`, {
+          params: {
+            key: process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY,
+            q: inputValue,
+            format: "json",
+          },
+        });
+        tipo === "partida" ? setSuggestionsPartida(response.data) : setSuggestionsDestino(response.data);
       } catch (error) {
         console.error("Erro ao buscar sugestões de localizações:", error);
       }
     } else {
-      setSuggestionsPartida([]);
+      tipo === "partida" ? setSuggestionsPartida([]) : setSuggestionsDestino([]);
     }
-  };
-
-  // Função para buscar sugestões de localizações para o ponto de ida
-  const fetchLocationSuggestionsIda = async (inputValue: string) => {
-    if (inputValue.length > 2) {
-      try {
-        const response = await axios.get(
-          `https://eu1.locationiq.com/v1/autocomplete.php`,
-          {
-            params: {
-              key: process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY,
-              q: inputValue,
-              format: "json",
-            },
-          }
-        );
-        setSuggestionsIda(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar sugestões de localizações:", error);
-      }
-    } else {
-      setSuggestionsIda([]);
-    }
-  };
-
-  const handlePartidaChange = (novoValor: string) => {
-    setPontoPartida(novoValor);
-    fetchLocationSuggestionsPartida(novoValor);
   };
   
-  const handleIdaChange = (novoValor: string) => {
-    setPontoIda(novoValor);
-    fetchLocationSuggestionsIda(novoValor);
-  };
-
   const handleSuggestionClickPartida = (suggestion: any) => {
-    setPontoPartida(suggestion.display_name);
+    onPartidaChange(suggestion.display_name);
     setSuggestionsPartida([]);
   };
 
-  const handleSuggestionClickIda = (suggestion: any) => {
-    setPontoIda(suggestion.display_name);
-    setSuggestionsIda([]);
+  const handleSuggestionClickDestino = (suggestion: any) => {
+    onDestinoChange(suggestion.display_name);
+    setSuggestionsDestino([]);
   };
 
   // Função para trocar os valores de pontoPartida e pontoIda
   const swapLocations = () => {
-    const tempPartida = pontoPartida;
-    setPontoPartida(pontoIda);
-    setPontoIda(tempPartida);
+    onPartidaChange(pontoDestino);
+    onDestinoChange(pontoPartida);
   };
 
   return (
-    <div className="h-[664px] flex justify-center items-center max-w-screen-xl w-full">
+    <div className="h-[664px] flex justify-center items-center bg-hero-pattern bg-cover bg-center">
       <div className="flex w-2/3 h-full p-5 flex-col space-y-2 justify-center items-start">
         <TxtHome />
       </div>
@@ -96,7 +57,11 @@ export default function SectionHome() {
             <InputTxt
               label="Ponto de partida:"
               valor={pontoPartida}
-              valorMudou={handlePartidaChange}
+              valorMudou={(e) =>{
+                const valor = e.target.value
+                onPartidaChange(valor)
+                fetchLocationSuggestions(valor, "partida")
+              }}
               tipo="text"
               placeholder="Seu Local"
               obrigatorio
@@ -119,19 +84,23 @@ export default function SectionHome() {
           <div className="relative w-full">
             <InputTxt
               label="Para:"
-              valor={pontoIda}
-              valorMudou={handleIdaChange}
+              valor={pontoDestino}
+              valorMudou={(e) =>{
+                const valor = e.target.value
+                onDestinoChange(valor)
+                fetchLocationSuggestions(valor, "destino")
+              }}
               tipo="text"
               placeholder="Seu Destino"
               obrigatorio
             />
-            {suggestionsIda.length > 0 && (
+            {suggestionsDestino.length > 0 && (
               <ul className="absolute z-10 top-full left-0 right-0 border border-zinc-300 mt-2 rounded-lg max-h-40 overflow-y-auto bg-white">
-                {suggestionsIda.map((suggestion: any, index: number) => (
+                {suggestionsDestino.map((suggestion: any, index: number) => (
                   <li
                     key={index}
                     className="p-2 cursor-pointer hover:bg-zinc-200"
-                    onClick={() => handleSuggestionClickIda(suggestion)}
+                    onClick={() => handleSuggestionClickDestino(suggestion)}
                   >
                     {suggestion.display_name}
                   </li>
@@ -144,7 +113,11 @@ export default function SectionHome() {
         </div>
         <hr className="mt-5 border border-white w-56" />
         <div className="mt-10 w-60">
-          <BtnGradient text="Criar sua viagem" icon={Viagem} />
+          <button 
+            className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm"
+            onClick={onCreateTrip}>
+              {Viagem} Criar sua viagem
+            </button>
         </div>
       </div>
     </div>

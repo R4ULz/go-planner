@@ -2,7 +2,7 @@ import { calendariu } from "../icons/teste";
 import { canetinha } from "../icons";
 import Image from "next/image";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 
@@ -11,6 +11,10 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
 
   const [suggestionsPartida, setSuggestionsPartida] = useState<any[]>([]);
   const [suggestionsDestino, setSuggestionsDestino] = useState<any[]>([]);
+
+  useEffect(() => {
+    console.log("Dados de tripData em Dados Principais:", tripData)
+  }, [tripData]);
 
   // Função para buscar as sugestões da API LocationIQ
   const fetchLocationSuggestions = async (inputValue: string, type: string) => {

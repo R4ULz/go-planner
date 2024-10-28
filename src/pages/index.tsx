@@ -4,8 +4,26 @@ import Header from "../components/Home/Header/Header";
 import BgImg from "@/src/components/icons/BgImgs";
 import Footer from "../components/Home/Footer/footer";
 import TripsSection from "../components/Home/Section3/TripsSection";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import SectionHome from "../components/Home/Section1/SectionHome";
 
 export default function Home() {
+
+  const router = useRouter()
+  const [pontoPartida, setPontoPartida] = useState()
+  const [pontoDestino, setPontoDestino] = useState()
+
+  const handlePartidaChange = (value) => setPontoPartida(value);
+  const handleDestinoChange = (value) => setPontoDestino(value);
+
+  const handleCreateTrip = () => {
+    router.push({
+      pathname: '/criarViagem',
+      query: { pontoPartida, pontoDestino },
+    });
+  };
+
   return (
     <div className="flex flex-col relative w-full items-center">
 
@@ -14,7 +32,7 @@ export default function Home() {
       </header>
 
       <section className="z-0 h-full w-full mt-20  ">
-        <BgImg/>
+        <SectionHome pontoPartida={pontoPartida} pontoDestino={pontoDestino} onPartidaChange={handlePartidaChange} onDestinoChange={handleDestinoChange} onCreateTrip={handleCreateTrip}/>
       </section>
       
       <section className=" w-full flex justify-center">
