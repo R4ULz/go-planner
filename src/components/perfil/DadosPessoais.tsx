@@ -2,13 +2,23 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Email,iconePerfil } from "../icons";
 import { useUser } from "../../contexts/UserContext"; // Importa o contexto do usuário
+import { canetinha } from "../icons";
 
-export default function DadosPessoais({ nome, setNome, email, setEmail}) {
+export default function DadosPessoais({ nome, setNome, email, setEmail, imagem}) {
   const { user } = useUser();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+    
   };
+
+
+  const [imagemURL, setImagemURL] = useState(() => localStorage.getItem('imagemURL') || '/imgs/perfil.jpg');
+
+  useEffect(() => {
+    localStorage.setItem('imagemURL', imagemURL);
+  }, [imagemURL]);
+  
 
   const [editavel, setEditavel] = useState(false)
 
@@ -45,11 +55,51 @@ export default function DadosPessoais({ nome, setNome, email, setEmail}) {
     }
   }, [user]);
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const imageURL = URL.createObjectURL(file);
+      setImagemURL(imageURL);
+    }
+  };
+  
+
+  const handleClick = () => {
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const [sexo, setSexo] = useState('');
+
+
   return (
     <div className="bg-white w-full h-full rounded-xl border-[1px] shadow-xl border-zinc-400 flex flex-col">
       <div className="h-full py-7 max-hd:py-5 max-hd:px-5 px-20">
         <div className="h-1/3 px-16 mb-8">
-          <Image className="rounded-full size-44 max-hd:size-36 mb-28" src="/imgs/perfil.jpg" width={176} height={176} alt="imagem de perfil"></Image>
+        <div className="w-1/2">
+          <div className="flex items-center flex-col w-[176px] h-[176px]">
+              <Image
+                src={imagemURL}
+                alt="Imagem Selecionada"
+                width={176}
+                height={176}
+                className="rounded-[100px]"
+              />
+            <button onClick={handleClick} className="text-zinc-700 text-center flex items-center gap-2">
+              {canetinha}
+              Editar Imagem
+            </button>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
+           </div>
+          </div>
         </div>
         <div className="h-2/3">
           <div className="px-16">
@@ -69,7 +119,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail}) {
               />
             </div>
           </div>
-          <div className="px-16 py-2 max-hd:py-2 space-y-2 max-hd:space-y-2">
+          <div className="px-16 py-5 max-hd:py-2 space-y-2 max-hd:space-y-2">
             <div className={`relative flex items-center border rounded-xl p-4 
               ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200'}`}>
               <i className={`absolute left-3 ${editavel ? 'text-zinc-500' : 'text-gray-500'}`}>
@@ -79,6 +129,49 @@ export default function DadosPessoais({ nome, setNome, email, setEmail}) {
                 ${editavel ? 'bg-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`} value={email} onChange={handleEmailChange} disabled={!editavel} />
             </div>
           </div>
+          <div className="px-16 py-2 space-y-2">
+            <div className="flex flex-row gap-20">
+              <span className="text-gray-700 font-medium">Sexo:</span>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="sexo"
+                  value="Masculino"
+                  checked={sexo === 'Masculino'}
+                  onChange={(e) => setSexo(e.target.value)}
+                  className="text-blue-500 focus:ring-blue-400"
+                  disabled={!editavel}
+                />
+                <span className="text-gray-700">Masculino</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="sexo"
+                  value="Feminino"
+                  checked={sexo === 'Feminino'}
+                  onChange={(e) => setSexo(e.target.value)}
+                  className="text-blue-500 focus:ring-blue-400"
+                  disabled={!editavel}
+                />
+                <span className="text-gray-700">Feminino</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="sexo"
+                  value="Não informar"
+                  checked={sexo === 'Não informar'}
+                  onChange={(e) => setSexo(e.target.value)}
+                  className="text-blue-500 focus:ring-blue-400"
+                  disabled={!editavel}
+                  defaultChecked
+                />
+                <span className="text-gray-700">Não informar</span>
+              </label>
+            </div>
+          </div>
+
           <div className="flex px-16 mt-5">
             <button
               onClick={habilitarEdicao}

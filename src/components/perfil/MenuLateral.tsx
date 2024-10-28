@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useUser } from "@/src/contexts/UserContext";
 import MenuItem from "./MenuItem";
 import { useRouter } from "next/router";
@@ -6,11 +7,17 @@ export default function MenuLateral({ setSelectedComponent, handleSave }) {
   const { logout } = useUser();
   const router = useRouter();
 
+  const [selectedComponent, setComponenteSelecionado] = useState("DadosPessoais");
+
   const handleLogout = () => {
     logout();
-    alert("Você está saindo")
+    alert("Você está saindo");
     router.push("/autenticacao");
+  };
 
+  const handleItemClick = (component: string) => {
+    setComponenteSelecionado(component);
+    setSelectedComponent(component);
   };
 
   return (
@@ -19,15 +26,21 @@ export default function MenuLateral({ setSelectedComponent, handleSave }) {
         <ul>
           <MenuItem
             texto="Dados Pessoais"
-            onclick={() => setSelectedComponent("DadosPessoais")}
+            onclick={() => handleItemClick("DadosPessoais")}
+            selected={selectedComponent === "DadosPessoais"}
+            cor="bg-rosinha"
           />
           <MenuItem
             texto="Histórico de viagens"
-            onclick={() => setSelectedComponent("HistoricoViagens")}
+            onclick={() => handleItemClick("HistoricoViagens")}
+            selected={selectedComponent === "HistoricoViagens"}
+            cor="bg-laranjinha"
           />
           <MenuItem
             texto="Login e senha"
-            onclick={() => setSelectedComponent("LoginSenha")}
+            onclick={() => handleItemClick("LoginSenha")}
+            selected={selectedComponent === "LoginSenha"}
+            cor="bg-roxo"
           />
         </ul>
       </div>
