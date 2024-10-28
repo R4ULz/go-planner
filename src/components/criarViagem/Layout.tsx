@@ -6,15 +6,20 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos";
 
-export default function Layout() {
+interface LayoutProps {
+  tripData: { partida: string; destino: string };
+  menuEnabled: boolean;
+  setMenuEnabled: (enabled: boolean) => void;
+}
+
+export default function Layout({tripData: initialTripData, menuEnabled, setMenuEnabled}: LayoutProps) {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPrincipais");
-  const [hasTripData, setHasTripData] = useState(false);
 
   const router = useRouter();
   const [tripData, setTripData] = useState({
     nomeViagem: "",
-    partida: "",
-    destino: "",
+    partida: initialTripData?.partida || "",
+    destino: initialTripData?.destino || "",
     dataIda: "",
     dataVolta: "",
     descricao: "",
@@ -24,9 +29,21 @@ export default function Layout() {
   });
 
   useEffect(() => {
-    const savedTripData = sessionStorage.getItem("tripData");
-    setHasTripData(!!savedTripData);
-  }, []);
+    // Atualizar tripData se initialTripData mudar
+    if (initialTripData.partida || initialTripData.destino) {
+      setTripData(prevTripData => ({
+        ...prevTripData,
+        partida: initialTripData.partida,
+        destino: initialTripData.destino,
+      }));
+      console.log("Initial trip data set in Layout:", initialTripData);
+    }
+  }, [initialTripData]);
+
+  useEffect(() => {
+    console.log("Initial trip data:", initialTripData);
+    console.log("Current trip data:", tripData);
+  }, [initialTripData, tripData]);
 
   const handleUpdateTrip = (updatedData: Partial<typeof tripData>) => {
     const newTripData = { ...tripData, ...updatedData };
@@ -82,7 +99,7 @@ export default function Layout() {
   };;
 
   const onSaveTrip = () => {
-    setHasTripData(true);
+    setMenuEnabled(true);
   };
 
   const renderComponent = () => {
@@ -101,7 +118,12 @@ export default function Layout() {
   return (
     <div className="flex gap-10 max-hd:gap-20 w-full max-hd:max-w-screen-xl min-h-[716px] px-24 max-hd:px-14 justify-center">
       <aside className="w-1/5 flex justify-center ml-10">
-        <MenuLateralV setSelectedComponent={setSelectedComponent} salvarViagem={salvarViagem} hasTripData={hasTripData}/>
+        <MenuLateralV 
+          setSelectedComponent={setSelectedComponent} 
+          salvarViagem={salvarViagem} 
+          menuEnabled={menuEnabled} 
+          selectedComponent={selectedComponent}
+        />
       </aside>
       <div className="w-full">
         <p className="text-black font-inter font-medium">CRIANDO SUA VIAGEM!</p>

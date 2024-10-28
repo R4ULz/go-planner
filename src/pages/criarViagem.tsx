@@ -5,56 +5,71 @@ import Header from "../components/Home/Header/Header";
 import { useUser } from "../contexts/UserContext";
 import { useRouter } from "next/router";
 
-
-
-export default function CriarViagem(){
-
-    const { user } = useUser();
+export default function CriarViagem() {
     const router = useRouter();
+    const { pontoPartida, pontoDestino } = router.query;
+    const { user } = useUser();
     const [showModal, setShowModal] = useState(false);
+    const [menuEnabled, setMenuEnabled] = useState(false);
+    const [tripData, setTripData] = useState({
+        partida: "",
+        destino: ""
+    });
 
     useEffect(() => {
         setShowModal(true);
-    },[user, router])
-  
-    const handleRedirect = () => {
-      setShowModal(false);
-      router.push({
-          pathname: '/autenticacao',
-          query: { modo: 'login' }  
-      });
-  };
+        console.log("Valores da URL:", { pontoPartida, pontoDestino });
+        // Definir valores iniciais de partida e destino quando disponíveis
+        if (pontoPartida && pontoDestino) {
+            setTripData({
+                partida: pontoPartida as string,
+                destino: pontoDestino as string
+            });
+        }
+    }, [pontoPartida, pontoDestino]);
 
-    return(
+    const handleRedirect = () => {
+        setShowModal(false);
+        router.push({
+            pathname: '/autenticacao',
+            query: { modo: 'login' }
+        });
+    };
+
+    return (
         <div>
             {user ?
-            <div className="flex h-screen flex-col">
-                <header className="">
-                    <Header></Header>
-                </header>
-                <div className="p-5 w-full flex justify-center">
-                    <Layout></Layout>
-                </div>
-                <footer>
-                    <Footer></Footer>
-                </footer>
-            </div>
-            :
-            showModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm">
-                    <div className="bg-white p-8 rounded-lg shadow-lg p-24">
-                        <h2 className="text-xl font-bold mb-4">Acesso não permitido</h2>
-                        <p className="mb-4 text-lg">Você precisa estar logado para acessar o perfil.</p>
-                        <button
-                            onClick={handleRedirect}
-                            className="bg-gradient-to-r to-rosinha from-laranja text-white px-4 py-2 rounded-lg"
-                        >
-                            Fazer login
-                        </button>
+                <div className="flex h-screen flex-col">
+                    <header className="">
+                        <Header />
+                    </header>
+                    <div className="p-5 w-full flex justify-center">
+                        <Layout 
+                            tripData={tripData} 
+                            menuEnabled={menuEnabled} 
+                            setMenuEnabled={setMenuEnabled} 
+                        />
                     </div>
+                    <footer>
+                        <Footer />
+                    </footer>
                 </div>
-            )
-                }
+                :
+                showModal && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm">
+                        <div className="bg-white p-8 rounded-lg shadow-lg">
+                            <h2 className="text-xl font-bold mb-4">Acesso não permitido</h2>
+                            <p className="mb-4 text-lg">Você precisa estar logado para acessar o perfil.</p>
+                            <button
+                                onClick={handleRedirect}
+                                className="bg-gradient-to-r to-rosinha from-laranja text-white px-4 py-2 rounded-lg"
+                            >
+                                Fazer login
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
         </div>
-    )
+    );
 }

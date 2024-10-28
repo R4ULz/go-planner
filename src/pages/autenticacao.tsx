@@ -137,8 +137,8 @@ export default function Login() {
                                 {message}
                             </p>
                         )}
-                            <InputTxt placeholder="Email:" valor={email} valorMudou={setEmail} tipo="text" obrigatorio />
-                            <InputTxt placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
+                            <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                            <input type="password" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Senha:" value={senha} onChange={(e) => setSenha(e.target.value)}/>
                             <Link className="text-zinc-300 text-sm font-inter float-end" href={'/recuperarSenha'}>Esqueceu a senha?</Link>
                             <div className="mt-10 space-y-3">
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Não tem login? Clique em <a onClick={() => setModo("cadastro")} className="text-laranja cursor-pointer"> Cadastrar</a></p>
@@ -191,10 +191,10 @@ export default function Login() {
                             </p>
                         )}
                         <div className="w-1/2">
-                            <InputTxt label="" placeholder="Nome" valor={nome} valorMudou={setNome} tipo="text" obrigatorio />
-                            <InputTxt label="" placeholder="Email:" valor={email} valorMudou={setEmail} tipo="email" obrigatorio />
-                            <InputTxt label="" placeholder="Senha:" valor={senha} valorMudou={setSenha} tipo="password" obrigatorio />
-                            <InputTxt label="" placeholder="Confirmar senha:" valor={confirmarSenha} valorMudou={setConfirmarSenha} tipo="password" obrigatorio />
+                            <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Nome:" value={nome} onChange={(e) => setNome(e.target.value)} required/>
+                            <input type="email" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                            <input type="password" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Senha:" value={senha} onChange={(e) => setSenha(e.target.value)} required/>
+                            <input type="password" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Confirmar senha:" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} required/>
                             <div className="mt-3">
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Já possui uma conta? Clique em<a onClick={() => setModo("login")} className="text-laranja cursor-pointer">Login</a></p>
                                 <button className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm" onClick={handleSubmit}>Cadastrar <i className="pi pi-arrow-right"></i></button>
