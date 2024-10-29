@@ -37,11 +37,11 @@ export default function Home() {
   return (
     <div className="flex flex-col relative w-full items-center">
 
-      <header className="fixed z-50 w-full flex justify-center">
+      <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
         <Header />
       </header>
 
-      <section className="z-0 h-full w-full mt-20  ">
+      <section className="z-0 h-full w-full mt-20 bg-hero-pattern bg-cover bg-center flex justify-center">
         <SectionHome pontoPartida={pontoPartida} pontoDestino={pontoDestino} onPartidaChange={handlePartidaChange} onDestinoChange={handleDestinoChange} onCreateTrip={handleCreateTrip}/>
       </section>
       
@@ -55,7 +55,7 @@ export default function Home() {
         <TripsSection/>                               
       </section>
 
-      <footer className="w-full">
+      <footer className="w-full flex justify-center bg-black">
         <Footer/>
       </footer>
 

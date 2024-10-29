@@ -8,10 +8,10 @@ export default function Header() {
     const{user} = useUser();
 
     return (
-        <div className="h-20 w-full flex  justify-between items-center gap-10 bg-white border-b-[1px] border-zinc-400">
+        <div className="h-20 w-full flex justify-between items-center max-w-screen-2xl gap-10 ">
             {user
                 ?
-                <div className="w-full h-full flex px-20 justify-between items-center gap-10">
+                <div className="w-full h-full flex px-5 justify-between items-center gap-10">
                     <div>
                         <Link href="/">{IconeLogo}</Link>
                     </div>
@@ -25,7 +25,7 @@ export default function Header() {
                     </div>
                 </div>
                 :
-                <div className="w-full h-full flex px-20 justify-between items-center gap-10">
+                <div className="w-full h-full flex px-5 justify-between items-center gap-10">
                     <div>
                         <Link href="/">{IconeLogo}</Link>
                     </div>
