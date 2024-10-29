@@ -19,7 +19,6 @@ export default function CriarViagem() {
     useEffect(() => {
         setShowModal(true);
         console.log("Valores da URL:", { pontoPartida, pontoDestino });
-        // Definir valores iniciais de partida e destino quando disponíveis
         if (pontoPartida && pontoDestino) {
             setTripData({
                 partida: pontoPartida as string,
@@ -29,6 +28,10 @@ export default function CriarViagem() {
     }, [pontoPartida, pontoDestino]);
 
     const handleRedirect = () => {
+
+        sessionStorage.setItem("redirectAfterLogin", 
+            `/criarViagem?pontoPartida=${pontoPartida}&pontoDestino=${pontoDestino}`);
+
         setShowModal(false);
         router.push({
             pathname: '/autenticacao',

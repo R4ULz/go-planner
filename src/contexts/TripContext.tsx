@@ -2,6 +2,7 @@ import React,{createContext, useState, useContext, ReactNode} from "react";
 
 interface Viagem{
     titulo: string;
+    partida: string;
     destino: string;
     dataInicio: string;
     fimViagem: string;
@@ -26,6 +27,7 @@ const ViagemContext = createContext<ViagemContextProps | undefined>(undefined);
 export const ViagemProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [viagem, setViagem] = useState<Viagem>({
       titulo: '',
+      partida: '',
       destino: '',
       dataInicio: '',
       fimViagem: '',
