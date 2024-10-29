@@ -1,19 +1,20 @@
-import InputTxt from "@/src/components/inputs/InputTxt";
 import TxtHome from "@/src/components/Home/Section1/TxtHome";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useUser } from '../contexts/UserContext';
 import { LogoAutent } from "../components/icons";
+import Toastify from 'toastify-js'
+import 'toastify-js/src/toastify.css';
 
 export default function Login() {
     const router = useRouter()
-    const { login } = useUser(); // Obtém a função login do contexto
+    const { login } = useUser();
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [nome, setNome] = useState("")
     const [confirmarSenha, setConfirmarSenha] = useState("")
-    const [modo, setModo] = useState<"login" | "cadastro">("cadastro");
+    const [modo, setModo] = useState<"login" | "cadastro">("login");
     const [message, setMessage] = useState("")
     const [showMessage, setShowMessage] = useState(false)
 
@@ -69,12 +70,15 @@ export default function Login() {
 
           if (res.ok) {
             login(data.user);
-            router.push('/perfil');
-          } else {
+            const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || '/perfil';
+            sessionStorage.removeItem("redirectAfterLogin"); 
+            router.push(redirectUrl); 
+
+        } else {
             setMessage(data.message);
             setShowMessage(true);
             console.log('Erro no login:', data.message);
-          }
+        }
         } catch (error) {
           console.log('Erro ao se conectar ao servidor', error);
         }
@@ -106,7 +110,17 @@ export default function Login() {
             const data = await res.json();
     
             if (res.ok) {
-                alert('Cadastro realizado com sucesso! Redirecionando para o login...');
+                Toastify({
+                    text: 'Cadastro realizado com sucesso, redirecionando para a página de login...',
+                    duration: 3000,
+                    close:true,
+                    gravity: 'top',
+                    position: 'right',
+                    stopOnFocus: true,
+                    style:{
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    }
+                })
                 router.push('/autenticacao?modo=login');
             } else {
                 alert('Erro ao cadastrar: ' + data.message);
