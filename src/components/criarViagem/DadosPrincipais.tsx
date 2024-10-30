@@ -119,7 +119,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-screen-xl">
       <div>
         <h1 className="text-xl font-bold font-inter">
           Dados Principais
@@ -187,7 +187,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
             )}
           </div>
           <hr className="border-zinc-300" />
-          <div className="gap-10 flex justify-between">
+          <div className="gap-6 flex justify-between">
             <div className={`relative flex items-center w-full border rounded-xl p-3`}>
               <i className={`absolute left-3`}>{calendariu}</i>
               <input
