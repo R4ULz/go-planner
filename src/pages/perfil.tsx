@@ -137,19 +137,19 @@ export default function Perfil() {
     <div>
       {user
         ?
-        <div className="flex h-screen overflow-x-hidden bg-gray-100 flex-col">
-      <header className="fixed z-50 w-full flex justify-center">
+        <div className="flex overflow-x-hidden bg-gray-100 flex-col items-center">
+      <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
         <Header />
       </header>
-      <div className="flex w-full h-[1000px] gap-10 mt-5">
-        <div className="flex w-1/5 p-20 max-w-screen-2xl">
+      <div className="flex max-w-screen-2xl  w-full  gap-10 mt-5">
+        <div className="flex w-1/5 p-20 ">
           <MenuLateral setSelectedComponent={setSelectedComponent} handleSave={handleUpdate} />
         </div>
         <div className="w-4/5 h-[750px] p-20 max-w-screen-2xl">
           {renderComponent()}
         </div>
       </div>
-      <footer className="w-full">
+      <footer  className="w-full flex justify-center bg-black">
         <Footer />
       </footer>
     </div>

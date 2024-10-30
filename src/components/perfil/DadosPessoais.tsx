@@ -75,7 +75,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, imagem})
 
 
   return (
-    <div className="bg-white w-full h-full rounded-xl border-[1px] shadow-xl border-zinc-400 flex flex-col">
+    <div className="bg-white w-full h-full rounded-xl border-[1px] shadow-xl border-zinc-400 flex flex-col max-w-screen-xl">
       <div className="h-full py-7 max-hd:py-5 max-hd:px-5 px-20">
         <div className="h-1/3 px-16 mb-8">
         <div className="w-1/2">

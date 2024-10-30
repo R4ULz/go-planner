@@ -102,7 +102,7 @@ export default function TripsSection() {
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                         <div className="text-white p-8 space-y-2">
                         <div className="flex gap-2 items-center">
-                            <h3 className="text-lg font-bold">Dysney</h3>
+                            <h3 className="text-lg font-bold">Disney</h3>
                                     <div className="flex gap-1">
                                         <div className="size-3 rounded-full bg-red-600"></div>
                                         <div className="size-3 rounded-full bg-white"></div>
