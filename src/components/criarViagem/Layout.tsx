@@ -5,6 +5,8 @@ import ConvidarAmigos from "./convidarAmigos/Amigos";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos";
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 interface LayoutProps {
   tripData: { partida: string; destino: string };
@@ -61,6 +63,20 @@ export default function Layout({tripData: initialTripData, menuEnabled, setMenuE
 
     let tripData = JSON.parse(tripDataString);
 
+    const partidaStored = sessionStorage.getItem("partida")
+    const destinoStored = sessionStorage.getItem("destino")
+
+    tripData = {
+      ...tripData,
+      partida: tripData.partida || partidaStored,
+      destino: tripData.destino || destinoStored,
+    };
+
+    if (!tripData.partida || !tripData.destino) {
+      alert("Partida e destino são obrigatórios.");
+      return;
+    }
+
     const atividadesAjustadas = tripData.atividades.map((atividade) => ({
       nome: atividade.name, // Ajustando 'name' para 'nome'
       data: atividade.date, // Ajustando 'date' para 'data'
@@ -85,18 +101,28 @@ export default function Layout({tripData: initialTripData, menuEnabled, setMenuE
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao enviar os dados para o banco de dados.");
+        throw new Error("Erro ao enviar os dados para o banco de dados. ", data);
       }
 
       const result = await response.json();
-      alert("Viagem salva com sucesso no banco de dados!");
+      Toastify({
+        text: 'Viagem confirmada!',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        stopOnFocus: true,
+        style:{
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        }
+      }).showToast();
       console.log(result);
       router.push('/perfil')
     } catch (error) {
       console.error("Erro ao enviar os dados:", error);
       alert("Falha ao confirmar a viagem.");
     }
-  };;
+  };
 
   const onSaveTrip = () => {
     setMenuEnabled(true);

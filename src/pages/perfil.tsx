@@ -23,16 +23,16 @@ export default function Perfil() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-      setShowModal(true);
-  },[user, router])
+    setShowModal(true);
+  }, [user, router])
 
   const handleRedirect = () => {
     setShowModal(false);
     router.push({
-        pathname: '/autenticacao',
-        query: { modo: 'login' }  
+      pathname: '/autenticacao',
+      query: { modo: 'login' }
     });
-};
+  };
 
   useEffect(() => {
     if (user) {
@@ -70,7 +70,7 @@ export default function Perfil() {
           gravity: 'top',
           position: 'right',
           stopOnFocus: true,
-          style:{
+          style: {
             background: "linear-gradient(to right, #00b09b, #96c93d)",
           }
         }).showToast();
@@ -83,7 +83,7 @@ export default function Perfil() {
           gravity: 'top',
           position: 'right',
           stopOnFocus: true,
-          style:{
+          style: {
             background: "#ce1836",
           }
         }).showToast();
@@ -97,7 +97,7 @@ export default function Perfil() {
         gravity: 'top',
         position: 'right',
         stopOnFocus: true,
-        style:{
+        style: {
           background: "#ce1836",
         }
       }).showToast();
@@ -108,27 +108,27 @@ export default function Perfil() {
     switch (selectedComponent) {
       case "DadosPessoais":
         return <DadosPessoais user={user} nome={nome}
-        setNome={setNome}
-        email={email}
-        setEmail={setEmail}
-        senha={senha}
-        setSenha={setSenha}
-        confirmSenha={confirmSenha}
-        setConfirmSenha={setConfirmSenha} />; 
+          setNome={setNome}
+          email={email}
+          setEmail={setEmail}
+          senha={senha}
+          setSenha={setSenha}
+          confirmSenha={confirmSenha}
+          setConfirmSenha={setConfirmSenha} />;
       case "HistoricoViagens":
         return <HistoricoViagens user={user} />; // Passa o usuário como prop
       case "LoginSenha":
         return <LoginESenha user={user} />; // Passa o usuário como prop
       default:
-        return <DadosPessoais user={user}             
-        nome={nome}
-        setNome={setNome}
-        email={email}
-        setEmail={setEmail}
-        senha={senha}
-        setSenha={setSenha}
-        confirmSenha={confirmSenha}
-        setConfirmSenha={setConfirmSenha}/>; // Passa o usuário como prop
+        return <DadosPessoais user={user}
+          nome={nome}
+          setNome={setNome}
+          email={email}
+          setEmail={setEmail}
+          senha={senha}
+          setSenha={setSenha}
+          confirmSenha={confirmSenha}
+          setConfirmSenha={setConfirmSenha} />; // Passa o usuário como prop
     }
   };
 
@@ -138,36 +138,36 @@ export default function Perfil() {
       {user
         ?
         <div className="flex h-screen overflow-x-hidden bg-gray-100 flex-col">
-      <header className="fixed z-50 w-full flex justify-center">
-        <Header />
-      </header>
-      <div className="flex w-full h-[1000px] gap-10 mt-5">
-        <div className="flex w-1/5 p-20 max-w-screen-2xl">
-          <MenuLateral setSelectedComponent={setSelectedComponent} handleSave={handleUpdate} />
+          <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
+            <Header />
+          </header>
+          <div className="flex w-full h-[1000px] gap-10 mt-5">
+            <div className="flex w-1/5 p-20 max-w-screen-2xl">
+              <MenuLateral setSelectedComponent={setSelectedComponent} handleSave={handleUpdate} />
+            </div>
+            <div className="w-4/5 h-[750px] p-20 max-w-screen-2xl">
+              {renderComponent()}
+            </div>
+          </div>
+          <footer className="w-full flex justify-center bg-black">
+            <Footer />
+          </footer>
         </div>
-        <div className="w-4/5 h-[750px] p-20 max-w-screen-2xl">
-          {renderComponent()}
-        </div>
-      </div>
-      <footer className="w-full">
-        <Footer />
-      </footer>
-    </div>
-    :
-    showModal && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm">
-          <div className="bg-white p-8 rounded-lg shadow-lg p-24">
+        :
+        showModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm">
+            <div className="bg-white p-8 rounded-lg shadow-lg">
               <h2 className="text-xl font-bold mb-4">Acesso não permitido</h2>
               <p className="mb-4 text-lg">Você precisa estar logado para acessar o perfil.</p>
               <button
-                  onClick={handleRedirect}
-                  className="bg-gradient-to-r to-rosinha from-laranja text-white px-4 py-2 rounded-lg"
+                onClick={handleRedirect}
+                className="bg-gradient-to-r to-rosinha from-laranja text-white px-4 py-2 rounded-lg"
               >
-                  Fazer login
+                Fazer login
               </button>
+            </div>
           </div>
-      </div>
-  )
+        )
       }
     </div>
   );

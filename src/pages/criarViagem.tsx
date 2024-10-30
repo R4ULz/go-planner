@@ -29,7 +29,7 @@ export default function CriarViagem() {
 
     const handleRedirect = () => {
 
-        sessionStorage.setItem("redirectAfterLogin", 
+        sessionStorage.setItem("redirectAfterLogin",
             `/criarViagem?pontoPartida=${pontoPartida}&pontoDestino=${pontoDestino}`);
 
         setShowModal(false);
@@ -43,17 +43,17 @@ export default function CriarViagem() {
         <div>
             {user ?
                 <div className="flex h-screen flex-col">
-                    <header className="">
+                    <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
                         <Header />
                     </header>
-                    <div className="p-5 w-full flex justify-center">
-                        <Layout 
-                            tripData={tripData} 
-                            menuEnabled={menuEnabled} 
-                            setMenuEnabled={setMenuEnabled} 
+                    <div className="p-5 mt-20 w-full flex justify-center">
+                        <Layout
+                            tripData={tripData}
+                            menuEnabled={menuEnabled}
+                            setMenuEnabled={setMenuEnabled}
                         />
                     </div>
-                    <footer>
+                    <footer className="w-full flex justify-center bg-black">
                         <Footer />
                     </footer>
                 </div>

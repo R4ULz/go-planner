@@ -13,6 +13,7 @@ export default async function handler(
     try {
       const {
         nomeViagem,
+        partida,
         destino,
         dataIda,
         dataVolta,
@@ -31,6 +32,7 @@ export default async function handler(
 
       const novaViagem = new Trip({
         titulo: nomeViagem,
+        partida,
         destino,
         dataInicio: dataIda,
         fimViagem: dataVolta,
