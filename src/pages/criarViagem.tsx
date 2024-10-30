@@ -53,13 +53,6 @@ export default function CriarViagem() {
                             setMenuEnabled={setMenuEnabled} 
                         />
                     </div>
-                    <div className="p-5 mt-20 w-full flex justify-center">
-                        <Layout
-                            tripData={tripData}
-                            menuEnabled={menuEnabled}
-                            setMenuEnabled={setMenuEnabled}
-                        />
-                    </div>
                     <footer className="w-full flex justify-center bg-black" className="w-full flex justify-center bg-black">
                         <Footer />
                     </footer>
