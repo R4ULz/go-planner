@@ -104,6 +104,12 @@ export default function Perfil() {
     }
   };
 
+  const handleCreateTrip = () => {
+      router.push({
+        pathname: "/criarViagem",
+    })
+  };
+
   const renderComponent = () => {
     switch (selectedComponent) {
       case "DadosPessoais":
@@ -116,7 +122,7 @@ export default function Perfil() {
           confirmSenha={confirmSenha}
           setConfirmSenha={setConfirmSenha} />;
       case "HistoricoViagens":
-        return <HistoricoViagens user={user} />; // Passa o usuário como prop
+        return <HistoricoViagens user={user} onCreateTrip={handleCreateTrip}/>; // Passa o usuário como prop
       case "LoginSenha":
         return <LoginESenha user={user} />; // Passa o usuário como prop
       default:
