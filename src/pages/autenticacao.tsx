@@ -6,6 +6,9 @@ import { useUser } from '../contexts/UserContext';
 import { LogoAutent } from "../components/icons";
 import Toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css';
+import { olhoCortado } from "../components/icons/olhoCortado";
+import { olhoAberto } from "../components/icons/olhoAberto";
+
 
 export default function Login() {
     const router = useRouter()
@@ -18,6 +21,12 @@ export default function Login() {
     const [message, setMessage] = useState("")
     const [showMessage, setShowMessage] = useState(false)
 
+    const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar senha
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Estado para mostrar/ocultar senha de confirmação
+
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+    const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+
     useEffect(() => {
         if (router.query.modo) {
             setModo(router.query.modo as "login" | "cadastro");
@@ -28,6 +37,8 @@ export default function Login() {
         if (modo === "login") {
             setEmail("");
             setSenha("");
+            setConfirmarSenha("");
+            setNome("");
             setShowMessage(false);
         }
     }, [modo]);
@@ -120,10 +131,20 @@ export default function Login() {
                     style:{
                         background: "linear-gradient(to right, #00b09b, #96c93d)",
                     }
-                })
+                }).showToast()
                 router.push('/autenticacao?modo=login');
             } else {
-                alert('Erro ao cadastrar: ' + data.message);
+                Toastify({
+                    text: data.message,
+                    duration: 3000,
+                    close:true,
+                    gravity: 'top',
+                    position: 'right',
+                    stopOnFocus: true,
+                    style:{
+                        background: "#EB4335",
+                    }
+                }).showToast()
             }
         } catch (error) {
             console.error('Erro ao se conectar ao servidor', error);
@@ -151,8 +172,22 @@ export default function Login() {
                                 {message}
                             </p>
                         )}
-                            <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                            <input type="password" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Senha:" value={senha} onChange={(e) => setSenha(e.target.value)}/>
+                            <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                            <div className="relative w-full">
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" 
+                                    placeholder="Senha:" 
+                                    value={senha} 
+                                    onChange={(e) => setSenha(e.target.value)}/>
+                                <button 
+                                    type="button" 
+                                    onClick={togglePasswordVisibility} 
+                                    className="absolute right-3 top-6 text-zinc-400"
+                                >
+                                    {showPassword ? (olhoCortado) : (olhoAberto)}
+                                </button>
+                            </div>
                             <Link className="text-zinc-300 text-sm font-inter float-end" href={'/recuperarSenha'}>Esqueceu a senha?</Link>
                             <div className="mt-10 space-y-3">
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Não tem login? Clique em <a onClick={() => setModo("cadastro")} className="text-laranja cursor-pointer"> Cadastrar</a></p>
@@ -205,10 +240,38 @@ export default function Login() {
                             </p>
                         )}
                         <div className="w-1/2">
-                            <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Nome:" value={nome} onChange={(e) => setNome(e.target.value)} required/>
-                            <input type="email" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-                            <input type="password" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Senha:" value={senha} onChange={(e) => setSenha(e.target.value)} required/>
-                            <input type="password" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-blue-500 focus:outline-none focus:bg-white" placeholder="Confirmar senha:" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} required/>
+                            <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="Nome:" value={nome} onChange={(e) => setNome(e.target.value)} required/>
+                            <input type="email" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                            <div className="relative w-full">
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" 
+                                    placeholder="Senha:" 
+                                    value={senha} 
+                                    onChange={(e) => setSenha(e.target.value)}/>
+                                <button 
+                                    type="button" 
+                                    onClick={togglePasswordVisibility} 
+                                    className="absolute right-3 top-6 text-zinc-400"
+                                >
+                                    {showPassword ? (olhoCortado) : (olhoAberto)}
+                                </button>
+                            </div>
+                            <div className="relative w-full">
+                                <input 
+                                    type={showConfirmPassword ? "text" : "password"} 
+                                    className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" 
+                                    placeholder="Confirmar Senha:" 
+                                    value={confirmarSenha} 
+                                    onChange={(e) => setConfirmarSenha(e.target.value)}/>
+                                <button 
+                                    type="button" 
+                                    onClick={toggleConfirmPasswordVisibility} 
+                                    className="absolute right-3 top-6 text-zinc-400"
+                                >
+                                    {showConfirmPassword ? (olhoCortado) : (olhoAberto)}
+                                </button>
+                            </div>
                             <div className="mt-3">
                                 <p className="text-white flex justify-center font-inter text-sm gap-1">Já possui uma conta? Clique em<a onClick={() => setModo("login")} className="text-laranja cursor-pointer">Login</a></p>
                                 <button className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold text-sm" onClick={handleSubmit}>Cadastrar <i className="pi pi-arrow-right"></i></button>

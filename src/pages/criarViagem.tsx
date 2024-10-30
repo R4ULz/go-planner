@@ -29,7 +29,7 @@ export default function CriarViagem() {
 
     const handleRedirect = () => {
 
-        sessionStorage.setItem("redirectAfterLogin", 
+        sessionStorage.setItem("redirectAfterLogin",
             `/criarViagem?pontoPartida=${pontoPartida}&pontoDestino=${pontoDestino}`);
 
         setShowModal(false);
