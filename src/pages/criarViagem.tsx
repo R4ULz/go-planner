@@ -43,9 +43,14 @@ export default function CriarViagem() {
         <div>
             {user ?
                 <div className="flex h-screen flex-col">
-                    <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
+                    <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
                         <Header />
                     </header>
+                    <div className="mt-20 p-5 w-full flex justify-center">
+                        <Layout 
+                            tripData={tripData} 
+                            menuEnabled={menuEnabled} 
+                            setMenuEnabled={setMenuEnabled} 
                     <div className="p-5 mt-20 w-full flex justify-center">
                         <Layout
                             tripData={tripData}
@@ -53,7 +58,7 @@ export default function CriarViagem() {
                             setMenuEnabled={setMenuEnabled}
                         />
                     </div>
-                    <footer className="w-full flex justify-center bg-black">
+                    <footer className="w-full flex justify-center bg-black" className="w-full flex justify-center bg-black">
                         <Footer />
                     </footer>
                 </div>
