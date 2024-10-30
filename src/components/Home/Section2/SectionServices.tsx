@@ -44,8 +44,8 @@ export default function Services() {
           </h1>
           <span className="flex flex-row bg-rosinha w-2 h-2 rounded-full p-1 relative top-6 mx-1"></span>
         </div>
-        <h6 className="font-rubik text-md ">
-          Mostrar as funcionalidades da nossa aplicação bem aqui
+        <h6 className="font-rubik text-md text-zinc-700">
+          Veja como você pode criar seu planejamento para a viagem perfeita!
         </h6>
       </div>
       <div className="w-full flex justify-between gap-10 items-start">

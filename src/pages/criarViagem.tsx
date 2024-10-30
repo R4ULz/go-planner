@@ -46,11 +46,11 @@ export default function CriarViagem() {
                     <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
                         <Header />
                     </header>
-                    <div className="p-5 mt-20 w-full flex justify-center">
-                        <Layout
-                            tripData={tripData}
-                            menuEnabled={menuEnabled}
-                            setMenuEnabled={setMenuEnabled}
+                    <div className="mt-20 p-5 w-full flex justify-center">
+                        <Layout 
+                            tripData={tripData} 
+                            menuEnabled={menuEnabled} 
+                            setMenuEnabled={setMenuEnabled} 
                         />
                     </div>
                     <footer className="w-full flex justify-center bg-black">
