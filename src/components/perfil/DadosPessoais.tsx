@@ -4,7 +4,7 @@ import { Email,iconePerfil } from "../icons";
 import { useUser } from "../../contexts/UserContext"; // Importa o contexto do usuário
 import { canetinha } from "../icons";
 
-export default function DadosPessoais({ nome, setNome, email, setEmail, imagem}) {
+export default function DadosPessoais({ nome, setNome, email, setEmail}) {
   const { user } = useUser();
 
   const handleEmailChange = (event) => {
@@ -12,8 +12,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, imagem})
     
   };
 
-
-  const [imagemURL, setImagemURL] = useState(() => localStorage.getItem('imagemURL') || '/imgs/perfil.jpg');
+  const [imagemURL, setImagemURL] = useState(localStorage.getItem('imagemURL') || '/imgs/perfil.jpg');
 
   useEffect(() => {
     localStorage.setItem('imagemURL', imagemURL);
@@ -21,11 +20,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, imagem})
   
 
   const [editavel, setEditavel] = useState(false)
-
-  const habilitarEdicao = () => {
-    setEditavel(true);
-  }
-
+  
   const fetchUserData = async (email) => {
     try {
       const res = await fetch('/api/getUserByEmail', {
@@ -55,7 +50,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, imagem})
     }
   }, [user]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const imageURL = URL.createObjectURL(file);
@@ -73,6 +68,25 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, imagem})
 
   const [sexo, setSexo] = useState('');
 
+  const [nomeOriginal, setNomeOriginal] = useState(nome);
+  const [emailOriginal, setEmailOriginal] = useState(email);
+
+  const habilitarEdicao = () => {
+    setEditavel(true);
+    setNomeOriginal(nome);
+    setEmailOriginal(email);
+  };
+
+  const cancelarEdicao = () => {
+    setNome(nomeOriginal);
+    setEmail(emailOriginal);
+    setEditavel(false);
+  };
+
+  const salvarEdicao = () => {
+    setEditavel(false);
+  };
+
 
   return (
     <div className="bg-white w-full h-full rounded-xl border-[1px] shadow-xl border-zinc-400 flex flex-col max-w-screen-xl">
@@ -87,47 +101,43 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, imagem})
                 height={176}
                 className="rounded-[100px]"
               />
-            <button onClick={handleClick} className="text-zinc-700 text-center flex items-center gap-2">
-              {canetinha}
-              Editar Imagem
-            </button>
-            <input
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-            />
-           </div>
-          </div>
-        </div>
-        <div className="h-2/3">
-          <div className="px-16">
-            <div className={`relative flex items-center border rounded-xl p-4 
-              ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200'}`}>
-              <i className={`absolute left-3 ${editavel ? 'text-zinc-500' : 'text-gray-500'}`}>
-                {iconePerfil}
-              </i>
+            <button onClick={() => document.getElementById("fileInput").click()} className="text-zinc-700 text-center flex items-center gap-2">
+                {canetinha}
+                Editar Imagem
+              </button>
               <input
-                type="text"
-                placeholder="Nome:"
-                className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none 
-                ${editavel ? 'bg-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
-                value={nome}
-                onChange={(event) => setNome(event.target.value)}
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
                 disabled={!editavel}
               />
             </div>
           </div>
-          <div className="px-16 py-5 max-hd:py-2 space-y-2 max-hd:space-y-2">
-            <div className={`relative flex items-center border rounded-xl p-4 
-              ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200'}`}>
-              <i className={`absolute left-3 ${editavel ? 'text-zinc-500' : 'text-gray-500'}`}>
-                {Email}
-              </i>
-              <input type="text" placeholder="Email:" className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none 
-                ${editavel ? 'bg-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`} value={email} onChange={handleEmailChange} disabled={!editavel} />
-            </div>
+        </div>
+        <div className="h-2/3">
+          <div className="px-16">
+            <input
+              type="text"
+              placeholder="Nome"
+              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none 
+              ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+              value={nome}
+              onChange={(event) => setNome(event.target.value)}
+              disabled={!editavel}
+            />
+          </div>
+          <div className="px-16 py-5">
+            <input
+              type="text"
+              placeholder="Email"
+              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none 
+              ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+              value={email}
+              onChange={handleEmailChange}
+              disabled={!editavel}
+            />
           </div>
           <div className="px-16 py-2 space-y-2">
             <div className="flex flex-row gap-20">
@@ -172,13 +182,32 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, imagem})
             </div>
           </div>
 
-          <div className="flex px-16 mt-5">
-            <button
-              onClick={habilitarEdicao}
-              className="border-[1px] border-laranja text-laranja px-4 py-2 rounded-xl"
-            >
-              Editar Informações
-            </button>
+          <div className="flex px-16 mt-5 gap-4">
+            {!editavel ? (
+              <button
+                onClick={habilitarEdicao}
+                className="border-[1px] border-laranja text-laranja px-4 py-2 rounded-xl"
+              >
+                Editar Informações
+              </button>
+            ) : (
+              <>                
+                <button
+                  onClick={cancelarEdicao}
+                  className="bg-rosinha text-white font-bold py-2 rounded-xl w-24"
+                >
+                  Cancelar
+                </button>
+                
+                <button
+                  onClick={salvarEdicao}
+                  className="bg-laranjinha text-white font-bold py-2 rounded-xl w-80"
+                >
+                  Salvar Informações
+                </button>
+
+              </>
+            )}
           </div>
         </div>
       </div>
