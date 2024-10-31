@@ -3,7 +3,7 @@ import { Frame } from "../../icons/Frame";
 import ModalAtividade from "./modalAtividade";
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Atividade = {
   id: number;
