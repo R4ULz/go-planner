@@ -139,47 +139,11 @@ export default function DadosPessoais({ nome, setNome, email, setEmail}) {
               disabled={!editavel}
             />
           </div>
-          <div className="px-16 py-2 space-y-2">
-            <div className="flex flex-row gap-20">
-              <span className="text-gray-700 font-medium">Sexo:</span>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="sexo"
-                  value="Masculino"
-                  checked={sexo === 'Masculino'}
-                  onChange={(e) => setSexo(e.target.value)}
-                  className="text-blue-500 focus:ring-blue-400"
-                  disabled={!editavel}
-                />
-                <span className="text-gray-700">Masculino</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="sexo"
-                  value="Feminino"
-                  checked={sexo === 'Feminino'}
-                  onChange={(e) => setSexo(e.target.value)}
-                  className="text-blue-500 focus:ring-blue-400"
-                  disabled={!editavel}
-                />
-                <span className="text-gray-700">Feminino</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="sexo"
-                  value="Não informar"
-                  checked={sexo === 'Não informar'}
-                  onChange={(e) => setSexo(e.target.value)}
-                  className="text-blue-500 focus:ring-blue-400"
-                  disabled={!editavel}
-                  defaultChecked
-                />
-                <span className="text-gray-700">Não informar</span>
-              </label>
-            </div>
+          
+          <div className="px-16 py-5">
+            <p>
+              Campo reservado para mostrar dados como CPF e RG
+            </p>
           </div>
 
           <div className="flex px-16 mt-5 gap-4">

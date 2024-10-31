@@ -12,6 +12,9 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
   const [suggestionsPartida, setSuggestionsPartida] = useState<any[]>([]);
   const [suggestionsDestino, setSuggestionsDestino] = useState<any[]>([]);
 
+  const[DataIda, setDataIda] = useState('');
+  const[DataRetorno, setDataRetorno] = useState('');
+
   useEffect(() => {
     console.log("Dados de tripData em Dados Principais:", tripData)
   }, [tripData]);
@@ -85,7 +88,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
   };
 
   const handleSave = () => {
-    if(!tripData.nomeViagem || !tripData.partida || !tripData.destino || !tripData.dataIda || !tripData.dataVolta){
+    if(!tripData.nomeViagem || !tripData.partida || !tripData.destino || !tripData.DataIda || !tripData.DataRetorno){
         Toastify({
           text: 'Os campos da viagem precisam estar preenchidos',
           duration: 3000,
@@ -192,20 +195,21 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
               <i className={`absolute left-3`}>{calendariu}</i>
               <input
                 type="date"
-                name="dataIda"
+                name="DataIda"
                 className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-                value={dataIda}
-                onChange={handleChange}
+                value={DataIda}
+                onChange = {e => setDataIda(e.target.value)}
               />
             </div>
             <div className={`text-zinc-700 relative flex items-center border w-full rounded-xl p-3`}>
               <i className={`absolute left-3`}>{calendariu}</i>
               <input
                 type="date"
-                name="dataVolta"
+                name="DataRetorno"
                 className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-                value={dataVolta}
-                onChange={handleChange}
+                value={DataRetorno}
+                min={DataIda}
+                onChange={e => setDataRetorno(e.target.value)}
               />
             </div>
           </div>

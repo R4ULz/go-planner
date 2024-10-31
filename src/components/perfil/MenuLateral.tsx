@@ -52,12 +52,6 @@ export default function MenuLateral({ setSelectedComponent, handleSave }) {
         >
           Sair
         </button>
-        <button
-          onClick={handleSave}
-          className="py-1 bg-gradient-to-r to-rosinha from-laranja rounded-xl text-white"
-        >
-          Salvar
-        </button>
       </ul>
     </aside>
   );
