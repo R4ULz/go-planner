@@ -132,7 +132,7 @@ export default function Login() {
                         background: "linear-gradient(to right, #00b09b, #96c93d)",
                     }
                 }).showToast()
-                router.push('/autenticacao?modo=login');
+                setModo('login')
             } else {
                 Toastify({
                     text: data.message,
