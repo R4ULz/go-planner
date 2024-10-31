@@ -17,6 +17,7 @@ export default function Perfil() {
   const { user } = useUser();
   const [nome, setNome] = useState(user?.nome);
   const [email, setEmail] = useState(user?.email);
+  const [cpf, setCPF] = useState(user?.cpf)
   const [senha, setSenha] = useState("");
   const [confirmSenha, setConfirmSenha] = useState("");
   const router = useRouter();
@@ -120,7 +121,8 @@ export default function Perfil() {
           senha={senha}
           setSenha={setSenha}
           confirmSenha={confirmSenha}
-          setConfirmSenha={setConfirmSenha} />;
+          setConfirmSenha={setConfirmSenha}
+          cpf={cpf} />;
       case "HistoricoViagens":
         return <HistoricoViagens user={user} onCreateTrip={handleCreateTrip}/>; // Passa o usuário como prop
       case "LoginSenha":

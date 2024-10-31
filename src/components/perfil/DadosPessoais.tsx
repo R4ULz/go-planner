@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Email,iconePerfil } from "../icons";
 import { useUser } from "../../contexts/UserContext"; // Importa o contexto do usuário
 import { canetinha } from "../icons";
 
-export default function DadosPessoais({ nome, setNome, email, setEmail}) {
+export default function DadosPessoais({ nome, setNome, email, setEmail, cpf}) {
   const { user } = useUser();
 
   const handleEmailChange = (event) => {
@@ -59,14 +58,12 @@ export default function DadosPessoais({ nome, setNome, email, setEmail}) {
   };
   
 
-  const handleClick = () => {
-    const fileInput = document.getElementById("fileInput");
-    if (fileInput) {
-      fileInput.click();
-    }
-  };
-
-  const [sexo, setSexo] = useState('');
+  // const handleClick = () => {
+  //   const fileInput = document.getElementById("fileInput");
+  //   if (fileInput) {
+  //     fileInput.click();
+  //   }
+  // };
 
   const [nomeOriginal, setNomeOriginal] = useState(nome);
   const [emailOriginal, setEmailOriginal] = useState(email);
@@ -142,7 +139,12 @@ export default function DadosPessoais({ nome, setNome, email, setEmail}) {
           
           <div className="px-16 py-5">
             <p>
-              Campo reservado para mostrar dados como CPF e RG
+            <input
+              type="text"
+              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
+              value={cpf}
+              disabled={!editavel}
+            />
             </p>
           </div>
 
