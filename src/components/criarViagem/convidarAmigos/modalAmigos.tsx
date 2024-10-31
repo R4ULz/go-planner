@@ -16,7 +16,7 @@ export default function ModalAmigos({
 
   useEffect(() => {
     if (!isOpen) {
-      setEmailAmigo(""); 
+      setEmailAmigo("");
     }
   }, [isOpen]);
 
@@ -58,6 +58,20 @@ export default function ModalAmigos({
           >
             Salvar
           </button>
+        </div>
+        <div className="py-5">
+          <hr />
+          <div className="mt-5">
+            <h2 className="text-xl font-bold flex ">
+              Lista de amigos
+              <span className="bg-roxo w-2 h-2 rounded-full p-1 flex mt-3 ml-1"></span>
+            </h2>
+            <p>Convide o(a) amigo(a) para planejar e viajar junto com voce!</p>
+
+            <div className="border-zinc-300 border flex">
+                
+            </div>
+          </div>
         </div>
       </div>
     </div>
