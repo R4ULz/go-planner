@@ -5,6 +5,8 @@ interface User {
   id: string;
   nome: string;
   email: string;
+  cpf: string
+  senha: string;
 }
 
 interface UserContextProps {
@@ -43,7 +45,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     setUser(null); // Remove as informações do usuário ao deslogar
     setToken(null);
     sessionStorage.removeItem('user');
-    sessionStorage.removeItem('token'); 
+    sessionStorage.removeItem('token');   
   };
 
   useEffect(() => {

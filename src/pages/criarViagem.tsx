@@ -19,7 +19,6 @@ export default function CriarViagem() {
     useEffect(() => {
         setShowModal(true);
         console.log("Valores da URL:", { pontoPartida, pontoDestino });
-        // Definir valores iniciais de partida e destino quando disponíveis
         if (pontoPartida && pontoDestino) {
             setTripData({
                 partida: pontoPartida as string,
@@ -29,6 +28,10 @@ export default function CriarViagem() {
     }, [pontoPartida, pontoDestino]);
 
     const handleRedirect = () => {
+
+        sessionStorage.setItem("redirectAfterLogin",
+            `/criarViagem?pontoPartida=${pontoPartida}&pontoDestino=${pontoDestino}`);
+
         setShowModal(false);
         router.push({
             pathname: '/autenticacao',
@@ -40,17 +43,17 @@ export default function CriarViagem() {
         <div>
             {user ?
                 <div className="flex h-screen flex-col">
-                    <header className="">
+                    <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
                         <Header />
                     </header>
-                    <div className="p-5 w-full flex justify-center">
+                    <div className="mt-20 p-5 w-full flex justify-center">
                         <Layout 
                             tripData={tripData} 
                             menuEnabled={menuEnabled} 
                             setMenuEnabled={setMenuEnabled} 
                         />
                     </div>
-                    <footer>
+                    <footer className="w-full flex justify-center bg-black" className="w-full flex justify-center bg-black">
                         <Footer />
                     </footer>
                 </div>
