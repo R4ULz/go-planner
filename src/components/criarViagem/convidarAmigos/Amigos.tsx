@@ -16,6 +16,9 @@ type Amigo = {
 interface ConvidarAmigosProps {
   tripData: {
     amigos: Amigo[];
+    destino: string;
+    DataIda: string;
+    DataRetorno: string;
   };
   handleUpdateTrip: (updatedData: Partial<{ amigos: Amigo[] }>) => void;
 }
@@ -24,7 +27,7 @@ export default function ConvidarAmigos({
   tripData,
   handleUpdateTrip,
 }: ConvidarAmigosProps) {
-  const { amigos, destino, dataIda ,dataVolta } = tripData;
+  const { amigos, destino, DataIda, DataRetorno } = tripData;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -58,6 +61,14 @@ export default function ConvidarAmigos({
     handleUpdateTrip({ amigos: updatedAmigos });
   };
 
+  function parseLocalDate(dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+  
+  const formattedDataIda = DataIda ? parseLocalDate(DataIda).toLocaleDateString('pt-BR') : "Data não informada";
+  const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDateString('pt-BR') : "Data não informada";
+
   return (
     <div className="font-rubik">
       <div className="flex flex-row">
@@ -71,9 +82,9 @@ export default function ConvidarAmigos({
               <div className="border rounded-xl py-1 border-rosinha flex flex-row justify-between font-bold font-inter px-4">
               <p className="flex flex-row gap-2 items-center">{location}{destino}</p>
                 <div className="flex gap-2">
-                  <p className="flex flex-row gap-2 items-center">{iconeCalendario2}{dataIda}</p>
+                  <p className="flex flex-row gap-2 items-center">{iconeCalendario2}{formattedDataIda}</p>
                   <p className="flex items-center">-</p>
-                  <p className="flex items-center">{dataVolta}</p>
+                  <p className="flex items-center">{formattedDataVolta}</p>
                 </div>
               </div>
             </div>
