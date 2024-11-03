@@ -4,6 +4,7 @@ import ModalAtividade from "./modalAtividade";
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
 import { useState } from "react";
+import { Plus } from "../../icons/Plus";
 
 type Atividade = {
   id: number;
@@ -81,7 +82,7 @@ const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDat
                 onClick={() => setIsModalOpen(true)}
                 className="text-white font-inter font-bold border-solid margin-0 bg-laranjinha px-5 py-3 rounded-2xl flex gap-2 items-center"
               >
-                Adicionar Atividade+
+                Adicionar Atividade <p className="text-3xl">+</p>
               </button>
             </div>
           </div>
