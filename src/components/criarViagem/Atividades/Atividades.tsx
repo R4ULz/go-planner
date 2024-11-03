@@ -15,23 +15,35 @@ type Atividade = {
 interface AtividadesProps {
   tripData: {
     atividades: Atividade[];
+    destino: string;
+    DataIda: string;
+    DataRetorno: string;
   };
   handleUpdateTrip: (updatedData: Partial<{ atividades: Atividade[] }>) => void;
 }
 
 export default function Atividades({ tripData, handleUpdateTrip }: AtividadesProps) {
 
-  const { atividades, destino, dataIda ,dataVolta } = tripData;
+  const { atividades, destino, DataIda, DataRetorno } = tripData;
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+// Função para criar uma data como local ao invés de UTC
+function parseLocalDate(dateString) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+const formattedDataIda = DataIda ? parseLocalDate(DataIda).toLocaleDateString('pt-BR') : "Data não informada";
+const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDateString('pt-BR') : "Data não informada";
 
   const addAtividade = (name: string, date: string, time: string) => {
     const newAtividade = { id: atividades.length + 1, name, date, time };
-    handleUpdateTrip({ atividades: [...atividades, newAtividade] }); // Atualizando o estado no Layout
+    handleUpdateTrip({ atividades: [...atividades, newAtividade] });
   };
 
   const removeAtividade = (id: number) => {
     const updatedAtividades = atividades.filter((atividade) => atividade.id !== id);
-    handleUpdateTrip({ atividades: updatedAtividades }); // Atualizando o estado no Layout
+    handleUpdateTrip({ atividades: updatedAtividades });
   };
 
   // Agrupando atividades por dia
@@ -58,9 +70,9 @@ export default function Atividades({ tripData, handleUpdateTrip }: AtividadesPro
               <div className="border rounded-xl py-1 border-rosinha flex flex-row justify-between font-bold font-inter px-4 max-w-screen-2xl">
                 <p className="flex flex-row gap-2 items-center">{location}{destino}</p>
                 <div className="flex gap-2">
-                  <p className="flex flex-row gap-2 items-center">{iconeCalendario2}{dataIda}</p>
+                  <p className="flex flex-row gap-2 items-center">{iconeCalendario2}{formattedDataIda}</p>
                   <p className="flex items-center">-</p>
-                  <p className="flex items-center">{dataVolta}</p>
+                  <p className="flex items-center">{formattedDataVolta}</p>
                 </div>
               </div>
             </div>
