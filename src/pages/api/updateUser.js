@@ -12,19 +12,15 @@ export default async function handler(req, res) {
 
   const { id, novoEmail, nome, senha } = req.body;
 
-  // Verifica se o ID é válido
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: 'ID de usuário inválido' });
   }
 
   try {
-    // Verifica se o novo email já está em uso por outro usuário
     const existingUser = await User.findOne({ email: novoEmail });
     if (existingUser && existingUser._id.toString() !== id) {
       return res.status(400).json({ message: 'O novo email já está em uso por outro usuário' });
     }
-
-    // Atualiza o usuário com base no ID
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
