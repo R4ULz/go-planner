@@ -54,31 +54,33 @@ export default function Login() {
 
     const handleLogin = async () => {
         try {
-          const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify
-            ({ 
-                email, 
-                senha }),
-          });
-      
-          const data = await res.json();
-
-          if (res.ok) {
-            login(data.user);
-            router.push('/perfil');
-          } else {
-            setMessage(data.message);
-            setShowMessage(true);
-            console.log('Erro no login:', data.message);
-          }
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    email, 
+                    senha 
+                }),
+            });
+        
+            const data = await res.json();
+    
+            if (res.ok) {
+                // Agora passamos o usuário e o token para o contexto
+                login(data.user, data.token);
+                router.push('/perfil');
+            } else {
+                setMessage(data.message);
+                setShowMessage(true);
+                console.log('Erro no login:', data.message);
+            }
         } catch (error) {
-          console.log('Erro ao se conectar ao servidor', error);
+            console.log('Erro ao se conectar ao servidor', error);
         }
-      };
+    };
+    
       
 
 
