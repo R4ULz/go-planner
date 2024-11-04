@@ -119,6 +119,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
       }).showToast();
     }
   };
+  
 
   return (
     <div className="w-full max-w-screen-xl">
@@ -209,6 +210,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
                 value={DataRetorno}
                 min={DataIda}
                 onChange={e => setDataRetorno(e.target.value)}
+                disabled={!DataIda}
               />
             </div>
           </div>

@@ -4,12 +4,16 @@ type modalAtividadeProps = {
   isOpen: boolean;
   onClose: () => void;
   onSave: (name: string, date: string, time: string) => void; 
+  dataIda: string;
+  dataRetorno: string;
 };
 
 export default function ModalAtividade({
   isOpen,
   onClose,
   onSave,
+  dataIda,
+  dataRetorno
 }: modalAtividadeProps) {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
@@ -69,6 +73,8 @@ export default function ModalAtividade({
                 onChange={(e) => setDate(e.target.value)}
                 className="border p-2 w-full rounded-xl"
                 placeholder="Escolha o dia"
+                min={dataIda}
+                max={dataRetorno}
               />
             </div>
           </div>
