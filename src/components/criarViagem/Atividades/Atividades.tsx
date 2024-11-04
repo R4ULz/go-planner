@@ -4,7 +4,6 @@ import ModalAtividade from "./modalAtividade";
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
 import { useState } from "react";
-import { Plus } from "../../icons/Plus";
 
 type Atividade = {
   id: number;
@@ -27,6 +26,21 @@ export default function Atividades({ tripData, handleUpdateTrip }: AtividadesPro
 
   const { atividades, destino, DataIda, DataRetorno } = tripData;
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSave = (name: string, date: string, time: string) => {
+    const newAtividade = {
+      id: atividades.length + 1,  
+      name,
+      date,
+      time
+    };
+    handleUpdateTrip({ atividades: [...atividades, newAtividade] });
+    setIsModalOpen(false);  
+  };
 
 // Função para criar uma data como local ao invés de UTC
 function parseLocalDate(dateString) {
@@ -109,7 +123,13 @@ const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDat
         )}
       </div>
 
-      <ModalAtividade isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={addAtividade} />
+      <ModalAtividade
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSave={handleModalSave}
+        dataIda={DataIda}
+        dataRetorno={DataRetorno}
+    />
     </div>
   );
 }

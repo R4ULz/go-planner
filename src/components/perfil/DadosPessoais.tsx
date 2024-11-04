@@ -120,7 +120,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
                 height={176}
                 className="rounded-[100px]"
               />
-              <button onClick={() => document.getElementById("fileInput").click()} className="text-zinc-700 text-center flex items-center gap-2 " >
+              <button onClick={() => document.getElementById("fileInput").click()} className="text-zinc-700 text-center flex items-center gap-2 ">
                 {canetinha}
                 Editar Imagem
               </button>
