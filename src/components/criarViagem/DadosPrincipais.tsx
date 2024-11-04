@@ -7,16 +7,15 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 
 export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip }) {
-  const { nomeViagem, destino, dataIda, dataVolta, descricao, imagem, partida } = tripData;
+  const { nomeViagem, destino, descricao, imagem, partida } = tripData;
 
   const [suggestionsPartida, setSuggestionsPartida] = useState<any[]>([]);
   const [suggestionsDestino, setSuggestionsDestino] = useState<any[]>([]);
-
-  const[DataIda, setDataIda] = useState('');
-  const[DataRetorno, setDataRetorno] = useState('');
+  const [DataIda, setDataIda] = useState(tripData.DataIda || '');
+  const [DataRetorno, setDataRetorno] = useState(tripData.DataRetorno || '');
 
   useEffect(() => {
-    console.log("Dados de tripData em Dados Principais:", tripData)
+    console.log("Dados de tripData em Dados Principais:", tripData);
   }, [tripData]);
 
   // Função para buscar as sugestões da API LocationIQ
@@ -27,7 +26,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
           `https://eu1.locationiq.com/v1/autocomplete.php`,
           {
             params: {
-              key: process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY, // Sua chave de API
+              key: process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY,
               q: inputValue,
               format: "json",
             },
@@ -65,18 +64,18 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
   const handleSuggestionClick = (suggestion: any, type: string) => {
     if (type === "partida") {
       handleUpdateTrip({ partida: suggestion.display_name });
-      setSuggestionsPartida([]); // Limpa as sugestões após a seleção
+      setSuggestionsPartida([]);
     } else if (type === "destino") {
       handleUpdateTrip({ destino: suggestion.display_name });
-      setSuggestionsDestino([]); // Limpa as sugestões após a seleção
+      setSuggestionsDestino([]);
     }
   };
-  
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      const imageURL = URL.createObjectURL(file); // Cria um URL temporário para a imagem
-      handleUpdateTrip({ imagem: imageURL }); // Atualiza o campo imagem nos dados da viagem
+      const imageURL = URL.createObjectURL(file);
+      handleUpdateTrip({ imagem: imageURL });
     }
   };
 
@@ -88,20 +87,23 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
   };
 
   const handleSave = () => {
-    if(!tripData.nomeViagem || !tripData.partida || !tripData.destino || !tripData.DataIda || !tripData.DataRetorno){
-        Toastify({
-          text: 'Os campos da viagem precisam estar preenchidos',
-          duration: 3000,
-          close: true,
-          gravity: 'top',
-          position: 'right',
-          stopOnFocus: true,
-          style:{
-            background: "#ce1836",
-          }
-        }).showToast();
-  
-    }else{
+    // Atualizar tripData com DataIda e DataRetorno
+    handleUpdateTrip({ DataIda, DataRetorno });
+
+    if(!tripData.nomeViagem || !tripData.partida || !tripData.destino || !DataIda || !DataRetorno){
+      Toastify({
+        text: 'Os campos da viagem precisam estar preenchidos',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        stopOnFocus: true,
+        style:{
+          background: "#ce1836",
+        }
+      }).showToast();
+
+    } else {
       sessionStorage.setItem("tripData", JSON.stringify(tripData));
       onSaveTrip();
       Toastify({
@@ -115,11 +117,9 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
           background: "linear-gradient(to right, #00b09b, #96c93d)",
         }
       }).showToast();
-
     }
-
-
   };
+  
 
   return (
     <div className="w-full max-w-screen-xl">
@@ -198,7 +198,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
                 name="DataIda"
                 className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
                 value={DataIda}
-                onChange = {e => setDataIda(e.target.value)}
+                onChange={e => setDataIda(e.target.value)}
               />
             </div>
             <div className={`text-zinc-700 relative flex items-center border w-full rounded-xl p-3`}>
@@ -210,6 +210,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
                 value={DataRetorno}
                 min={DataIda}
                 onChange={e => setDataRetorno(e.target.value)}
+                disabled={!DataIda}
               />
             </div>
           </div>

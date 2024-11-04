@@ -53,7 +53,7 @@ export default function CriarViagem() {
                             setMenuEnabled={setMenuEnabled} 
                         />
                     </div>
-                    <footer className="w-full flex justify-center bg-black" className="w-full flex justify-center bg-black">
+                    <footer className="w-full flex justify-center bg-black">
                         <Footer />
                     </footer>
                 </div>

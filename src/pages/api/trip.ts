@@ -15,15 +15,15 @@ export default async function handler(
         nomeViagem,
         partida,
         destino,
-        dataIda,
-        dataVolta,
+        DataIda,
+        DataRetorno,
         descricao,
         atividades,
         amigos,
         imagem,
       } = req.body;
 
-      if (!nomeViagem || !destino || !dataIda || !dataVolta) {
+      if (!nomeViagem || !destino || !DataIda || !DataRetorno) {
         console.log("Erro: Dados obrigatórios faltando.");
         return res
           .status(400)
@@ -34,8 +34,8 @@ export default async function handler(
         titulo: nomeViagem,
         partida,
         destino,
-        dataInicio: dataIda,
-        fimViagem: dataVolta,
+        dataInicio: DataIda,
+        fimViagem: DataRetorno,
         descricao,
         atividades,
         amigos,
