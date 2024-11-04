@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 
 // Definição do tipo User
 interface User {
-  id: string,
+  id: string;
   nome: string;
   email: string;
   cpf: string
@@ -11,7 +11,8 @@ interface User {
 
 interface UserContextProps {
   user: User | null;
-  login: (userData: User) => void;
+  token: string | null;
+  login: (userData: User, token: string) => void;
   logout: () => void;
 }
 
@@ -20,7 +21,7 @@ const UserContext = createContext<UserContextProps | undefined>(undefined);
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error('useUser deve ser usado dentro de um UserProvider');
   }
   return context;
 };
@@ -31,26 +32,33 @@ interface UserProviderProps {
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
-  const login = (userData: User) => {
+  const login = (userData: User, token: string) => {
     setUser(userData); // Armazena as informações do usuário
-    sessionStorage.setItem('user', JSON.stringify(userData))
+    setToken(token);    // Armazena o token JWT
+    sessionStorage.setItem('user', JSON.stringify(userData));
+    sessionStorage.setItem('token', token);
   };
 
   const logout = () => {
     setUser(null); // Remove as informações do usuário ao deslogar
-    sessionStorage.removeItem('user')
+    setToken(null);
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');   
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     const storedUser = sessionStorage.getItem('user');
-    if(storedUser){
+    const storedToken = sessionStorage.getItem('token');
+    if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
-  }, [])
+  }, []);
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, token, login, logout }}>
       {children}
     </UserContext.Provider>
   );
