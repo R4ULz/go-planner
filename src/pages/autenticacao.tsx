@@ -68,32 +68,33 @@ export default function Login() {
 
     const handleLogin = async () => {
         try {
-          const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify
-            ({email, senha }),
-          });
-      
-          const data = await res.json();
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, senha }),
+            });
+    
+            const data = await res.json();
+    
+            if (res.ok) {
+                login(data.user, data.token);
 
-          if (res.ok) {
-            login(data.user);
-            const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || '/perfil';
-            sessionStorage.removeItem("redirectAfterLogin"); 
-            router.push(redirectUrl); 
-
-        } else {
-            setMessage(data.message);
-            setShowMessage(true);
-            console.log('Erro no login:', data.message);
-        }
+                const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || '/perfil';
+                sessionStorage.removeItem("redirectAfterLogin"); 
+                router.push(redirectUrl); 
+            } else {
+                setMessage(data.message);
+                setShowMessage(true);
+                console.log('Erro no login:', data.message);
+            }
         } catch (error) {
-          console.log('Erro ao se conectar ao servidor', error);
+            console.log('Erro ao se conectar ao servidor', error);
         }
-      };
+    };
+    
+    
       
 
 
