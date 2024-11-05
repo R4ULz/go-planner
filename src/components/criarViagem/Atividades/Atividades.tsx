@@ -94,7 +94,7 @@ const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDat
             <div className="w-1/6 flex justify-end items-center mr-7">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="text-white font-inter font-bold border-solid margin-0 bg-laranjinha px-5 py-3 rounded-2xl flex gap-2 items-center"
+                className="text-white font-inter font-bold border-solid margin-0 bg-laranjinha px-2 py-3 rounded-2xl flex gap-2 items-center"
               >
                 Adicionar Atividade <p className="text-3xl">+</p>
               </button>

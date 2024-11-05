@@ -164,7 +164,6 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
             <input
               type="text"
               className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-              value={cpf}
               disabled={!editavel}
             />
             </p>
