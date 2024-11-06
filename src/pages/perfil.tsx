@@ -153,7 +153,7 @@ export default function Perfil() {
         <div className="flex w-1/5 p-20 ">
           <MenuLateral setSelectedComponent={setSelectedComponent} handleSave={handleUpdate} />
         </div>
-        <div className="w-4/5 h-[750px] p-20 max-w-screen-2xl">
+        <div className="w-4/5 h-[850px] p-20 max-w-screen-2xl">
           {renderComponent()}
         </div>
       </div>

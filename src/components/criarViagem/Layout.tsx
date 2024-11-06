@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { useUser } from "@/src/contexts/UserContext";
 
 interface LayoutProps {
   tripData: { partida: string; destino: string };
@@ -16,6 +17,7 @@ interface LayoutProps {
 
 export default function Layout({tripData: initialTripData, menuEnabled, setMenuEnabled}: LayoutProps) {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPrincipais");
+  const {user} = useUser();
 
   const router = useRouter();
   const [tripData, setTripData] = useState({
@@ -70,6 +72,7 @@ export default function Layout({tripData: initialTripData, menuEnabled, setMenuE
       ...tripData,
       partida: tripData.partida || partidaStored,
       destino: tripData.destino || destinoStored,
+      criador: user?.id,
     };
 
     if (!tripData.partida || !tripData.destino) {
