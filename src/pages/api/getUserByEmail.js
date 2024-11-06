@@ -30,6 +30,7 @@ export default async function getUserByEmail(req, res) {
         id: user._id,
         nome: user.nome,
         email: user.email,
+        foto: user.foto,
       },
     });
   } catch (error) {
