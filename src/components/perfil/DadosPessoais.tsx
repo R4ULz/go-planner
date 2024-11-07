@@ -4,18 +4,14 @@ import { Email, iconePerfil } from "../icons";
 import { useUser } from "../../contexts/UserContext"; // Importa o contexto do usuário
 import { canetinha } from "../icons";
 
-export default function DadosPessoais({ nome, setNome, email, setEmail }) {
+export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) {
   const { user } = useUser();
+
+  const [imagemURL, setImagemURL] = useState('/imgs/perfil.jpg'); // Padrão inicial
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
-
-  const [imagemURL, setImagemURL] = useState(localStorage.getItem('imagemURL') || '/imgs/perfil.jpg');
-
-  useEffect(() => {
-    localStorage.setItem('imagemURL', imagemURL);
-  }, [imagemURL]);
 
   const [editavel, setEditavel] = useState(false);
 
@@ -34,6 +30,9 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
       if (res.ok) {
         setNome(data.user.nome);
         setEmail(data.user.email);
+
+        // Define imagem de perfil do usuário ou imagem padrão
+        setImagemURL(data.user.foto || '/imgs/perfil.jpg');
       } else {
         console.log('Usuário não encontrado ou erro:', data.message);
       }
@@ -48,11 +47,31 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
     }
   }, [user]);
 
-  const handleImageChange = (event) => {
+  const handleImageChange = async (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      const imageURL = URL.createObjectURL(file);
-      setImagemURL(imageURL);
+      const formData = new FormData();
+      formData.append('profilePic', file);
+      formData.append('id', user.id); 
+
+      try {
+        const res = await fetch('/api/uploadProfilePicture', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        const data = await res.json();
+        if (res.ok) {
+          setImagemURL(data.foto); // Atualiza a URL da imagem no estado após o upload
+          alert('Imagem de perfil atualizada com sucesso');
+        } else {
+          console.error('Erro ao atualizar imagem:', data.message);
+          alert('Erro ao atualizar imagem');
+        }
+      } catch (error) {
+        console.error('Erro ao fazer upload da imagem:', error);
+        alert('Erro ao fazer upload da imagem');
+      }
     }
   };
 
@@ -89,6 +108,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
           id: user.id, 
           novoEmail: email,
           nome: nome,
+          foto: foto,
         }),
       });
 
@@ -114,13 +134,13 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
           <div className="w-1/2">
             <div className="flex items-center flex-col w-[176px] h-[176px]">
               <Image
-                src={imagemURL}
+                src={imagemURL} // URL da imagem de perfil atual
                 alt="Imagem Selecionada"
                 width={176}
                 height={176}
                 className="rounded-[100px]"
               />
-              <button onClick={() => document.getElementById("fileInput").click()} className="text-zinc-700 text-center flex items-center gap-2 ">
+              <button onClick={handleClick} className="text-zinc-700 text-center flex items-center gap-2 ">
                 {canetinha}
                 Editar Imagem
               </button>
@@ -140,8 +160,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
             <input
               type="text"
               placeholder="Nome"
-              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-gray-300  rounded-xl focus:outline-none 
-              ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-gray-300 rounded-xl focus:outline-none ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed'}`}
               value={nome}
               onChange={(event) => setNome(event.target.value)}
               disabled={!editavel}
@@ -151,14 +170,12 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
             <input
               type="text"
               placeholder="Email"
-              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-gray-300 rounded-xl focus:outline-none 
-              ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-gray-300 rounded-xl focus:outline-none ${editavel ? 'border-zinc-400 bg-white' : 'border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed'}`}
               value={email}
               onChange={handleEmailChange}
               disabled={!editavel}
             />
           </div>
-
           <div className="px-16 py-5">
             <p>
             <input
@@ -168,7 +185,6 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
             />
             </p>
           </div>
-
           <div className="flex px-16 mt-5 gap-4">
             {!editavel ? (
               <button
@@ -185,7 +201,6 @@ export default function DadosPessoais({ nome, setNome, email, setEmail }) {
                 >
                   Cancelar
                 </button>
-
                 <button
                   onClick={salvarEdicao}
                   className="bg-laranjinha text-white font-bold py-2 rounded-xl w-80"

@@ -61,15 +61,20 @@ const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDat
     handleUpdateTrip({ atividades: updatedAtividades });
   };
 
-  // Agrupando atividades por dia
-  const atividadesPorDia = atividades.reduce((acc: Record<string, Atividade[]>, atividade) => {
-    const { date } = atividade; 
-    if (!acc[date]) {
-      acc[date] = [];
-    }
-    acc[date].push(atividade);
-    return acc;
-  }, {});
+    // Ordena as atividades pelo campo `date` de forma crescente
+    const atividadesOrdenadas = [...atividades].sort((a, b) => {
+      return parseLocalDate(a.date).getTime() - parseLocalDate(b.date).getTime();
+    });
+
+    // Agrupa as atividades por dia após ordenar
+    const atividadesPorDia = atividadesOrdenadas.reduce((acc: Record<string, Atividade[]>, atividade) => {
+      const { date } = atividade; 
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(atividade);
+      return acc;
+    }, {});
 
   return (
     <div className="font-rubik flex flex-col justify-center">
