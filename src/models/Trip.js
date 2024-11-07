@@ -11,7 +11,7 @@ const tripSchema = new mongoose.Schema({
     nome: { type: String},
     data: { type: Date },
     horario: { type: String},
-    concluida: {type: Boolean}
+    concluida: {type: Boolean},
   }],
   amigos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   imagem: { type: String },

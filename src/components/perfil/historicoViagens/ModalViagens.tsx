@@ -1,17 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { calendariu } from "../../icons/teste"; // Ícone do calendário
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
-import ActivityItem from "../../criarViagem/Atividades/ActivityItem";
 
 export default function ModalViagem({ viagem, onClose }) {
     const [selectedItem, setSelectedItem] = useState("dadosPrincipais")
+    const [atividades, setAtividades] = useState([])
+    const [laodingAtividades, setLoadingAtividades] = useState(true)
+
+    useEffect(() =>{
+        const fetchAtividades = async () =>{
+            if(!viagem || !viagem._id) return;
+            setLoadingAtividades(true)
+
+            try{
+                const response = await fetch(`api/trip/getActivities?tripId=${viagem._id}`)
+                if(!response.ok){
+                    throw new Error("erro ao buscar atividades")
+                }
+                const atividadesData = await response.json()
+                setAtividades(atividadesData);
+            }catch(error){
+                console.error("erro ao buscar atividades", error)
+            }finally{
+                setLoadingAtividades(false)
+            }
+        }
+
+        fetchAtividades()
+    }, [viagem])
+
+    const toggleAtividade = async (globalIndex, currentStatus) => {
+        try {
+            const response = await fetch(`api/trip/updateActivityStatus`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ tripId: viagem._id, atividadeIndex: globalIndex, concluida: !currentStatus }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao atualizar status da atividade");
+            }
+
+            setAtividades((prevAtividades) =>
+                prevAtividades.map((atividade, index) =>
+                    index === globalIndex
+                        ? { ...atividade, concluida: !currentStatus }
+                        : atividade
+                )
+            );
+        } catch (error) {
+            console.error("Erro ao atualizar atividade:", error);
+        }
+    };
 
     if (!viagem) return null;
 
     const itemSelecionado = (item) => {
         setSelectedItem(item);
-    }
+    };
+
+    const atividadesPorData = atividades.reduce((acc, atividade, globalIndex) => {
+        const dataFormatada = new Date(atividade.data).toLocaleDateString('pt-BR');
+        if (!acc[dataFormatada]) acc[dataFormatada] = [];
+        acc[dataFormatada].push({ ...atividade, globalIndex });
+        return acc;
+    }, {});
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
@@ -88,22 +144,38 @@ export default function ModalViagem({ viagem, onClose }) {
                 ) : selectedItem === "atividades" ? (
                     <div className="space-y-4 mt-1">
                         <p className="font-bold text-2xl flex -mb-3">Atividades<span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span></p>
-                        <div className="items-center">
-                            <div className="border rounded-xl py-1 border-rosinha flex flex-row justify-between font-bold font-inter px-4 max-w-screen-2xl">
-                                <p className="flex flex-row gap-2 items-center">{location}{viagem.destino}</p>
-                                <div className="flex gap-2">
-                                    <p className="flex flex-row gap-2 items-center">{iconeCalendario2}{new Date(viagem.dataInicio).toLocaleDateString("pt-BR")}</p>
-                                    <p className="flex items-center">-</p>
-                                    <p className="flex items-center">{new Date(viagem.fimViagem).toLocaleDateString("pt-BR")}</p>
-                                </div>
-                            </div>
-                            <div>
-                                
-                            </div>
+                        <div className="items-center h-96 overflow-auto">
+                        {laodingAtividades ? (
+                                <p>Carregando atividades...</p>
+                            ) : (
+                                Object.keys(atividadesPorData).map((data) => (
+                                    <div key={data} className="mb-4">
+                                        <h3 className="font-bold text-lg">{data}</h3>
+                                        <ul className="space-y-2">
+                                            {atividadesPorData[data].map((atividade) => (
+                                                <li key={atividade.globalIndex} className="flex items-center justify-between p-4 rounded-2xl border border-zinc-300">
+                                                    <div className="flex items-center gap-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={atividade.concluida}
+                                                            onChange={() => toggleAtividade(atividade.globalIndex, atividade.concluida)}
+                                                            className="h-5 w-5"
+                                                        />
+                                                        <span className={`${atividade.concluida ? "line-through text-gray-500 bg-gray-100" : "text-zinc-700"}`}>
+                                                            {atividade.nome}
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-zinc-600">{atividade.horario}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
-                        ) : (
-                        <div>teste2</div>
+                ) : (
+                        <div className="font-inter text-zinc-700 text-2xl p-5">Aqui teremos a parte de convidados da viagem</div>
                         )
             }
                     </div>

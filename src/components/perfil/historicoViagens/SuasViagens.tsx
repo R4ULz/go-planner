@@ -5,6 +5,7 @@ import { iconeCalendario2 } from "../../icons/Schedule2"
 import { use, useEffect, useState } from "react"
 import { useUser } from "@/src/contexts/UserContext"
 import ModalViagem from "./ModalViagens"
+import { useRouter } from "next/router"
 
 export default function SuasViagens() {
 
@@ -12,6 +13,14 @@ export default function SuasViagens() {
     const [loading, setLoading] = useState(true);
     const [modalViagem, setModalViagem] = useState(null)
     const {user} = useUser()
+    const router = useRouter();
+
+    const handleEditRedirect = (tripId) => {
+      router.push({
+        pathname: "/editarViagem",
+        query: { tripId }, // Passa o tripId como parâmetro da URL
+      });
+    };
 
     const fetchViagens = async () =>{
         if(!user) return;
@@ -76,7 +85,7 @@ export default function SuasViagens() {
                                 </div>
                                 <div className="flex space-x-4 mt-4">
                                     <button className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold" onClick={() =>{setModalViagem(viagem)}}>Visualizar</button>
-                                    <button className="border border-laranja px-4 py-1 text-laranja rounded-xl font-semibold">Editar viagem</button>
+                                    <button className="border border-laranja px-4 py-1 text-laranja rounded-xl font-semibold" onClick={() => handleEditRedirect(viagem._id)}>Editar viagem</button>
                                 </div>
                             </div>
                             <div className="size-44 relative">
