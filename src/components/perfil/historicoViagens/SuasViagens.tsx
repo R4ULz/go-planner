@@ -22,6 +22,34 @@ export default function SuasViagens() {
       });
     };
 
+    const deleteTrip = async (id) => {
+        console.log("ID para deletar:", id); // Verificação do ID
+    
+        try {
+          const response = await fetch(`/api/trip/deleteTripById`, { // Certifique-se de que o caminho está correto
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }), // Enviando o ID no corpo da requisição
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Viagem deletada:", data);
+            alert("Viagem deletada com sucesso!");
+            // Atualiza o estado para remover a viagem deletada da lista
+            setMinhasViagens((prev) => prev.filter((viagem) => viagem._id !== id));
+          } else {
+            const errorData = await response.json();
+            alert(`Erro: ${errorData.message}`);
+          }
+        } catch (error) {
+          console.error("Erro ao deletar a viagem:", error);
+          alert("Não foi possível deletar a viagem. Tente novamente.");
+        }
+    };
+    
     const fetchViagens = async () =>{
         if(!user) return;
         try {
@@ -60,7 +88,7 @@ export default function SuasViagens() {
                     <div key={viagem._id} className="bg-white w-full p-2 rounded-xl border-[1px] shadow-md mt-4">
                         <div className="flex justify-between">
                             <h3 className="text-2xl text-zinc-600 font-bold">{viagem.titulo}</h3>
-                            <span>{lixeira}</span>
+                            <button onClick={() => deleteTrip(viagem._id)}>{lixeira}</button>
                         </div>
                         <div className="flex justify-between">
                             <div className="flex flex-col">
