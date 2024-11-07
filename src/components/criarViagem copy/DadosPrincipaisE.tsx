@@ -59,17 +59,44 @@ export default function EditarDadosPrincipais({ tripData }) {
       }).showToast();
       return;
     }
-
-    try {
-      await axios.put(`/api/trip/${tripData._id}`, formData);
+  
+    if (!tripData._id) {
       Toastify({
-        text: 'Viagem atualizada com sucesso!',
+        text: 'ID da viagem não encontrado.',
         duration: 3000,
         close: true,
         gravity: 'top',
         position: 'right',
-        style: { background: "linear-gradient(to right, #00b09b, #96c93d)" },
+        style: { background: "#ce1836" },
       }).showToast();
+      return;
+    }
+  
+    try {
+      // Verificando se tripData._id está correto
+      console.log("ID da viagem:", tripData._id);
+  
+      const response = await axios.put(`/api/trip/${tripData._id}`, formData);
+  
+      if (response.status === 200) {
+        Toastify({
+          text: 'Viagem atualizada com sucesso!',
+          duration: 3000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          style: { background: "linear-gradient(to right, #00b09b, #96c93d)" },
+        }).showToast();
+      } else {
+        Toastify({
+          text: 'Erro ao atualizar viagem. Tente novamente!',
+          duration: 3000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          style: { background: "#ce1836" },
+        }).showToast();
+      }
     } catch (error) {
       console.error("Erro ao atualizar viagem:", error);
       Toastify({
@@ -82,6 +109,8 @@ export default function EditarDadosPrincipais({ tripData }) {
       }).showToast();
     }
   };
+  
+  
 
   return (
     <div className="w-full max-w-screen-xl">
