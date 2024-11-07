@@ -7,15 +7,19 @@ import { useRouter } from "next/router";
 type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { useUser } from "@/src/contexts/UserContext";
 
 interface LayoutProps {
+  isEditMode: boolean;
+  tripId?: string;
   tripData: { partida: string; destino: string };
   menuEnabled: boolean;
   setMenuEnabled: (enabled: boolean) => void;
 }
 
-export default function Layout({tripData: initialTripData, menuEnabled, setMenuEnabled}: LayoutProps) {
+export default function Layout({isEditMode, tripId, tripData: initialTripData, menuEnabled, setMenuEnabled}: LayoutProps) {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPrincipais");
+  const {user} = useUser();
 
   const router = useRouter();
   const [tripData, setTripData] = useState({
@@ -31,7 +35,23 @@ export default function Layout({tripData: initialTripData, menuEnabled, setMenuE
   });
 
   useEffect(() => {
-    // Atualizar tripData se initialTripData mudar
+    if (isEditMode && tripId) {
+      const fetchTripData = async () => {
+        try {
+          const response = await fetch(`/api/trip/updateTrip?tripId=${tripId}`);
+          if (!response.ok) throw new Error("Erro ao buscar dados da viagem");
+
+          const data = await response.json();
+          setTripData(data);
+        } catch (error) {
+          console.error("Erro ao carregar viagem para edição:", error);
+        }
+      };
+      fetchTripData();
+    }
+  }, [isEditMode, tripId]);
+
+  useEffect(() => {
     if (initialTripData.partida || initialTripData.destino) {
       setTripData(prevTripData => ({
         ...prevTripData,
@@ -70,6 +90,7 @@ export default function Layout({tripData: initialTripData, menuEnabled, setMenuE
       ...tripData,
       partida: tripData.partida || partidaStored,
       destino: tripData.destino || destinoStored,
+      criador: user?.id,
     };
 
     if (!tripData.partida || !tripData.destino) {
@@ -106,7 +127,7 @@ export default function Layout({tripData: initialTripData, menuEnabled, setMenuE
 
       const result = await response.json();
       Toastify({
-        text: 'Viagem confirmada!',
+        text: isEditMode ? 'Viagem atualizada com sucesso!' : 'Viagem criada com sucesso!',
         duration: 3000,
         close: true,
         gravity: 'top',
@@ -152,7 +173,7 @@ export default function Layout({tripData: initialTripData, menuEnabled, setMenuE
         />
       </aside>
       <div className="w-full">
-        <p className="text-black font-inter font-medium">CRIANDO SUA VIAGEM!</p>
+        <p className="text-black font-inter font-medium">{isEditMode ? "EDITANDO SUA VIAGEM!" : "CRIANDO SUA VIAGEM!"}</p>
         {renderComponent()}
       </div>
     </div>

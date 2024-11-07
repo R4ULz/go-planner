@@ -8,12 +8,14 @@ const tripSchema = new mongoose.Schema({
   fimViagem: { type: Date, required: true },
   descricao: { type: String },
   atividades: [{
-    nome: { type: String, required: true },
-    data: { type: Date, required: true },
-    horario: { type: String, required: true }
+    nome: { type: String},
+    data: { type: Date },
+    horario: { type: String},
+    concluida: {type: Boolean},
   }],
   amigos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   imagem: { type: String },
+  criador:{type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
 });
 
 

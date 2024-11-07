@@ -177,7 +177,13 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) 
             />
           </div>
           <div className="px-16 py-5">
-            <p>Campo reservado para mostrar dados como CPF e RG</p>
+            <p>
+            <input
+              type="text"
+              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
+              disabled={!editavel}
+            />
+            </p>
           </div>
           <div className="flex px-16 mt-5 gap-4">
             {!editavel ? (

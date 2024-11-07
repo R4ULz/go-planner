@@ -21,9 +21,10 @@ export default async function handler(
         atividades,
         amigos,
         imagem,
+        criador,
       } = req.body;
 
-      if (!nomeViagem || !destino || !DataIda || !DataRetorno) {
+      if (!nomeViagem || !destino || !DataIda || !DataRetorno || !criador) {
         console.log("Erro: Dados obrigatórios faltando.");
         return res
           .status(400)
@@ -40,6 +41,7 @@ export default async function handler(
         atividades,
         amigos,
         imagem,
+        criador,
       });
 
       const savedTrip = await novaViagem.save();

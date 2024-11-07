@@ -1,9 +1,10 @@
-import ActivityItem from "./ActivityItem";
+import ActivityItem from "./ActivityItemE";
 import { Frame } from "../../icons/Frame";
-import ModalAtividade from "./modalAtividade";
+import ModalAtividade from "./modalAtividadeE";
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 type Atividade = {
   id: number;
@@ -13,19 +14,33 @@ type Atividade = {
 };
 
 interface AtividadesProps {
-  tripData: {
-    atividades: Atividade[];
-    destino: string;
-    DataIda: string;
-    DataRetorno: string;
-  };
+  tripId: string;
   handleUpdateTrip: (updatedData: Partial<{ atividades: Atividade[] }>) => void;
 }
 
-export default function Atividades({ tripData, handleUpdateTrip }: AtividadesProps) {
-
-  const { atividades, destino, DataIda, DataRetorno } = tripData;
+export default function Atividades({ tripId, handleUpdateTrip }: AtividadesProps) {
+  const [atividades, setAtividades] = useState<Atividade[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [destino, setDestino] = useState("");
+  const [DataIda, setDataIda] = useState("");
+  const [DataRetorno, setDataRetorno] = useState("");
+
+  // Função para carregar atividades e informações da viagem
+  useEffect(() => {
+    const fetchTripData = async () => {
+      try {
+        const response = await axios.get(`/api/trip/${tripId}`);
+        const tripData = response.data;
+        setAtividades(tripData.atividades);
+        setDestino(tripData.destino);
+        setDataIda(tripData.DataIda);
+        setDataRetorno(tripData.DataRetorno);
+      } catch (error) {
+        console.error("Erro ao carregar atividades:", error);
+      }
+    };
+    fetchTripData();
+  }, [tripId]);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -33,48 +48,41 @@ export default function Atividades({ tripData, handleUpdateTrip }: AtividadesPro
 
   const handleModalSave = (name: string, date: string, time: string) => {
     const newAtividade = {
-      id: atividades.length + 1,  
+      id: atividades.length + 1,
       name,
       date,
       time
     };
-    handleUpdateTrip({ atividades: [...atividades, newAtividade] });
-    setIsModalOpen(false);  
-  };
-
-// Função para criar uma data como local ao invés de UTC
-function parseLocalDate(dateString) {
-  const [year, month, day] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
-
-const formattedDataIda = DataIda ? parseLocalDate(DataIda).toLocaleDateString('pt-BR') : "Data não informada";
-const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDateString('pt-BR') : "Data não informada";
-
-  const addAtividade = (name: string, date: string, time: string) => {
-    const newAtividade = { id: atividades.length + 1, name, date, time };
-    handleUpdateTrip({ atividades: [...atividades, newAtividade] });
+    const updatedAtividades = [...atividades, newAtividade];
+    setAtividades(updatedAtividades);
+    handleUpdateTrip({ atividades: updatedAtividades });
+    setIsModalOpen(false);
   };
 
   const removeAtividade = (id: number) => {
     const updatedAtividades = atividades.filter((atividade) => atividade.id !== id);
+    setAtividades(updatedAtividades);
     handleUpdateTrip({ atividades: updatedAtividades });
   };
 
-    // Ordena as atividades pelo campo `date` de forma crescente
-    const atividadesOrdenadas = [...atividades].sort((a, b) => {
-      return parseLocalDate(a.date).getTime() - parseLocalDate(b.date).getTime();
-    });
+  // Formatar as datas
+  const parseLocalDate = (dateString: string) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
 
-    // Agrupa as atividades por dia após ordenar
-    const atividadesPorDia = atividadesOrdenadas.reduce((acc: Record<string, Atividade[]>, atividade) => {
-      const { date } = atividade; 
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(atividade);
-      return acc;
-    }, {});
+  const formattedDataIda = DataIda ? parseLocalDate(DataIda).toLocaleDateString('pt-BR') : "Data não informada";
+  const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDateString('pt-BR') : "Data não informada";
+
+  // Agrupar atividades por dia
+  const atividadesPorDia = atividades.reduce((acc: Record<string, Atividade[]>, atividade) => {
+    const { date } = atividade;
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(atividade);
+    return acc;
+  }, {});
 
   return (
     <div className="font-rubik flex flex-col justify-center">
@@ -112,7 +120,7 @@ const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDat
         {atividades.length > 0 ? (
           Object.keys(atividadesPorDia).map((dia) => (
             <div key={dia} className="mb-6">
-              <h3 className="text-lg font-bold mb-3">Dia {dia.split("-")[2]}</h3> 
+              <h3 className="text-lg font-bold mb-3">Dia {dia.split("-")[2]}</h3>
               {atividadesPorDia[dia].map((atividade) => (
                 <ActivityItem key={atividade.id} activity={atividade} onRemove={removeAtividade}/>
               ))}
@@ -134,7 +142,7 @@ const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDat
         onSave={handleModalSave}
         dataIda={DataIda}
         dataRetorno={DataRetorno}
-    />
+      />
     </div>
   );
 }
