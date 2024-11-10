@@ -1,40 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌍 Go Planner - Planejador de Viagens
 
-## Getting Started
+**Bem-vindo ao Go Planner!**  
+Seu companheiro digital para planejar viagens inesquecíveis e sem complicações. Com o Go Planner, você pode organizar seu itinerário, gerenciar locais a visitar e ter uma visão completa dos detalhes da sua próxima aventura. Tudo isso com uma interface moderna e intuitiva. Este projeto foi desenvolvido como parte do Projeto Interdisciplinar (PI) da **FATEC Zona Leste (FATEC-ZL)**, unindo aprendizado e prática das mais recentes tecnologias de desenvolvimento web.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Tecnologias Utilizadas
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **React** - Experiência de usuário dinâmica e responsiva.
+- **TypeScript** - Código mais seguro e escalável.
+- **Tailwind CSS** - Estilo prático e eficiente, com design visualmente atraente e moderno.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+---
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## 🎯 Objetivo do Projeto
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+O Go Planner foi criado para facilitar o planejamento de viagens e oferecer uma ferramenta simples e poderosa, onde os usuários possam:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- 📅 Adicionar e organizar atividades diárias
+- 📍 Definir pontos de interesse e locais a visitar
+- 🔄 Ajustar o itinerário conforme preferências pessoais
+- 🖥️ Visualizar e personalizar cada etapa da viagem
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📌 Sobre o Projeto Interdisciplinar - FATEC-ZL
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Este projeto faz parte do nosso **Projeto Interdisciplinar (PI)** da **FATEC Zona Leste** e integra conhecimentos de várias disciplinas, entregando um sistema completo e funcional. Com o Go Planner, aplicamos não só conceitos de programação e desenvolvimento de front-end, mas também técnicas de design de interface e arquitetura de software.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 👥 Equipe
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Conheça as pessoas que fizeram esse projeto possível:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Raul dos Santos](https://github.com/R4ULz1)
+- [Leandro Rodrigues](https://github.com/LeandroRodrigues061)
+- [Gabriel Kendi](https://github.com/Kendi9866)
+- [Nicolas Yanase](https://github.com/Nick-Yanase)
+- [Miguel Lemos](https://github.com/Bzats)
+
+---
+
+Agradecemos por visitar nosso projeto! Ficaremos muito felizes em receber sugestões e contribuições. 🌟
+
+---
