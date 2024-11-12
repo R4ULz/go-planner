@@ -6,8 +6,7 @@ export default async function handler(req, res) {
   await connect();
 
   const { id } = req.query;
-
-  // Verifica se o ID foi fornecido e se é um ObjectId válido
+  console.log(id)
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "ID da viagem inválido ou não fornecido" });
   }
