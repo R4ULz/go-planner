@@ -10,7 +10,7 @@ export default function TripsSection() {
     return (
         <div className="flex flex-col w-full max-w-screen-xl pt-10">
             <div className="">
-                <div className="flex">
+                <div className="flex md:justify-start sm:justify-center">
                     <h1 className="font-rubik font-bold text-black text-4xl md:text-3xl">Viagens populares</h1>
                     <span className="flex flex-row bg-rosinha w-2 h-2 rounded-full p-1 relative top-6 mx-1"></span>
                 </div>
@@ -30,14 +30,14 @@ export default function TripsSection() {
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                         <div className="text-white p-8 space-y-2">
                         <div className="flex gap-3 items-center">
-                                <h3 className="text-lg font-bold">Rio de Janeiro</h3>
+                                <h3 className="text-lg font-bold">Brasil</h3>
                                 <div className="flex gap-1">
                                     <div className="size-3 rounded-full bg-green-600"></div>
                                     <div className="size-3 rounded-full bg-yellow-600"></div>
                                     <div className="size-3 rounded-full bg-blue-600"></div>
                                 </div>
                             </div>
-                            <p>O Brasil é o lar da maior floresta tropical do mundo, a Amazônia, que abrange 40% da América do Sul e abriga uma incrível biodiversidade.</p>
+                            <p>A Amazônia, que abrange 40% da América do Sul, abriga uma incrível biodiversidade.</p>
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@ export default function TripsSection() {
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                         <div className="text-white p-8 space-y-2">
                         <div className="flex gap-2 items-center">
-                            <h3 className="text-lg font-bold">Disney</h3>
+                            <h3 className="text-lg font-bold">Estados Unidos</h3>
                                     <div className="flex gap-1">
                                         <div className="size-3 rounded-full bg-red-600"></div>
                                         <div className="size-3 rounded-full bg-white"></div>

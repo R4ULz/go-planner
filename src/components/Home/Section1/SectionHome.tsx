@@ -46,7 +46,7 @@ export default function SectionHome({pontoPartida, pontoDestino, onPartidaChange
   };
 
   return (
-    <section className="h-[664px] max-w-screen-xl w-full flex justify-between items-center ">
+    <section className="h-[664px] max-w-screen-xl w-full flex justify-between items-center md:flex-row sm:flex-col pb-20">
       <div className="flex w-2/3 h-full p-5 flex-col space-y-2 justify-center items-start">
         <TxtHome />
       </div>
