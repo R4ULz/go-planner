@@ -7,7 +7,8 @@ export default async function handler(req, res) {
   await connect(); // Conectando ao banco de dados
 
   if (method === 'POST') {
-    const { id } = req.body;
+    const { id } = req.body; // Obter o ID do corpo da requisição
+    console.log("ID recebido na API para deletar:", id); 
 
     if (!id) {
       return res.status(400).json({ message: 'ID da viagem é obrigatório' });

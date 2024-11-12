@@ -37,7 +37,7 @@ export default function MenuLateral({ setSelectedComponent, handleSave }) {
             cor="bg-laranjinha"
           />
           <MenuItem
-            texto="Login e senha"
+            texto="Lista de amigos"
             onclick={() => handleItemClick("LoginSenha")}
             selected={selectedComponent === "LoginSenha"}
             cor="bg-roxo"

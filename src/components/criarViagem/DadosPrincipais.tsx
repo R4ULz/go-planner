@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 
-export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip }) {
+export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip, }) {
   const { nomeViagem, destino, descricao, imagem, partida } = tripData;
-
+  const [imagemFile, setImagemFile] = useState<File | null>(null);
   const [suggestionsPartida, setSuggestionsPartida] = useState<any[]>([]);
   const [suggestionsDestino, setSuggestionsDestino] = useState<any[]>([]);
   const [DataIda, setDataIda] = useState(tripData.DataIda || '');
@@ -74,6 +74,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      setImagemFile(file);
       const imageURL = URL.createObjectURL(file);
       handleUpdateTrip({ imagem: imageURL });
     }
