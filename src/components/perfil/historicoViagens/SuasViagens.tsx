@@ -64,6 +64,7 @@ export default function SuasViagens() {
 
     const formatarData = (data) =>{
         const dataObj = new Date(data);
+        dataObj.setHours(dataObj.getHours() + 12);
         return dataObj.toLocaleDateString('pt-BR', {
             day: "2-digit",
             month: "2-digit",
