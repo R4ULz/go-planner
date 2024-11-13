@@ -46,12 +46,17 @@ export default function SectionHome({pontoPartida, pontoDestino, onPartidaChange
   };
 
   return (
-    <section className="h-[664px] max-w-screen-xl w-full flex justify-between items-center md:flex-row sm:flex-col pb-20">
-      <div className="flex w-2/3 h-full p-5 flex-col space-y-2 justify-center items-start">
+    <section className="h-[400px] md:h-[664px] flex-col md:flex-row max-w-screen-xl w-full flex justify-between items-center ">
+      <div className="flex md:w-2/3 gap-20 h-full p-5 flex-col space-y-2 md:justify-center items-start">
         <TxtHome />
+        <button 
+            className="w-[250px] md:hidden flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-3 py-2 text-white rounded-xl font-bold "
+            onClick={onCreateTrip}>
+              {Viagem} Criar sua viagem
+            </button>
       </div>
-      <div className="flex relative flex-col backdrop-blur-sm bg-black/40 rounded-2xl px-20 py-12 justify-center items-center text-gray-400 w-[450px]">
-        <div className="space-y-6 w-full flex justify-start flex-col items-center ">
+      <div className="flex md:relative flex-col backdrop-blur-sm bg-black/40 rounded-2xl md:px-20 md:py-12 px-3 justify-center items-center text-gray-400 w-[260px] md:w-[450px]">
+        <div className="space-y-6 hidden md:block w-full flex justify-start flex-col items-center ">
           <div className="relative w-full ">
             <InputTxt
               label="Ponto de partida:"
@@ -107,13 +112,13 @@ export default function SectionHome({pontoPartida, pontoDestino, onPartidaChange
               </ul>
             )}
           </div>
-          <div className="absolute right-[36px] top-[68px]">{LineDestiny}</div>
-          <button onClick={swapLocations} className="absolute left-[36px] top-32">{Arrows}</button>
+          <div className="hidden md:block md:absolute md:right-[36px] md:top-[68px]">{LineDestiny}</div>
+          <button onClick={swapLocations} className="hidden md:block md:absolute md:left-[36px] md:top-32">{Arrows}</button>
         </div>
-        <hr className="mt-10 border-b- border-zinc-600 w-full" />
-        <div className="mt-8 w-full">
+        <hr className="hidden md:block mt-10 border-b- border-zinc-600 w-full" />
+        <div className="md:mt-8 flex justify-center items-center w-full">
           <button 
-            className="w-full flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold "
+            className="w-full hidden md:inline-flex flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-7 py-3 text-white rounded-xl font-bold "
             onClick={onCreateTrip}>
               {Viagem} Criar sua viagem
             </button>

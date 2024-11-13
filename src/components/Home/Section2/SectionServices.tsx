@@ -48,7 +48,7 @@ export default function Services() {
           Veja como você pode criar seu planejamento para a viagem perfeita!
         </h6>
       </div>
-      <div className="w-full flex md:flex-row justify-between gap-10 items-start sm:flex-col">
+      <div className="w-full flex md:flex-row justify-between gap-10 items-start flex-col">
         <div className="flex flex-col md:w-2/5 sm:w-full">
           <div className="p-7 md:gap-10 flex flex-col items-center sm:gap-2">
             {options.map((option) => (
