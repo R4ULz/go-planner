@@ -13,14 +13,6 @@ export default function SuasViagens() {
     const [loading, setLoading] = useState(true);
     const [modalViagem, setModalViagem] = useState(null)
     const {user} = useUser()
-    const router = useRouter();
-
-    const handleEditRedirect = (tripId) => {
-      router.push({
-        pathname: "/editarViagem",
-        query: { tripId }, // Passa o tripId como parâmetro da URL
-      });
-    };
 
     const deleteTrip = async (id) => {
         console.log("ID para deletar:", id); // Verificação do ID
@@ -50,7 +42,7 @@ export default function SuasViagens() {
         }
     };
     
-    const fetchViagens = async () =>{
+    const buscaViagens = async () =>{
         if(!user) return;
         try {
             const response = await fetch(`api/trip/findTrips?id=${user.id}`, {method: 'GET'});
@@ -67,11 +59,12 @@ export default function SuasViagens() {
     }
 
     useEffect(() =>{
-        fetchViagens()
+        buscaViagens()
     }, [])
 
     const formatarData = (data) =>{
         const dataObj = new Date(data);
+        dataObj.setHours(dataObj.getHours() + 12);
         return dataObj.toLocaleDateString('pt-BR', {
             day: "2-digit",
             month: "2-digit",
@@ -113,7 +106,6 @@ export default function SuasViagens() {
                                 </div>
                                 <div className="flex space-x-4 mt-4">
                                     <button className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold" onClick={() =>{setModalViagem(viagem)}}>Visualizar</button>
-                                    <button className="border border-laranja px-4 py-1 text-laranja rounded-xl font-semibold" onClick={() => handleEditRedirect(viagem._id)}>Editar viagem</button>
                                 </div>
                             </div>
                             <div className="size-44 relative">
@@ -123,7 +115,7 @@ export default function SuasViagens() {
                     </div>
                 ))
             )}
-            {modalViagem && <ModalViagem viagem={modalViagem} onClose={() => setModalViagem(null)} />}
+            {modalViagem && <ModalViagem viagem={modalViagem} buscarViagens={buscaViagens} onClose={() => setModalViagem(null)} />}
         </div>
     );
 }
