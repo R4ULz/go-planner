@@ -23,7 +23,7 @@ interface ConvidarAmigosProps {
   handleUpdateTrip: (updatedData: Partial<{ amigos: Amigo[] }>) => void;
 }
 
-export default function ConvidarAmigos({
+export default function  ConvidarAmigos({
   tripData,
   handleUpdateTrip,
 }: ConvidarAmigosProps) {
