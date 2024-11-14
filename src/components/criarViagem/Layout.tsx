@@ -21,8 +21,8 @@ interface LayoutProps {
 export default function Layout({ isEditMode, tripId, tripData: initialTripData, menuEnabled, setMenuEnabled }: LayoutProps) {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPrincipais");
   const { user } = useUser();
-
   const router = useRouter();
+
   const [tripData, setTripData] = useState({
     _id: "",
     nomeViagem: "",
@@ -45,7 +45,7 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
           if (!response.ok) throw new Error("Erro ao buscar dados da viagem");
 
           const data = await response.json();
-          setTripData(data); // Agora garantimos que o `_id` também está sendo definido
+          setTripData(data);
         } catch (error) {
           console.error("Erro ao carregar viagem para edição:", error);
         }
@@ -54,33 +54,27 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
     }
   }, [isEditMode, tripId]);
 
-  useEffect(() => {
-    if (initialTripData.partida || initialTripData.destino) {
-      setTripData(prevTripData => ({
-        ...prevTripData,
-        partida: initialTripData.partida,
-        destino: initialTripData.destino,
-      }));
-      console.log("Initial trip data set in Layout:", initialTripData);
-    }
-  }, [initialTripData]);
-
   const handleUpdateTrip = (updatedData: Partial<typeof tripData>) => {
     const newTripData = { ...tripData, ...updatedData };
     setTripData(newTripData);
     sessionStorage.setItem("tripData", JSON.stringify(newTripData));
   };
 
+  const handleAddNewTopic = (newTopic) => {
+    setTripData((prevTripData) => {
+      const updatedTopics = [...prevTripData.topicos, newTopic];
+      return { ...prevTripData, topicos: updatedTopics };
+    });
+  };
+
   const salvarViagem = async () => {
     const tripDataString = sessionStorage.getItem("tripData");
-
     if (!tripDataString) {
       alert("Nenhum dado de viagem encontrado para salvar.");
       return;
     }
 
     let tripData = JSON.parse(tripDataString);
-
     const partidaStored = sessionStorage.getItem("partida");
     const destinoStored = sessionStorage.getItem("destino");
 
@@ -105,7 +99,6 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
     tripData = { ...tripData, atividades: atividadesAjustadas };
 
     const amigosAjustados = tripData.amigos.map((amigo) => amigo.id);
-
     tripData = { ...tripData, atividades: atividadesAjustadas, amigos: amigosAjustados };
 
     console.log("Enviando dados ajustados:", tripData);
@@ -143,6 +136,7 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
     }
   };
 
+  // Definir a função onSaveTrip corretamente
   const onSaveTrip = () => {
     setMenuEnabled(true);
   };
@@ -156,7 +150,7 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
       case "ConvidarAmigos":
         return <ConvidarAmigos tripData={tripData} handleUpdateTrip={handleUpdateTrip} />;
       case "Topicos":
-        return <Topicos tripData={tripData} handleUpdateTrip={handleUpdateTrip} />;
+        return <Topicos tripData={tripData} handleUpdateTrip={handleUpdateTrip} handleAddNewTopic={handleAddNewTopic} />;
       default:
         return null;
     }
@@ -165,11 +159,12 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
   return (
     <div className="flex gap-10 max-hd:gap-20 w-full max-hd:max-w-screen-xl min-h-[716px] px-24 max-hd:px-14 justify-center">
       <aside className="w-1/5 flex justify-center ml-10">
-        <MenuLateralV 
-          setSelectedComponent={setSelectedComponent} 
-          salvarViagem={salvarViagem} 
-          menuEnabled={menuEnabled} 
+        <MenuLateralV
+          setSelectedComponent={setSelectedComponent}
+          salvarViagem={salvarViagem}
+          menuEnabled={menuEnabled}
           selectedComponent={selectedComponent}
+          topicos={tripData.topicos}
         />
       </aside>
       <div className="w-full">

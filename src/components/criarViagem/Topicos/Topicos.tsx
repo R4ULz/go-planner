@@ -6,26 +6,27 @@ import 'froala-editor/css/froala_style.min.css'; // Estilos adicionais
 
 export default function Topico({ tripData, handleUpdateTrip }) {
   // Carregar tópicos do sessionStorage se existirem, ou usar tripData
-  const initialContent = () => {
-    const storedContent = sessionStorage.getItem(`trip_${tripData._id}_topicos`);
-    return storedContent ? JSON.parse(storedContent) : (tripData?.topicos?.[0]?.conteudo || '');
+  const initialTopics = () => {
+    if (!tripData._id) return []; // Se a viagem ainda não foi criada, retornar um array vazio
+    const storedTopics = sessionStorage.getItem(`trip_${tripData._id}_topicos`);
+    return storedTopics ? JSON.parse(storedTopics) : (tripData?.topicos || []);
   };
 
-  const [content, setContent] = useState(() => {
-    const initial = initialContent();
-    return typeof initial === 'string' ? initial : '';
-  });
-
-  const [topicName, setTopicName] = useState(tripData?.topicos?.[0]?.nome || 'Tópico Principal');
+  const [topics, setTopics] = useState(() => Array.isArray(initialTopics()) ? initialTopics() : []);
+  const [content, setContent] = useState('');
+  const [topicName, setTopicName] = useState('');
+  const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
-    // Atualizar sessionStorage sempre que o conteúdo mudar
-    sessionStorage.setItem(
-      `trip_${tripData._id}_topicos`,
-      JSON.stringify(content)
-    );
-  }, [content]);
-
+    if (tripData._id) {
+      // Atualizar sessionStorage sempre que os tópicos mudarem e a viagem já tiver sido criada
+      sessionStorage.setItem(
+        `trip_${tripData._id}_topicos`,
+        JSON.stringify(topics)
+      );
+    }
+  }, [topics, tripData._id]);
+ 
   // Função para extrair texto puro do HTML
   const stripHtmlTags = (htmlContent) => {
     const parser = new DOMParser();
@@ -36,23 +37,52 @@ export default function Topico({ tripData, handleUpdateTrip }) {
   const handleContentChange = (updatedContent) => {
     if (typeof updatedContent === 'string') {
       setContent(updatedContent);
-      const plainTextContent = stripHtmlTags(updatedContent);
-      handleUpdateTrip({
-        topicos: [{ nome: topicName, conteudo: plainTextContent }],
-      });
     }
   };
 
-  // Função para salvar os tópicos no sessionStorage
+  // Função para salvar os tópicos no sessionStorage e atualizar o tripData
   const salvarTopicos = () => {
     // Armazenar nome e conteúdo no sessionStorage como texto puro
     const plainTextContent = stripHtmlTags(content);
-    const topicosData = {
+    if (!topicName.trim()) {
+      alert('O nome do tópico não pode estar vazio.');
+      return;
+    }
+
+    const newTopic = {
       nome: topicName,
       conteudo: plainTextContent,
     };
-    sessionStorage.setItem(`trip_${tripData._id}_topicos`, JSON.stringify(topicosData));
-    alert('Tópicos salvos com sucesso!');
+
+    let updatedTopics;
+    if (editingIndex !== null) {
+      // Editar tópico existente
+      updatedTopics = topics.map((topic, index) => (index === editingIndex ? newTopic : topic));
+      setEditingIndex(null);
+    } else {
+      // Adicionar novo tópico
+      updatedTopics = [...topics, newTopic];
+    }
+
+    setTopics(updatedTopics);
+
+    // Atualizar tripData com os tópicos atualizados
+    handleUpdateTrip({
+      topicos: updatedTopics,
+    });
+
+    // Limpar os campos para adicionar um novo tópico
+    setTopicName('');
+    setContent('');
+
+    alert('Tópico salvo com sucesso!');
+  };
+
+  const editarTopico = (index) => {
+    const topicToEdit = topics[index];
+    setTopicName(topicToEdit.nome);
+    setContent(topicToEdit.conteudo);
+    setEditingIndex(index);
   };
 
   return (
@@ -87,8 +117,25 @@ export default function Topico({ tripData, handleUpdateTrip }) {
               onClick={salvarTopicos}
               className="w-48 py-3 bg-gradient-to-r to-rosinha from-laranja rounded-lg text-white font-semibold shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
             >
-              Salvar Tópicos
+              {editingIndex !== null ? 'Atualizar Tópico' : 'Salvar Tópico'}
             </button>
+          </div>
+
+          <div className="mt-8">
+            <h3 className="font-bold text-lg mb-4">Tópicos Salvos:</h3>
+            <ul>
+              {topics.map((topic, index) => (
+                <li key={index} className="mb-2 flex justify-between items-center">
+                  <span>{topic.nome}</span>
+                  <button
+                    onClick={() => editarTopico(index)}
+                    className="w-32 py-1 bg-gradient-to-r to-rosinha from-laranja rounded-lg text-white font-semibold shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+                  >
+                    Editar
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
