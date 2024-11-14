@@ -6,7 +6,6 @@ import { canetinha } from "../icons";
 
 export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) {
   const { user } = useUser();
-
   const [imagemURL, setImagemURL] = useState('/imgs/perfil.jpg'); // Padrão inicial
 
   const handleEmailChange = (event) => {
