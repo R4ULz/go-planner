@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { calendariu } from "../../icons/teste"; // Ícone do calendário
+import { lixeira } from "../../icons/lixeira";
+import { User } from "../../icons/user";
 
 export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [selectedItem, setSelectedItem] = useState("dadosPrincipais");
@@ -12,6 +14,8 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         horario: "",
     });
     const [adicionandoAtividade, setAdicionandoAtividade] = useState(false);
+    const [convidados, setConvidados] = useState([]);
+    const [loadingConvidados, setLoadingConvidados] = useState(true);
 
     const [dadosViagem, setDadosViagem] = useState({
         titulo: viagem.titulo,
@@ -78,9 +82,44 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         fetchAtividades();
     }, [viagem]);
 
+    useEffect(() => {
+        const fetchConvidados = async () => {
+            if (!viagem || !viagem.amigos || viagem.amigos.length === 0) return;
+            setLoadingConvidados(true);
+
+            try {
+                const convidadosDetalhes = await Promise.all(
+                    viagem.amigos.map(async (amigoId) => {
+                        const response = await fetch("/api/getUserById", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ id: amigoId }),
+                        });
+                        if (!response.ok) throw new Error("Erro ao buscar convidado");
+                        console.log("tentando buscar convidados com ID:", amigoId)
+                        const data = await response.json();
+                        console.log("dados do usuario:", data)
+                        return data.user;
+                    })
+                );
+
+                setConvidados(convidadosDetalhes);
+                console.log("Convidados:", convidadosDetalhes); // Verifique os dados carregados
+            } catch (error) {
+                console.error("Erro ao buscar convidados:", error);
+            } finally {
+                setLoadingConvidados(false);
+            }
+        };
+
+        fetchConvidados();
+    }, [viagem]);
+
     const fetchViagem = async () => {
         try {
             setLoadingAtividades(true);
+            setLoadingConvidados(true);
+
             const response = await fetch(`/api/trip/findTripById/${viagem._id}`);
             if (!response.ok) throw new Error("Erro ao buscar dados da viagem");
 
@@ -94,10 +133,13 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                 descricao: updatedData.descricao
             });
             setAtividades(updatedData.atividades || []);
+            setConvidados(updatedData.convidados || []);
+
         } catch (error) {
             console.error("Erro ao buscar dados da viagem", error);
         } finally {
             setLoadingAtividades(false);
+            setLoadingConvidados(false)
         }
     };
 
@@ -125,21 +167,23 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
 
     const toggleAtividade = async (globalIndex, currentStatus) => {
         try {
-            const response = await fetch(`api/trip/updateActivityStatus`, {
+            const response = await fetch(`/api/trip/updateActivityStatus`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ tripId: viagem._id, atividadeIndex: globalIndex, concluida: !currentStatus }),
             });
-
+    
             if (!response.ok) throw new Error("Erro ao atualizar status da atividade");
-
-            setAtividades((prevAtividades) =>
-                prevAtividades.map((atividade, index) =>
-                    index === globalIndex ? { ...atividade, concluida: !currentStatus } : atividade
-                )
-            );
+    
+            // Buscando novamente as atividades para garantir a sincronização
+            const fetchAtividades = await fetch(`api/trip/getActivities?tripId=${viagem._id}`);
+            if (!fetchAtividades.ok) throw new Error("Erro ao buscar atividades");
+    
+            const atividadesAtualizadas = await fetchAtividades.json();
+            setAtividades(atividadesAtualizadas);
+    
         } catch (error) {
             console.error("Erro ao atualizar atividade:", error);
         }
@@ -196,7 +240,6 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
             alert("Erro ao adicionar a atividade.");
         }
     };
-
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
@@ -285,54 +328,54 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                             <button onClick={abrirFormularioAtividade} className="text-white font-inter font-bold text-sm border-solid margin-0 bg-laranjinha px-2 py-3 rounded-2xl flex gap-2 items-center">Adicionar Atividade <p className="text-xl">+</p></button>
                         </div>
                         {adicionandoAtividade && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative">
-                <button onClick={fecharFormularioAtividade} className="absolute top-4 right-4 text-xl">&times;</button>
-                <h2 className="text-xl font-bold mb-2 flex">
-          Adicionar Atividade
-          <span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-3 ml-1"></span>
-        </h2>
-                <div className="space-y-4">
-                    <div>
-                        <input 
-                            type="text" 
-                            name="nome" 
-                            placeholder="Nome da Atividade:"
-                            value={novaAtividade.nome} 
-                            onChange={(e) => setNovaAtividade({ ...novaAtividade, nome: e.target.value })} 
-                            className="w-full border border-gray-300 p-2 rounded-xl" 
-                        />
-                    </div>
-                    <div className="flex gap-3">
-                        <div className="w-1/4">
-                            <input
-                                type="time"
-                                name="horario"
-                                value={novaAtividade.horario}
-                                onChange={(e) => setNovaAtividade({ ...novaAtividade, horario: e.target.value })}
-                                className="w-full border border-gray-300 p-2 rounded-xl"
-                            />
-                        </div>
-                        <div className="w-3/4">
-                            <input
-                                type="date"
-                                name="data"
-                                value={novaAtividade.data}
-                                min={dataMinima}
-                                max={dataMaxima}
-                                onChange={(e) => setNovaAtividade({ ...novaAtividade, data: e.target.value })}
-                                className="w-full border border-gray-300 p-2 rounded-xl"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex justify-end space-x-4">
-                        <button onClick={fecharFormularioAtividade} className="px-4 py-2 text-zinc-600 border border-zinc-300 rounded-xl">Cancelar</button>
-                        <button onClick={adicionarAtividade} className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold">Adicionar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )}
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative">
+                                    <button onClick={fecharFormularioAtividade} className="absolute top-4 right-4 text-xl">&times;</button>
+                                    <h2 className="text-xl font-bold mb-2 flex">
+                                        Adicionar Atividade
+                                        <span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-3 ml-1"></span>
+                                    </h2>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <input
+                                                type="text"
+                                                name="nome"
+                                                placeholder="Nome da Atividade:"
+                                                value={novaAtividade.nome}
+                                                onChange={(e) => setNovaAtividade({ ...novaAtividade, nome: e.target.value })}
+                                                className="w-full border border-gray-300 p-2 rounded-xl"
+                                            />
+                                        </div>
+                                        <div className="flex gap-3">
+                                            <div className="w-1/4">
+                                                <input
+                                                    type="time"
+                                                    name="horario"
+                                                    value={novaAtividade.horario}
+                                                    onChange={(e) => setNovaAtividade({ ...novaAtividade, horario: e.target.value })}
+                                                    className="w-full border border-gray-300 p-2 rounded-xl"
+                                                />
+                                            </div>
+                                            <div className="w-3/4">
+                                                <input
+                                                    type="date"
+                                                    name="data"
+                                                    value={novaAtividade.data}
+                                                    min={dataMinima}
+                                                    max={dataMaxima}
+                                                    onChange={(e) => setNovaAtividade({ ...novaAtividade, data: e.target.value })}
+                                                    className="w-full border border-gray-300 p-2 rounded-xl"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-end space-x-4">
+                                            <button onClick={fecharFormularioAtividade} className="px-4 py-2 text-zinc-600 border border-zinc-300 rounded-xl">Cancelar</button>
+                                            <button onClick={adicionarAtividade} className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold">Adicionar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         <div className="items-center h-96 overflow-auto">
                             {loadingAtividades ? (
                                 <p>Carregando atividades...</p>
@@ -364,7 +407,41 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                         </div>
                     </div>
                 ) : (
-                    <div className="font-inter text-zinc-700 text-2xl p-5">Aqui teremos a parte de convidados da viagem</div>
+                    <div className="space-y-4 mt-1">
+                        <div className="flex flex-col h-96">
+                            <p className="font-bold text-2xl flex">Convidados<span className="bg-roxo w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span></p>
+                            <div className="py-5 overflow-auto">
+                                {loadingConvidados ? (
+                                    <p>Carregando convidados...</p>
+                                ) : (
+                                    <ul className="w-full">
+                                        {convidados.map((convidado) => (
+                                            <li
+                                                key={convidado.id}
+                                                className="border p-3 mb-2 rounded-lg flex gap-10 text-zinc-500 justify-between text-lg"
+                                            >
+                                                <div className="flex flex-row items-center">
+                                                    <p className="gap-2 font-inter font-bold flex items-center border-r-2 pr-2">
+                                                        {User} {convidado.nome}
+                                                    </p>
+                                                    <p className="px-5">{convidado.email}</p>
+                                                </div>
+                                                <div className="flex justify-between ">
+                                                    <p className="flex items-center px-5 gap-3 font-bold">
+                                                        <span className="bg-laranjinha w-2 h-2 rounded-full p-1 flex mt- ml-1"></span>{" "}
+                                                        Convite pendente
+                                                    </p>
+                                                    <button className="border-l-2 pl-2 hidden">
+                                                        {lixeira}
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 )
                 }
             </div>
