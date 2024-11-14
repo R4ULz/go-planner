@@ -131,7 +131,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
         </h1>
       </div>
       <div className="flex justify-between max-hd:gap-20">
-        <div className="mt-8 space-y-7 w-1/2">
+        <div className="mt-8 space-y-5 w-1/2">
           <div className="flex flex-col">
             <label className="text-zinc-700 font-inter pl-1">Nome da sua viagem:</label>
             <input
@@ -192,27 +192,33 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
           </div>
           <hr className="border-zinc-300" />
           <div className="gap-6 flex justify-between">
-            <div className={`relative flex items-center w-full border rounded-xl p-3`}>
-              <i className={`absolute left-3`}>{calendariu}</i>
-              <input
-                type="date"
-                name="DataIda"
-                className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-                value={DataIda}
-                onChange={e => setDataIda(e.target.value)}
-              />
+            <div className="w-full">
+              <label htmlFor="DataIda" className="flex text-zinc-700">Data de ida:</label>
+              <div className={`relative flex items-center w-full border rounded-xl p-3`}>
+                <i className={`absolute left-3`}>{calendariu}</i>
+                <input
+                  type="date"
+                  name="DataIda"
+                  className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
+                  value={DataIda}
+                  onChange={e => setDataIda(e.target.value)}
+                />
+              </div>
             </div>
-            <div className={`text-zinc-700 relative flex items-center border w-full rounded-xl p-3`}>
-              <i className={`absolute left-3`}>{calendariu}</i>
-              <input
-                type="date"
-                name="DataRetorno"
-                className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-                value={DataRetorno}
-                min={DataIda}
-                onChange={e => setDataRetorno(e.target.value)}
-                disabled={!DataIda}
-              />
+            <div className="w-full">
+              <label htmlFor="DataIda" className="flex text-zinc-700">Data de ida:</label>
+              <div className={`text-zinc-700 relative flex items-center border w-full rounded-xl p-3`}>
+                <i className={`absolute left-3`}>{calendariu}</i>
+                <input
+                  type="date"
+                  name="DataRetorno"
+                  className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
+                  value={DataRetorno}
+                  min={DataIda}
+                  onChange={e => setDataRetorno(e.target.value)}
+                  disabled={!DataIda}
+                />
+              </div>
             </div>
           </div>
           <div>
