@@ -4,10 +4,11 @@ import Atividades from "./Atividades/Atividades";
 import ConvidarAmigos from "./convidarAmigos/Amigos";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos";
+type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos" | "Topicos";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { useUser } from "@/src/contexts/UserContext";
+import Topicos from "./Topicos/Topicos";
 
 interface LayoutProps {
   isEditMode: boolean;
@@ -17,12 +18,13 @@ interface LayoutProps {
   setMenuEnabled: (enabled: boolean) => void;
 }
 
-export default function Layout({isEditMode, tripId, tripData: initialTripData, menuEnabled, setMenuEnabled}: LayoutProps) {
+export default function Layout({ isEditMode, tripId, tripData: initialTripData, menuEnabled, setMenuEnabled }: LayoutProps) {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPrincipais");
-  const {user} = useUser();
+  const { user } = useUser();
 
   const router = useRouter();
   const [tripData, setTripData] = useState({
+    _id: "",
     nomeViagem: "",
     partida: initialTripData?.partida || "",
     destino: initialTripData?.destino || "",
@@ -32,6 +34,7 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
     atividades: [],
     amigos: [],
     imagem: null,
+    topicos: [],
   });
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
           if (!response.ok) throw new Error("Erro ao buscar dados da viagem");
 
           const data = await response.json();
-          setTripData(data);
+          setTripData(data); // Agora garantimos que o `_id` também está sendo definido
         } catch (error) {
           console.error("Erro ao carregar viagem para edição:", error);
         }
@@ -62,11 +65,6 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
     }
   }, [initialTripData]);
 
-  useEffect(() => {
-    console.log("Initial trip data:", initialTripData);
-    console.log("Current trip data:", tripData);
-  }, [initialTripData, tripData]);
-
   const handleUpdateTrip = (updatedData: Partial<typeof tripData>) => {
     const newTripData = { ...tripData, ...updatedData };
     setTripData(newTripData);
@@ -83,8 +81,8 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
 
     let tripData = JSON.parse(tripDataString);
 
-    const partidaStored = sessionStorage.getItem("partida")
-    const destinoStored = sessionStorage.getItem("destino")
+    const partidaStored = sessionStorage.getItem("partida");
+    const destinoStored = sessionStorage.getItem("destino");
 
     tripData = {
       ...tripData,
@@ -99,9 +97,9 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
     }
 
     const atividadesAjustadas = tripData.atividades.map((atividade) => ({
-      nome: atividade.name, // Ajustando 'name' para 'nome'
-      data: atividade.date, // Ajustando 'date' para 'data'
-      horario: atividade.time, // Ajustando 'time' para 'horario'
+      nome: atividade.name,
+      data: atividade.date,
+      horario: atividade.time,
     }));
 
     tripData = { ...tripData, atividades: atividadesAjustadas };
@@ -122,7 +120,7 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao enviar os dados para o banco de dados. ", data);
+        throw new Error("Erro ao enviar os dados para o banco de dados.");
       }
 
       const result = await response.json();
@@ -133,12 +131,12 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
         gravity: 'top',
         position: 'right',
         stopOnFocus: true,
-        style:{
+        style: {
           background: "linear-gradient(to right, #00b09b, #96c93d)",
         }
       }).showToast();
       console.log(result);
-      router.push('/perfil')
+      router.push('/perfil');
     } catch (error) {
       console.error("Erro ao enviar os dados:", error);
       alert("Falha ao confirmar a viagem.");
@@ -152,11 +150,13 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
   const renderComponent = () => {
     switch (selectedComponent) {
       case "DadosPrincipais":
-        return <DadosPrincipais tripData={tripData} handleUpdateTrip={handleUpdateTrip} onSaveTrip={onSaveTrip}/>;
+        return <DadosPrincipais tripData={tripData} handleUpdateTrip={handleUpdateTrip} onSaveTrip={onSaveTrip} />;
       case "Atividades":
         return <Atividades tripData={tripData} handleUpdateTrip={handleUpdateTrip} />;
       case "ConvidarAmigos":
         return <ConvidarAmigos tripData={tripData} handleUpdateTrip={handleUpdateTrip} />;
+      case "Topicos":
+        return <Topicos tripData={tripData} handleUpdateTrip={handleUpdateTrip} />;
       default:
         return null;
     }

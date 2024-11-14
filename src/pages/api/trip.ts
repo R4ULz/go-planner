@@ -22,6 +22,7 @@ export default async function handler(
         amigos,
         imagem,
         criador,
+        topicos,
       } = req.body;
 
       if (!nomeViagem || !destino || !DataIda || !DataRetorno || !criador) {
@@ -42,6 +43,7 @@ export default async function handler(
         amigos,
         imagem,
         criador,
+        topicos,
       });
 
       const savedTrip = await novaViagem.save();
