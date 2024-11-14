@@ -28,16 +28,21 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem, menuE
     }
   };
 
+  const handleNewTopicClick = () => {
+    // Aqui podemos definir "Topicos" como o componente selecionado
+    setSelectedComponent("Topicos");
+  };
+
   return (
     <aside className="flex h-full flex-col border-[1px] bg-white shadow-xl border-zinc-400 rounded-xl text-black font-bold">
       <div className="overflow-y-auto lg:max-h-none max-h-[200px] flex-grow">
-      <ul>
-      <MenuItemV
-          texto="Dados Principais"
-          onclick={() => handleItemClick("DadosPrincipais", false)}
-          selected={selectedComponent === "DadosPrincipais"}
-          cor="bg-rosinha"
-        />
+        <ul>
+          <MenuItemV
+            texto="Dados Principais"
+            onclick={() => handleItemClick("DadosPrincipais", false)}
+            selected={selectedComponent === "DadosPrincipais"}
+            cor="bg-rosinha"
+          />
           <MenuItemV
             texto="Atividades"
             onclick={() => handleItemClick("Atividades", !menuEnabled)}
@@ -52,8 +57,11 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem, menuE
             disabled={!menuEnabled}
             cor="bg-roxo"
           />
-          <div className="flex justify-center mt-5 hidden">
-            <button className="px-7 flex flex-row items-center text-black border-2 border-laranjinha rounded-xl font-bold">
+          <div className="flex justify-center mt-5">
+            <button
+              className="px-7 flex flex-row items-center text-black border-2 border-laranjinha rounded-xl font-bold"
+              onClick={handleNewTopicClick}
+            >
               Novo Tópico {Plus}
             </button>
           </div>
