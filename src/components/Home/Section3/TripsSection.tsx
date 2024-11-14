@@ -9,16 +9,16 @@ import Image from "next/image";
 export default function TripsSection() {
     return (
         <div className="flex flex-col w-full max-w-screen-xl pt-10">
-            <div className="">
-                <div className="flex md:justify-start sm:justify-center">
+            <div >
+                <div className="flex md:justify-start justify-center">
                     <h1 className="font-rubik font-bold text-black text-4xl md:text-3xl">Viagens populares</h1>
                     <span className="flex flex-row bg-rosinha w-2 h-2 rounded-full p-1 relative top-6 mx-1"></span>
                 </div>
             </div>
 
-            <div className="grid grid-cols-4 grid-rows-3 gap-4 p-6">
+            <div className="grid md:grid-cols-4 md:grid-rows-3 md:gap-4 md:p-6 grid-cols-4 grid-rows-5 gap-4 p-6">
                 {/* Brasil */}
-                <div className="relative w-full h-60 group">
+                <div className="relative w-full h-60 group md:col-span-1 md:row-span-1 col-span-2 row-span-1">
                     <Image
                         src={Brasil}
                         alt="Imagem referente ao Brasil"
@@ -43,7 +43,7 @@ export default function TripsSection() {
                 </div>
 
                 {/* Espanha */}
-                <div className="relative col-span-2 row-span-1 group">
+                <div className="relative md:col-span-2 md:row-span-1 group col-span-2">
                     <Image
                         src={Espanha}
                         alt="Imagem referente a Espanha"
@@ -67,7 +67,7 @@ export default function TripsSection() {
                 </div>
 
                 {/* Paris */}
-                <div className="relative col-span-1 row-span-2 min-h-[150px] group">
+                <div className="relative md:col-span-1 md:row-span-2 min-h-[150px] group col-span-2 row-span-2">
                     <Image
                         src={Paris}
                         alt="Imagem referente a Paris"
@@ -91,7 +91,7 @@ export default function TripsSection() {
                 </div>
 
                 {/* EUA */}
-                <div className="relative col-span-1 row-span-2 w-full group">
+                <div className="relative md:col-span-1 md:row-span-2 w-full group col-span-2 row-span-2">
                     <Image
                         src={EUA}
                         alt="Imagem referente aos Estados Unidos"
@@ -115,7 +115,7 @@ export default function TripsSection() {
                 </div>
 
                 {/* Itália */}
-                <div className="relative col-span-2 row-span-1 w-full group">
+                <div className="relative md:col-span-2 md:row-span-1 w-full group col-span-4 row-span-1">
                     <Image
                         src={Italia}
                         alt="Imagem referente a Itália"
@@ -139,7 +139,7 @@ export default function TripsSection() {
                 </div>
 
                 {/* Tokyo */}
-                <div className="relative w-full col-span-3 row-span-1 group">
+                <div className="relative w-full md:col-span-3 md:row-span-1 group col-span-4 row-span-1">
                     <Image
                         src={Tokyo}
                         alt="Imagem referente a Tokyo"
