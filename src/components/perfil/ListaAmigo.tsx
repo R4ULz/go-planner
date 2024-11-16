@@ -78,6 +78,24 @@ export default function ListaAmigos({ user }) {
       return;
     }
 
+    if(user.email === friendEmail){
+      Toastify({
+        text:"Opa, você não consegue se adicionar como amigo! Escolha outro email",
+        duration: 3500,
+        style: {background: "#ce1836"}
+      }).showToast();
+      return;
+    }
+
+    if (friends.some(friend => friend.email === friendEmail)) {
+      Toastify({
+        text: "Este amigo já está na sua lista!",
+        duration: 2000,
+        style: { background: "#ce1836" }
+      }).showToast();
+      return;
+    }
+
     try {
       const response = await fetch('/api/addFriend', {
         method: 'POST',
@@ -93,6 +111,7 @@ export default function ListaAmigos({ user }) {
       const data = await response.json();
       if (response.ok) {
         setFriends((prevFriends) => [...prevFriends, data.friend]);
+        setFriendEmail(''); 
         Toastify({
           text: 'Amigo adicionado com sucesso!',
           duration: 2000,
@@ -125,14 +144,14 @@ export default function ListaAmigos({ user }) {
         <p className="text-zinc-400">Adicione seus amigos para convidá-los para as suas próximas viagens</p>
 
         <div className="mt-6 px-4 py-2 border-[0.5px] border-zinc-300 rounded-xl flex items-center justify-between">
-          <div className="flex gap-1 items-center">
+          <div className="flex gap-1 items-center flex-1">
             {emailRoxo}
             <input
               type="text"
               placeholder="Digite o email do amigo"
               value={friendEmail}
               onChange={(e) => setFriendEmail(e.target.value)}
-              className="focus:outline-none"
+              className="focus:outline-none w-full"
             />
           </div>
 
@@ -154,25 +173,28 @@ export default function ListaAmigos({ user }) {
           <span className="bg-roxo w-2 h-2 rounded-full p-1 flex mt-[18px] ml-2"></span>
         </h1>
         <p className="text-zinc-400">Aqui ficam as pessoas que irão planejar e viajar junto com você!</p>
-        <div className="w-full h-[350px] flex flex-col mt-6">
+        <div className="w-full h-[290px] flex flex-col gap-5 mt-6 overflow-y-auto box-border">
           {friends.length > 0 ? (
             friends.map((friend) => (
               <div key={friend._id} className="rounded-xl border-[0.5px] px-4 py-3 flex justify-between items-center">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 ">
                   <div className="flex gap-2">
                     {User}
-                    <p className="text-lg font-semibold text-zinc-500">{friend.nome}</p>
+                    <p className="text-lg font-semibold text-zinc-500 w-32 truncate">{friend.nome}</p>
                   </div>
                   <div className="w-[1px] h-10 bg-zinc-300" />
                   <p className="text-lg text-zinc-500">{friend.email}</p>
                 </div>
-                <button onClick={handleRemoveFriend} className="bg-red-500 z-10">
+                <button onClick={() => handleRemoveFriend(friend._id)}>
                   {lixeira}
                 </button>
               </div>
             ))
           ) : (
-            <p className="text-center text-zinc-500">Nenhum amigo encontrado.</p>
+            <div className="flex flex-col justify-center items-center font-semibold text-xl">
+              <p className="text-center text-zinc-500">Parece que não há nenhum aqui.</p>
+              <p className="text-zinc-500"> Clique em "adicionar" para encontrar seus amigos! </p>
+            </div>
           )}
         </div>
       </div>
