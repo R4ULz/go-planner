@@ -1,35 +1,55 @@
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import Toastify from 'toastify-js';
 import { User } from "../icons/user";
 import { emailRoxo } from "../icons/emailRoxo"; 
 import { lixeira } from "../icons/lixeira";
 import { adicionarFriend } from "../icons/addFriend";
-import { useEffect, useState } from "react";
-import Toastify from 'toastify-js';
-import { useUser } from "@/src/contexts/UserContext";
 
-export default function ListaAmigos() {
-  console.log("ListaAmigos component is mounted");
-
-  const { user } = useUser();
-  console.log("User at component mount:", user); // Verifica o conteúdo de `user` ao montar o componente
+export default function ListaAmigos({ user }) {
   const [friendEmail, setFriendEmail] = useState("");
   const [friends, setFriends] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Função para carregar amigos do banco de dados
+
+
+  const handleRemoveFriend = async (friendId) => {
+    try {
+      const response = await fetch('/api/removeFriend', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, friendId: friendId })
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        setFriends(data.friends); // Atualiza a lista de amigos no estado
+        Toastify({
+          text: 'Amigo removido com sucesso!',
+          duration: 2000,
+          style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+        }).showToast();
+      } else {
+        console.error('Erro ao remover amigo:', data.message);
+      }
+    } catch (error) {
+      console.error('Erro ao remover amigo:', error);
+    }
+  };
+
+
+
   const loadFriendsFromDatabase = async () => {
-    if (user?.amigos && user.amigos.length > 0) {
+    if (user?.id) {
       try {
-        console.log("IDs de amigos do usuário:", user.amigos);
         const response = await fetch("/api/getFriends", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ friendIds: user.amigos }),
+          body: JSON.stringify({ userId: user.id }), 
         });
         
         const data = await response.json();
+        console.log(data)
         if (response.ok) {
-          console.log("Amigos carregados da API:", data.friends); // Verifique se os amigos foram carregados corretamente
           setFriends(data.friends);
         } else {
           console.error("Erro ao carregar amigos:", data.message);
@@ -38,22 +58,16 @@ export default function ListaAmigos() {
         console.error("Erro ao carregar amigos:", error);
       }
     } else {
-      console.log("Nenhum amigo encontrado para carregar.");
+      console.log("ID do usuário não encontrado.");
     }
-    setIsLoading(false); // Finaliza o carregamento após a tentativa
+    setIsLoading(false);
   };
 
-  // Carregar os dados completos dos amigos quando o componente monta
   useEffect(() => {
-    if (!user) {
-      console.log("useEffect: Usuário não está carregado ainda.");
-      return;
-    }
-    
-    console.log("useEffect em ListaAmigos executado, usuário atual:", user);
     loadFriendsFromDatabase();
-  }, [user]); // Executa sempre que o usuário muda
+  }, [user]);
 
+  // Função para adicionar amigo
   const handleAddFriend = async () => {
     if (!user?.id || !friendEmail) {
       Toastify({
@@ -97,20 +111,18 @@ export default function ListaAmigos() {
   };
 
   if (isLoading) {
-    return <p>Carregando amigos...</p>; // Exibe uma mensagem de carregamento enquanto aguarda os dados
+    return <p>Carregando amigos...</p>;
   }
 
   return (
     <div className="w-full h-full border-[1px] border-zinc-400 px-14 py-8 rounded-xl bg-white text-lg space-y-8">
       <div className="flex flex-col gap-1">
-        <h2 className="text-zinc-500 text-cl font-semibold tex">Lista de amigos</h2>
+        <h2 className="text-zinc-500 text-cl font-semibold">Lista de amigos</h2>
         <h1 className="text-zinc-900 font-bold text-2xl flex">
           Adicione mais amigos
           <span className="bg-roxo w-2 h-2 rounded-full p-1 flex mt-[18px] ml-2"></span>
         </h1>
-        <p className="text-zinc-400">
-          Adicione seus amigos para convidá-los para as suas próximas viagens
-        </p>
+        <p className="text-zinc-400">Adicione seus amigos para convidá-los para as suas próximas viagens</p>
 
         <div className="mt-6 px-4 py-2 border-[0.5px] border-zinc-300 rounded-xl flex items-center justify-between">
           <div className="flex gap-1 items-center">
@@ -141,13 +153,11 @@ export default function ListaAmigos() {
           Seus amigos
           <span className="bg-roxo w-2 h-2 rounded-full p-1 flex mt-[18px] ml-2"></span>
         </h1>
-        <p className="text-zinc-400">
-          Aqui ficam as pessoas que irão planejar e viajar junto com você!
-        </p>
+        <p className="text-zinc-400">Aqui ficam as pessoas que irão planejar e viajar junto com você!</p>
         <div className="w-full h-[350px] flex flex-col mt-6">
           {friends.length > 0 ? (
             friends.map((friend) => (
-              <div key={friend} className="rounded-xl border-[0.5px] px-4 py-3 flex justify-between items-center">
+              <div key={friend._id} className="rounded-xl border-[0.5px] px-4 py-3 flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <div className="flex gap-2">
                     {User}
@@ -156,9 +166,9 @@ export default function ListaAmigos() {
                   <div className="w-[1px] h-10 bg-zinc-300" />
                   <p className="text-lg text-zinc-500">{friend.email}</p>
                 </div>
-                <div className="hover:text-RosinhaEscurinho transition-all pl-9">
+                <button onClick={handleRemoveFriend} className="bg-red-500 z-10">
                   {lixeira}
-                </div>
+                </button>
               </div>
             ))
           ) : (

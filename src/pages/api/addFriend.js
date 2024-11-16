@@ -12,20 +12,17 @@ export default async function handler(req, res) {
     try {
       await connect();
 
-      // Encontre o amigo pelo email
       const friendUser = await User.findOne({ email: friendEmail });
       if (!friendUser) {
         return res.status(404).json({ message: "Usuário amigo não encontrado." });
       }
 
-      // Adicione o amigo ao array de amigos do usuário atual
       const currentUser = await User.findByIdAndUpdate(
         currentUserId,
         { $addToSet: { amigos: friendUser._id } }, // Garante que o amigo não será adicionado mais de uma vez
         { new: true }
       );
 
-      // Adicione o usuário atual ao array de amigos do amigo
       await User.findByIdAndUpdate(
         friendUser._id,
         { $addToSet: { amigos: currentUserId } }, // Garante que o usuário atual não será adicionado mais de uma vez
