@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { calendariu } from "../../icons/teste"; // Ícone do calendário
 import { lixeira } from "../../icons/lixeira";
 import { User } from "../../icons/user";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [selectedItem, setSelectedItem] = useState("dadosPrincipais");
@@ -165,25 +166,25 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         }
     };
 
-    const toggleAtividade = async (globalIndex, currentStatus) => {
+    const toggleAtividade = async (atividadeId, currentStatus) => {
+        console.log("Toggling atividade ID:", atividadeId, "Current Status:", currentStatus);
         try {
             const response = await fetch(`/api/trip/updateActivityStatus`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ tripId: viagem._id, atividadeIndex: globalIndex, concluida: !currentStatus }),
+                body: JSON.stringify({ tripId: viagem._id, atividadeId, concluida: !currentStatus }),
             });
-    
+
             if (!response.ok) throw new Error("Erro ao atualizar status da atividade");
-    
-            // Buscando novamente as atividades para garantir a sincronização
-            const fetchAtividades = await fetch(`api/trip/getActivities?tripId=${viagem._id}`);
+
+            const fetchAtividades = await fetch(`/api/trip/getActivities?tripId=${viagem._id}`);
             if (!fetchAtividades.ok) throw new Error("Erro ao buscar atividades");
-    
+
             const atividadesAtualizadas = await fetchAtividades.json();
             setAtividades(atividadesAtualizadas);
-    
+            console.log("Atividades atualizadas:", atividadesAtualizadas);
         } catch (error) {
             console.error("Erro ao atualizar atividade:", error);
         }
@@ -202,7 +203,11 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         .slice() // Cria uma cópia do array para evitar mutação direta
         .sort((a, b) => new Date(a.data) - new Date(b.data)) // Ordena as atividades por data em ordem crescente
         .reduce((acc, atividade, globalIndex) => {
-            const dataFormatada = new Date(atividade.data).toLocaleDateString("pt-BR");
+            const adjustedDate = new Date(atividade.data);
+            adjustedDate.setHours(adjustedDate.getHours() + 12);
+
+            const dataFormatada = adjustedDate.toLocaleDateString("pt-BR");
+
             if (!acc[dataFormatada]) acc[dataFormatada] = [];
             acc[dataFormatada].push({ ...atividade, globalIndex });
             return acc;
@@ -221,20 +226,26 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
             return;
         }
 
+        const atividadeComId = {
+            ...novaAtividade,
+            id: uuidv4(),
+        };
+
         try {
             const response = await fetch(`/api/trip/addActivityToTrip`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ tripId: viagem._id, atividade: novaAtividade }),
+                body: JSON.stringify({ tripId: viagem._id, atividade: atividadeComId }),
             });
 
             if (!response.ok) throw new Error("Erro ao adicionar a atividade");
 
             const atividadesAtualizadas = await response.json();
-            setAtividades(atividadesAtualizadas); // Atualiza o estado com o array atualizado de atividades
-            fecharFormularioAtividade(); // Fecha o formulário após adicionar
+            setAtividades(atividadesAtualizadas);
+            fecharFormularioAtividade();
+            setNovaAtividade({ nome: "", data: "", horario: "" });
         } catch (error) {
             console.error("Erro ao adicionar atividade:", error);
             alert("Erro ao adicionar a atividade.");
@@ -385,14 +396,32 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                         <h3 className="font-bold text-lg">{data}</h3>
                                         <ul className="space-y-2">
                                             {atividadesPorData[data].map((atividade) => (
-                                                <li key={atividade.globalIndex} className="flex items-center justify-between p-4 rounded-2xl border border-zinc-300">
+                                                <li key={atividade.id} className="flex items-center justify-between p-4 rounded-2xl border border-zinc-300">
                                                     <div className="flex items-center gap-2">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={atividade.concluida}
-                                                            onChange={() => toggleAtividade(atividade.globalIndex, atividade.concluida)}
-                                                            className="h-5 w-5"
-                                                        />
+                                                        <label className="inline-flex items-center cursor-pointer">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="hidden peer"
+                                                                checked={atividade.concluida}
+                                                                onChange={() => toggleAtividade(atividade.id, atividade.concluida)}
+                                                            />
+                                                            <span className="w-5 h-5 bg-white border border-rosinha rounded-md peer-checked:bg-rosinha peer-checked:border-rosinha transition duration-200 flex items-center justify-center">
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="size-5 text-white"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="2"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        d="M5 13l4 4L19 7"
+                                                                    />
+                                                                </svg>
+                                                            </span>
+                                                        </label>
                                                         <span className={`${atividade.concluida ? "line-through text-gray-500 bg-gray-100" : "text-zinc-700"}`}>
                                                             {atividade.nome}
                                                         </span>
