@@ -1,5 +1,6 @@
 import connect from "../../../lib/mongoose";
 import Trip from "../../../models/Trip";
+import { v4 as uuidv4 } from "uuid";
 
 export default async function handler(req, res) {
     await connect();
@@ -8,16 +9,18 @@ export default async function handler(req, res) {
         const { tripId, atividade } = req.body;
 
         try {
-            // Encontra a viagem pelo ID e adiciona a nova atividade ao array
+
+            const atividadeComId = {...atividade, id: atividade.id || uuidv4}
+
             const trip = await Trip.findByIdAndUpdate(
                 tripId,
-                { $push: { atividades: atividade } }, // Adiciona a atividade ao array
-                { new: true } // Retorna o documento atualizado
+                { $push: { atividades: atividadeComId } },
+                { new: true }
             );
 
             if (!trip) return res.status(404).json({ error: "Viagem não encontrada" });
 
-            res.status(200).json(trip.atividades); // Retorna o array atualizado de atividades
+            res.status(200).json(trip.atividades);
         } catch (error) {
             console.error("Erro ao adicionar atividade:", error);
             res.status(500).json({ error: "Erro ao adicionar atividade" });
