@@ -9,10 +9,9 @@ interface MenuLateralVProps {
   salvarViagem: () => void;
   menuEnabled: boolean;
   selectedComponent: string;
-  topicos: { nome: string }[];
 }
 
-export default function MenuLateralV({ setSelectedComponent, salvarViagem, menuEnabled, selectedComponent, topicos }: MenuLateralVProps) {
+export default function MenuLateralV({ setSelectedComponent, salvarViagem, menuEnabled, selectedComponent }: MenuLateralVProps) {
 
   const handleItemClick = (component: string, isDisabled: boolean) => {
     if (isDisabled) {
@@ -57,15 +56,6 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem, menuE
             disabled={!menuEnabled}
             cor="bg-roxo"
           />
-          {topicos.map((topico, index) => (
-            <MenuItemV
-              key={index}
-              texto={topico.nome}
-              onclick={() => handleItemClick("Topicos", false)}
-              selected={selectedComponent === "Topicos"}
-              cor="bg-verde"
-            />
-          ))}
           <div className="flex justify-center mt-5">
             <button
               className="px-7 flex flex-row items-center text-black border-2 border-laranjinha rounded-xl font-bold"

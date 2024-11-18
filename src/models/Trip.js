@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const tripSchema = new mongoose.Schema({
   titulo: { type: String, required: true },
@@ -26,4 +26,4 @@ const tripSchema = new mongoose.Schema({
   criador: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
-export default mongoose.models.Trip || mongoose.model('Trip', tripSchema);
+module.exports = mongoose.models.Trip || mongoose.model('Trip', tripSchema);
