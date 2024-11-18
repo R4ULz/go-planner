@@ -1,4 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
+
+const atividadeSchema = new mongoose.Schema({
+  id: { type: String, default: () => uuidv4() }, 
+  nome: { type: String, required: true },
+  data: { type: Date, required: true },
+  horario: { type: String },
+  concluida: { type: Boolean, default: false },
+});
 
 const tripSchema = new mongoose.Schema({
   titulo: { type: String, required: true },
