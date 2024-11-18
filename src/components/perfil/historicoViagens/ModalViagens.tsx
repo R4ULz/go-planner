@@ -7,7 +7,9 @@ import { v4 as uuidv4 } from 'uuid';
 export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [selectedItem, setSelectedItem] = useState("dadosPrincipais");
     const [atividades, setAtividades] = useState([]);
+    const [topicos, setTopicos] = useState([]);
     const [loadingAtividades, setLoadingAtividades] = useState(true);
+    const [loadingTopicos, setLoadingTopicos] = useState(true);
     const [editavel, setEditavel] = useState(false);
     const [novaAtividade, setNovaAtividade] = useState({
         nome: "",
@@ -251,6 +253,27 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
             alert("Erro ao adicionar a atividade.");
         }
     };
+    useEffect(() => {
+        const fetchTopicos = async () => {
+            if (!viagem || !viagem._id) return;
+
+            setLoadingTopicos(true);
+            try {
+                const response = await fetch(`/api/trip/getTopics?tripId=${viagem._id}`);
+                if (!response.ok) throw new Error("Erro ao buscar tópicos");
+
+                const topicosData = await response.json();
+                setTopicos(topicosData.topicos || []);
+            } catch (error) {
+                console.error("Erro ao buscar tópicos:", error);
+            } finally {
+                setLoadingTopicos(false);
+            }
+        };
+
+        fetchTopicos();
+    }, 
+    [viagem]);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
@@ -280,6 +303,13 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                     >
                         <span className={`${selectedItem === "listaConvidados" ? "flex flex-row bg-laranjinha w-[4px] h-[16px] rounded-full top-6" : "hidden"}`}></span>
                         Lista de convidados
+                    </li>
+                    <li
+                        className={`cursor-pointer flex gap-1 items-center font-bold ${selectedItem === "topicos" ? "text-zinc-700" : "text-zinc-400"}`}
+                        onClick={() => itemSelecionado("topicos")}
+                    >
+                        <span className={`${selectedItem === "topicos" ? "flex flex-row bg-laranjinha w-[4px] h-[16px] rounded-full top-6" : "hidden"}`}></span>
+                        Tópicos
                     </li>
                 </ul>
 

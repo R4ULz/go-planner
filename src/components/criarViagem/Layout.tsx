@@ -165,8 +165,7 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
           salvarViagem={salvarViagem}
           menuEnabled={menuEnabled}
           selectedComponent={selectedComponent}
-          topicos={tripData.topicos}
-        />
+          />      
       </aside>
       <div className="w-full">
         <p className="text-black font-inter font-medium">{isEditMode ? "EDITANDO SUA VIAGEM!" : "CRIANDO SUA VIAGEM!"}</p>

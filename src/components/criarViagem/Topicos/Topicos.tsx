@@ -1,143 +1,199 @@
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
-import 'froala-editor/js/plugins.pkgd.min.js'; // Dependências do Froala
-import 'froala-editor/css/froala_editor.pkgd.min.css'; // Estilos do editor
-import 'froala-editor/css/froala_style.min.css'; // Estilos adicionais
+import 'froala-editor/js/plugins.pkgd.min.js';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+import 'froala-editor/css/froala_style.min.css';
 
 export default function Topico({ tripData, handleUpdateTrip }) {
-  // Carregar tópicos do sessionStorage se existirem, ou usar tripData
   const initialTopics = () => {
-    if (!tripData._id) return []; // Se a viagem ainda não foi criada, retornar um array vazio
-    const storedTopics = sessionStorage.getItem(`trip_${tripData._id}_topicos`);
+    const storedTopics = localStorage.getItem(`trip_${tripData._id}_topicos`);
     return storedTopics ? JSON.parse(storedTopics) : (tripData?.topicos || []);
   };
 
   const [topics, setTopics] = useState(() => Array.isArray(initialTopics()) ? initialTopics() : []);
-  const [content, setContent] = useState('');
   const [topicName, setTopicName] = useState('');
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [activeTopicIndex, setActiveTopicIndex] = useState(null);
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
 
   useEffect(() => {
     if (tripData._id) {
-      // Atualizar sessionStorage sempre que os tópicos mudarem e a viagem já tiver sido criada
-      sessionStorage.setItem(
+      localStorage.setItem(
         `trip_${tripData._id}_topicos`,
         JSON.stringify(topics)
       );
     }
   }, [topics, tripData._id]);
- 
-  // Função para extrair texto puro do HTML
-  const stripHtmlTags = (htmlContent) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, 'text/html');
-    return doc.body.textContent || "";
-  };
 
   const handleContentChange = (updatedContent) => {
-    if (typeof updatedContent === 'string') {
-      setContent(updatedContent);
+    if (activeTopicIndex !== null) {
+      const updatedTopics = topics.map((topic, index) =>
+        index === activeTopicIndex ? { ...topic, conteudo: updatedContent } : topic
+      );
+      setTopics(updatedTopics);
+
+      if (tripData._id) {
+        localStorage.setItem(
+          `trip_${tripData._id}_topicos`,
+          JSON.stringify(updatedTopics)
+        );
+      }
     }
   };
 
-  // Função para salvar os tópicos no sessionStorage e atualizar o tripData
-  const salvarTopicos = () => {
-    // Armazenar nome e conteúdo no sessionStorage como texto puro
-    const plainTextContent = stripHtmlTags(content);
+  const salvarTopico = () => {
     if (!topicName.trim()) {
       alert('O nome do tópico não pode estar vazio.');
       return;
     }
 
-    const newTopic = {
-      nome: topicName,
-      conteudo: plainTextContent,
-    };
+    if (isCreatingNew) {
+      const newTopic = {
+        nome: topicName,
+        conteudo: '',
+      };
 
-    let updatedTopics;
-    if (editingIndex !== null) {
-      // Editar tópico existente
-      updatedTopics = topics.map((topic, index) => (index === editingIndex ? newTopic : topic));
-      setEditingIndex(null);
+      const updatedTopics = [...topics, newTopic];
+      setTopics(updatedTopics);
+
+      handleUpdateTrip({
+        topicos: updatedTopics,
+      });
+
+      setTopicName('');
+      setIsCreatingNew(false);
+      alert('Novo tópico criado com sucesso!');
     } else {
-      // Adicionar novo tópico
-      updatedTopics = [...topics, newTopic];
+      const updatedTopics = topics.map((topic, index) =>
+        index === activeTopicIndex ? { ...topic, nome: topicName } : topic
+      );
+      setTopics(updatedTopics);
+
+      handleUpdateTrip({
+        topicos: updatedTopics,
+      });
+
+      setIsCreatingNew(false); // Desativa o modo de criação de novos tópicos
+      setTopicName(''); // Limpa o input de nome
+      alert('Tópico atualizado com sucesso!');
+    }
+  };
+
+  const excluirTopico = () => {
+    if (activeTopicIndex === null) {
+      alert('Nenhum tópico selecionado para exclusão.');
+      return;
     }
 
+    const updatedTopics = topics.filter((_, index) => index !== activeTopicIndex);
     setTopics(updatedTopics);
 
-    // Atualizar tripData com os tópicos atualizados
     handleUpdateTrip({
       topicos: updatedTopics,
     });
 
-    // Limpar os campos para adicionar um novo tópico
+    setActiveTopicIndex(null);
     setTopicName('');
-    setContent('');
-
-    alert('Tópico salvo com sucesso!');
+    setIsCreatingNew(false);
+    alert('Tópico excluído com sucesso!');
   };
 
-  const editarTopico = (index) => {
-    const topicToEdit = topics[index];
-    setTopicName(topicToEdit.nome);
-    setContent(topicToEdit.conteudo);
-    setEditingIndex(index);
+  const selecionarTopico = (index) => {
+    setActiveTopicIndex(index);
+    setTopicName(topics[index]?.nome || '');
+    setIsCreatingNew(false); // Desativa o modo de criação de novos tópicos
+  };
+
+  const iniciarNovoTopico = () => {
+    setTopicName('');
+    setActiveTopicIndex(null);
+    setIsCreatingNew(true);
   };
 
   return (
-    <div className="font-rubik">
-      <div className="flex flex-row">
-        <div className="w-full">
-          <div className="flex">
-            <p className="font-bold text-xl">Tópicos</p>
-            <span className="bg-roxo w-2 h-2 rounded-full p-1 flex mt-3 ml-1"></span>
-          </div>
+    <div className="font-rubik flex">
+      {/* Menu lateral */}
+      <aside className="w-1/5 bg-gray-200 p-4 rounded-l-lg h-[500px] overflow-y-auto">
+        <h3 className="font-bold text-lg mb-4">Tópicos:</h3>
+        <ul>
+          <li className="mb-4">
+            <button
+              onClick={iniciarNovoTopico}
+              className="w-full py-2 bg-gradient-to-r from-laranja to-rosinha text-white font-bold rounded-lg shadow hover:shadow-lg transition duration-300"
+            >
+              Novo Tópico +
+            </button>
+          </li>
+          <hr className="border-t border-gray-300 my-4" />
+          {topics.map((topic, index) => (
+            <li key={index} className="mb-2 flex items-center">
+              <button
+                onClick={() => selecionarTopico(index)}
+                className={`w-full truncate text-left px-4 py-2 rounded ${
+                  index === activeTopicIndex
+                    ? 'bg-gradient-to-r from-laranja to-rosinha text-white'
+                    : 'bg-white hover:bg-gray-100'
+                }`}
+                title={topic.nome}
+              >
+                {topic.nome}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </aside>
 
-          <div className="mt-2">
-            <input
-              type="text"
-              value={topicName}
-              onChange={(e) => setTopicName(e.target.value)}
-              placeholder="Nome do Tópico"
-              className="w-full px-4 py-2 border rounded mb-4"
-            />
+      {/* Conteúdo principal */}
+      <div className="w-4/5 p-6">
+        {isCreatingNew ? (
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 justify-start">
+              <input
+                type="text"
+                value={topicName}
+                onChange={(e) => setTopicName(e.target.value)}
+                className="text-lg font-bold w-1/2 px-2 py-1 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-laranja"
+                placeholder="Digite o nome do novo tópico"
+              />
+              <button
+                onClick={salvarTopico}
+                className="py-1.5 px-3 bg-gradient-to-r from-laranja to-rosinha text-white font-bold rounded-md shadow hover:shadow-lg transition duration-300"
+              >
+                Salvar Novo Tópico
+              </button>
+            </div>
           </div>
-
-          <div className="mt-4">
+        ) : activeTopicIndex !== null ? (
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 justify-start">
+              <input
+                type="text"
+                value={topicName}
+                onChange={(e) => setTopicName(e.target.value)}
+                className="text-lg font-bold w-1/2 px-2 py-1 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-laranja"
+                placeholder="Edite o nome do tópico"
+              />
+              <button
+                onClick={salvarTopico}
+                className="py-1.5 px-3 bg-gradient-to-r from-laranja to-rosinha text-white font-bold rounded-md shadow hover:shadow-lg transition duration-300"
+              >
+                Salvar
+              </button>
+              <button
+                onClick={excluirTopico}
+                className="py-1.5 px-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold rounded-md shadow hover:shadow-lg transition duration-300"
+              >
+                Excluir
+              </button>
+            </div>
             <FroalaEditor
               tag="textarea"
-              model={content}
-              onModelChange={handleContentChange}
+              model={topics[activeTopicIndex]?.conteudo || ''}
+              onModelChange={(content) => handleContentChange(content)}
             />
           </div>
-
-          <div className="mt-6 flex justify-end">
-            <button
-              onClick={salvarTopicos}
-              className="w-48 py-3 bg-gradient-to-r to-rosinha from-laranja rounded-lg text-white font-semibold shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
-            >
-              {editingIndex !== null ? 'Atualizar Tópico' : 'Salvar Tópico'}
-            </button>
-          </div>
-
-          <div className="mt-8">
-            <h3 className="font-bold text-lg mb-4">Tópicos Salvos:</h3>
-            <ul>
-              {topics.map((topic, index) => (
-                <li key={index} className="mb-2 flex justify-between items-center">
-                  <span>{topic.nome}</span>
-                  <button
-                    onClick={() => editarTopico(index)}
-                    className="w-32 py-1 bg-gradient-to-r to-rosinha from-laranja rounded-lg text-white font-semibold shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
-                  >
-                    Editar
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        ) : (
+          <p className="text-gray-600">Selecione um tópico para editar ou clique em "Novo Tópico" para criar um.</p>
+        )}
       </div>
     </div>
   );
