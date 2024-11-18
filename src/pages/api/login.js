@@ -27,8 +27,8 @@ export default async function handler(req, res) {
     const isMatch = await bcrypt.compare(senha, user.senha);
 
     if (!isMatch) {
-      console.log("Usuario ou senha incorretos");
-      return res.status(401).json({ message: "Usuario ou senha incorretos" });
+      console.log("Usuário ou senha incorretos");
+      return res.status(401).json({ message: "Usuário ou senha incorretos" });
     }
 
     // Gera o token JWT
@@ -38,7 +38,13 @@ export default async function handler(req, res) {
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    console.log("Login bem-sucedido", user._id, "com um token", token);
+    // Log para verificar se o login foi bem-sucedido e se o user está sendo passado corretamente
+    console.log("Login bem-sucedido para o usuário:", {
+      id: user._id.toString(),
+      nome: user.nome,
+      email: user.email,
+    });
+
     return res.status(200).json({
       user: {
         id: user._id.toString(),

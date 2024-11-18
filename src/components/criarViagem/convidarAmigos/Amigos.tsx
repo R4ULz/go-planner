@@ -23,7 +23,7 @@ interface ConvidarAmigosProps {
   handleUpdateTrip: (updatedData: Partial<{ amigos: Amigo[] }>) => void;
 }
 
-export default function ConvidarAmigos({
+export default function  ConvidarAmigos({
   tripData,
   handleUpdateTrip,
 }: ConvidarAmigosProps) {
@@ -93,12 +93,12 @@ export default function ConvidarAmigos({
                 onClick={() => setIsModalOpen(true)}
                 className="text-white font-inter font-bold border-solid margin-0 bg-laranjinha px-5 py-3 rounded-2xl flex gap-2 items-center"
               >
-                Adicionar Amigo {adicionarFriend}
+                Adicionar  {adicionarFriend}
               </button>
             </div>
           </div>
           <div className="py-7">
-            <p className="font-inter font-bold text-zinc-700 text-lg">Lista de amigos</p>
+            <p className="font-inter font-bold text-zinc-700 text-lg">Lista de convidados</p>
             {amigos.length > 0 ? (
               <ul>
                 {amigos.map((amigo) => (
@@ -131,7 +131,7 @@ export default function ConvidarAmigos({
                 <p className="font-medium py-5">Opa! Não há amigos aqui!</p>
                 <p className="text-gray-500">Se você quiser adicionar algum amigo para poder </p>
                 <p className="text-gray-500">ajudar no seu planejamento e na viagem, aperte em </p>
-                <p className="text-gray-500">“Adicionar amigo”.</p>
+                <p className="text-gray-500">“Adicionar”.</p>
               </div>
             )}
           </div>

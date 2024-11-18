@@ -5,8 +5,9 @@ interface User {
   id: string;
   nome: string;
   email: string;
-  cpf: string
+  cpf: string;
   senha: string;
+  amigos: string[]; // Array de IDs dos amigos
 }
 
 interface UserContextProps {
