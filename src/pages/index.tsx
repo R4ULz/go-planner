@@ -10,7 +10,6 @@ import SectionHome from "../components/Home/Section1/SectionHome";
 import { useUser } from "../contexts/UserContext";
 
 export default function Home() {
-
   const router = useRouter()
   const user = useUser()
   const [pontoPartida, setPontoPartida] = useState()
