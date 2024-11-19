@@ -6,7 +6,7 @@ import { LinkedInLogo } from "../../icons/linkedin"
 
 export default function Footer(){
     return(
-    <div className="flex flex-col font-rubik text-white w-full max-w-screen-2xl h-full bg-black md:px-0 px-8 py-6">
+    <div className="flex flex-col font-rubik text-white w-full max-w-screen-2xl h-full bg-black md:px-0 px-8 py-6 md:py-0">
         <div className="flex flex-col md:py-16 md:flex-row justify-between">
 
             <div className="font-bold pr-24">
