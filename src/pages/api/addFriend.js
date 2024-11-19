@@ -1,5 +1,6 @@
-import connect from "../../lib/mongoose";;
+import connect from "../../lib/mongoose";
 import User from '../../models/User';
+import { enviarEmail } from '../../lib/emailService';
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -13,10 +14,36 @@ export default async function handler(req, res) {
       await connect();
 
       const friendUser = await User.findOne({ email: friendEmail });
+
       if (!friendUser) {
-        return res.status(404).json({ message: "Usuário amigo não encontrado." });
+        // Enviar email para convidar a pessoa a se cadastrar
+        try {
+          const mensagem = `
+            Olá,
+
+            Você foi convidado para se cadastrar no Go.Planner, um aplicativo de planejamento de viagens.
+
+            Clique no link abaixo para se registrar:
+            https://go-planner.com/register
+
+            Abraços,
+            Equipe Go.Planner
+          `;
+
+          await enviarEmail(friendEmail, mensagem);
+
+          return res.status(200).json({
+            message: "Usuário amigo não encontrado. Email de convite enviado com sucesso.",
+          });
+        } catch (emailError) {
+          console.error("Erro ao enviar email de convite:", emailError);
+          return res.status(500).json({
+            message: "Usuário amigo não encontrado e falha ao enviar email de convite.",
+          });
+        }
       }
 
+      // Adicionar o amigo se ele for encontrado no banco de dados
       const currentUser = await User.findByIdAndUpdate(
         currentUserId,
         { $addToSet: { amigos: friendUser._id } }, // Garante que o amigo não será adicionado mais de uma vez
