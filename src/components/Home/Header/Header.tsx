@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useUser } from "@/src/contexts/UserContext";
 import { notifications } from "../../icons/notifications";
+import NotificationList from "./NotificationList";
 
 export default function Header() {
     const { user } = useUser();
@@ -16,8 +17,8 @@ export default function Header() {
     const notificationsList = [
         { id: 1, text: "Você recebeu uma nova mensagem.", time: "1 hora atrás" },
         { id: 2, text: "Seu amigo adicionou uma nova atividade.", time: "12 horas atrás" },
-        { id: 3, text: "A viagem foi confirmada!", time: "1 dia atrás" },
-        { id: 4, text: "A viagem foi confirmada!", time: "1 dia atrás" },
+        { id: 3, text: "Solicitação de amizade recebida", time: "1 dia atrás" },
+        { id: 4, text: "A viagem foi alterada!", time: "3 dias atrás" },
     ];
 
     return (
@@ -72,24 +73,7 @@ export default function Header() {
                         </button>
 
                          {notificationsOpen && (
-                            <div className="absolute top-14 right-72 w-72 bg-white shadow-lg rounded-lg border border-gray-200">
-                                <div className="p-4 border-b border-gray-300">
-                                    <h3 className="text-sm font-bold text-gray-700">Notificações</h3>
-                                </div>
-                                <ul className="max-h-60 overflow-y-auto">
-                                    {notificationsList.map((notification) => (
-                                        <li key={notification.id} className="p-4 hover:bg-gray-100 border-b last:border-b-0">
-                                            <p className="text-sm text-gray-600">{notification.text}</p>
-                                            <p className="text-xs text-gray-400">{notification.time}</p>
-                                        </li>
-                                    ))}
-                                </ul>
-                                {notificationsList.length === 0 && (
-                                    <div className="p-4 text-sm text-gray-400 text-center">
-                                        Sem notificações no momento.
-                                    </div>
-                                )}
-                            </div>
+                            <NotificationList notifications={notificationsList} />
                         )}
 
                         <Link href={{ pathname: '/perfil' }}>

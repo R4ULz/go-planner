@@ -137,7 +137,6 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
     }
   };
 
-  // Definir a função onSaveTrip corretamente
   const onSaveTrip = () => {
     setMenuEnabled(true);
   };
