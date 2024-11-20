@@ -23,7 +23,12 @@ const tripSchema = new mongoose.Schema({
       conteudo: { type: String },
     },
   ],
-  amigos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  amigos: [
+    {
+      amigoId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+      status: { type: String, enum: ["PENDENTE", "ACEITO"], default: "PENDENTE" }, // Status do convite
+    },
+  ],
   imagem: { type: String },
   criador: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconeLogo } from "../../icons/index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useUser } from "@/src/contexts/UserContext";
 import { notifications } from "../../icons/notifications";
@@ -10,16 +10,66 @@ export default function Header() {
     const { user } = useUser();
     const [menuOpen, setMenuOpen] = useState(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [notificationsList, setNotificationsList] = useState([])
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
     const toggleNotifications = () => setNotificationsOpen(!notificationsOpen)
 
-    const notificationsList = [
-        { id: 1, text: "Você recebeu uma nova mensagem.", time: "1 hora atrás" },
-        { id: 2, text: "Seu amigo adicionou uma nova atividade.", time: "12 horas atrás" },
-        { id: 3, text: "Solicitação de amizade recebida", time: "1 dia atrás" },
-        { id: 4, text: "A viagem foi alterada!", time: "3 dias atrás" },
-    ];
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            if (!user?.id) {
+                console.log("Usuário não logado ou ID indefinido");
+                return;
+            }
+            
+            try {
+                console.log(user.id)
+              const response = await fetch(`/api/notificacoes/getNotificacoes`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId: user.id }),
+              });
+        
+              if (!response.ok) throw new Error("Erro ao buscar notificações");
+        
+              const data = await response.json();
+              console.log("Notificações recebidas:", data.notifications);
+              setNotificationsList(data.notifications || []);
+            } catch (error) {
+              console.error("Erro ao buscar notificações:", error);
+            }
+          };
+        
+          if (user) {
+            fetchNotifications();
+          }
+        }, [user]);
+
+      const handleNotificationAction = async (notificationId, action) => {
+        try {
+          const response = await fetch(`/api/notificacoes/gerenciarNotificacoes`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: user.id,
+              notificationId,
+              action,
+            }),
+          });
+    
+          if (!response.ok) throw new Error("Erro ao processar notificação");
+    
+          setNotificationsList((prev) =>
+            prev.filter((notification) => notification.id !== notificationId)
+          );
+        } catch (error) {
+          console.error("Erro ao processar notificação:", error);
+        }
+      };
 
     return (
         <div className="h-20 w-full flex justify-between items-center max-w-screen-2xl gap-10 px-5">
@@ -63,18 +113,21 @@ export default function Header() {
             <div className="hidden md:flex items-center gap-5">
                 {user ? (
                     <div className="flex items-center gap-7">
-                        <button onClick={toggleNotifications} className="size-5">
-                            {notifications}
-                            {notificationsList.length > 0 && (
-                                <span className="relative bottom-9 left-3 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                                    {notificationsList.length}
-                                </span>
-                            )}
-                        </button>
-
-                         {notificationsOpen && (
-                            <NotificationList notifications={notificationsList} />
-                        )}
+                    <button onClick={toggleNotifications} className="size-5">
+                      {notifications}
+                      {notificationsList.length > 0 && (
+                        <span className="relative bottom-9 left-3 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                          {notificationsList.length}
+                        </span>
+                      )}
+                    </button>
+        
+                    {notificationsOpen && (
+                      <NotificationList
+                        notifications={notificationsList}
+                        onAction={handleNotificationAction}
+                      />
+                    )}
 
                         <Link href={{ pathname: '/perfil' }}>
                             <Image className="rounded-full" src="/imgs/perfil.jpg" alt="Imagem de perfil" width={50} height={50} />
