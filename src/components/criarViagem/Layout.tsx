@@ -98,8 +98,13 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
       data: atividade.date,
       horario: atividade.time,
     }));
+  
+    console.log("teste", tripData.amigos)
 
-    const amigosAjustados = tripData.amigos.map((amigo) => amigo.id);
+    const amigosAjustados = tripData.amigos.map((amigo) => ({
+      amigoId: amigo.id || amigo.amigoId,
+      status: "PENDENTE"
+    }));
     tripData = { ...tripData, atividades: atividadesAjustadas, amigos: amigosAjustados };
 
     console.log("Enviando dados ajustados:", tripData);
@@ -137,7 +142,6 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
     }
   };
 
-  // Definir a função onSaveTrip corretamente
   const onSaveTrip = () => {
     setMenuEnabled(true);
   };

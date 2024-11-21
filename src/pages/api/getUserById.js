@@ -1,5 +1,6 @@
 import connect from '../../lib/mongoose';
 import User from '../../models/User';
+import mongoose from 'mongoose';
 
 export default async function getUserById(req, res) {
   if (req.method !== 'POST') {
@@ -12,24 +13,27 @@ export default async function getUserById(req, res) {
   console.log("ID recebido na API:", id);
 
   try {
-    // Busca o usuário pelo email no MongoDB
-    const user = await User.findOne({ _id: id });
- 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
-    console.log("achei",user)
-    // Se o usuário for encontrado, retorna os dados
+    console.log("Usuário encontrado:", user);
+
     return res.status(200).json({
       user: {
-        id: user.id,
+        id: user._id,
         nome: user.nome,
         email: user.email,
       },
     });
   } catch (error) {
+    console.error("Erro ao buscar usuário:", error);
     return res.status(500).json({ message: 'Erro ao buscar o usuário', error });
   }
 }
