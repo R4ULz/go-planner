@@ -16,7 +16,7 @@ export default function TripsSection() {
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-4 md:grid-rows-3 md:gap-4 md:p-6 grid-cols-4 grid-rows-5 gap-4 p-6">
+            <div className="grid md:grid-cols-4 md:grid-rows-3 md:gap-4 md:p-6 grid-cols-4 grid-rows-5 gap-4 p-6 scroll-smooth" id="lugares">
                 {/* Brasil */}
                 <div className="relative w-full h-60 group md:col-span-1 md:row-span-1 col-span-2 row-span-1">
                     <Image
