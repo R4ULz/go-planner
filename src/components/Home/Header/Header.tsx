@@ -36,15 +36,15 @@ export default function Header() {
 
             <nav className="hidden md:flex space-x-8 font-inter">
                 <Link href="/sobre" className="text-gray-500 hover:text-gray-900">Sobre</Link>
-                <Link href="/como-funciona" className="text-gray-500 hover:text-gray-900">Como Funciona</Link>
-                <Link href="/lugares" className="text-gray-500 hover:text-gray-900">Lugares</Link>
+                <Link href="/#como-funciona" className="text-gray-500 hover:text-gray-900">Como Funciona</Link>
+                <Link href="/#lugares" className="text-gray-500 hover:text-gray-900">Lugares</Link>
             </nav>
 
             {menuOpen && (
                 <div className="md:hidden absolute top-20 left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 py-4">
                     <Link href="/sobre" className="text-gray-500 hover:text-gray-900">Sobre</Link>
-                    <Link href="/como-funciona" className="text-gray-500 hover:text-gray-900">Como Funciona</Link>
-                    <Link href="/lugares" className="text-gray-500 hover:text-gray-900">Lugares</Link>
+                    <Link href="#como-funciona" className="text-gray-500 hover:text-gray-900">Como Funciona</Link>
+                    <Link href="#lugares" className="text-gray-500 hover:text-gray-900">Lugares</Link>
 
                     {user ? (
                         <Link href={{ pathname: '/perfil' }}>
