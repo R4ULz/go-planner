@@ -16,60 +16,58 @@ export default function Header() {
     const toggleNotifications = () => setNotificationsOpen(!notificationsOpen)
 
     useEffect(() => {
-        const fetchNotifications = async () => {
-            if (!user?.id) {
-                console.log("Usuário não logado ou ID indefinido");
-                return;
-            }
-            
-            try {
-                console.log(user.id)
-              const response = await fetch(`/api/notificacoes/getNotificacoes`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ userId: user.id }),
-              });
-        
-              if (!response.ok) throw new Error("Erro ao buscar notificações");
-        
-              const data = await response.json();
-              console.log("Notificações recebidas:", data.notifications);
-              setNotificationsList(data.notifications || []);
-            } catch (error) {
-              console.error("Erro ao buscar notificações:", error);
-            }
-          };
-        
-          if (user) {
-            fetchNotifications();
-          }
-        }, [user]);
-
-      const handleNotificationAction = async (notificationId, action) => {
+      const fetchNotifications = async () => {
+        if (!user?.id) {
+          console.log("Usuário não logado ou ID indefinido");
+          return;
+        }
+    
         try {
-          const response = await fetch(`/api/notificacoes/gerenciarNotificacoes`, {
-            method: "PATCH",
+          const response = await fetch(`/api/notificacoes/getNotificacoes`, {
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              userId: user.id,
-              notificationId,
-              action,
-            }),
+            body: JSON.stringify({ userId: user.id }),
           });
     
-          if (!response.ok) throw new Error("Erro ao processar notificação");
+          if (!response.ok) throw new Error("Erro ao buscar notificações");
     
-          setNotificationsList((prev) =>
-            prev.filter((notification) => notification.id !== notificationId)
-          );
+          const data = await response.json();
+          setNotificationsList(data.notifications || []);
         } catch (error) {
-          console.error("Erro ao processar notificação:", error);
+          console.error("Erro ao buscar notificações:", error);
         }
       };
+    
+      if (user) {
+        fetchNotifications();
+      }
+    }, [user]);
+
+    const handleNotificationAction = async (notificationId, action) => {
+      try {
+        const response = await fetch(`/api/notificacoes/gerenciarNotificacoes`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            notificationId,
+            action,
+          }),
+        });
+    
+        if (!response.ok) throw new Error("Erro ao processar notificação");
+
+        setNotificationsList((prev) =>
+          prev.filter((notification) => notification.id !== notificationId)
+        );
+      } catch (error) {
+        console.error("Erro ao processar notificação:", error);
+      }
+    };
 
     return (
         <div className="h-20 w-full flex justify-between items-center max-w-screen-2xl gap-10 px-5">

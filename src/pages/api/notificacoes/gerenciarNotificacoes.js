@@ -1,5 +1,6 @@
 import connect from '../../../lib/mongoose';
 import User from '../../../models/User';
+import Trip from '../../../models/Trip';
 
 export default async function handler(req, res) {
   if (req.method !== 'PATCH') {
@@ -27,14 +28,48 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: 'Notificação não encontrada' });
     }
 
-    if (action === 'ACCEPT') {
-      notification.status = 'ACEITO';
-    } else if (action === 'REJECT') {
-      notification.status = 'REJEITADO';
-    } else {
-      return res.status(400).json({ message: 'Ação inválida' });
-    }
+    notification.lida = true
 
+    if (action === "ACCEPT" && notification.tipo === "CONVITE_VIAGEM") {
+      const trip = await Trip.findById(notification.viagemId);
+  
+      if (!trip) {
+          return res.status(404).json({ error: "Viagem não encontrada." });
+      }
+  
+      const amigoExistente = trip.amigos.find(
+          (amigo) => amigo.amigoId.toString() === user._id.toString()
+      );
+  
+      if (amigoExistente) {
+          amigoExistente.status = "ACEITO";
+      } else {
+          return res.status(404).json({ error: "Amigo não encontrado na viagem." });
+      }
+  
+      await trip.save();
+      return res.status(200).json({ message: "Convite aceito com sucesso." });
+  }
+  
+  if (action === "REJECT" && notification.tipo === "CONVITE_VIAGEM") {
+      const trip = await Trip.findById(notification.viagemId);
+  
+      if (!trip) {
+          return res.status(404).json({ error: "Viagem não encontrada." });
+      }
+  
+      const amigoExistente = trip.amigos.find(
+          (amigo) => amigo.amigoId.toString() === user._id.toString()
+      );
+  
+      if (amigoExistente) {
+          amigoExistente.status = "RECUSADO";
+      } else {
+          return res.status(404).json({ error: "Amigo não encontrado na viagem." });
+      }
+
+      await trip.save();
+  }
     await user.save();
     return res.status(200).json({ message: 'Notificação atualizada com sucesso' });
   } catch (error) {
