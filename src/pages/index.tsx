@@ -48,7 +48,7 @@ export default function Home() {
         <Services/>
       </section>
 
-        <hr className="bg-laranjinha h-[2px] w-3/4 " />
+        <hr className="bg-laranjinha h-[2px] w-3/4 " id="lugares"/>
 
       <section className="flex justify-center w-full">
         <TripsSection/>                               

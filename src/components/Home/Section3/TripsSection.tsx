@@ -8,15 +8,15 @@ import Image from "next/image";
 
 export default function TripsSection() {
     return (
-        <div className="flex flex-col w-full max-w-screen-xl pt-10">
+        <div className="flex flex-col w-full max-w-screen-xl pt-10" >
             <div >
                 <div className="flex md:justify-start justify-center">
-                    <h1 className="font-rubik font-bold text-black text-4xl md:text-3xl">Viagens populares</h1>
+                    <h1 className="font-rubik font-bold text-black text-4xl md:text-3xl">Lugares populares</h1>
                     <span className="flex flex-row bg-rosinha w-2 h-2 rounded-full p-1 relative top-6 mx-1"></span>
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-4 md:grid-rows-3 md:gap-4 md:p-6 grid-cols-4 grid-rows-5 gap-4 p-6 scroll-smooth" id="lugares">
+            <div className="grid md:grid-cols-4 md:grid-rows-3 md:gap-4 md:p-6 grid-cols-4 grid-rows-5 gap-4 p-6 scroll-smooth" >
                 {/* Brasil */}
                 <div className="relative w-full h-60 group md:col-span-1 md:row-span-1 col-span-2 row-span-1">
                     <Image

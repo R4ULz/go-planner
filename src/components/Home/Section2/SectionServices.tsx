@@ -76,7 +76,7 @@ export default function Services() {
             </div>
           </div>
           <div className="w-full flex md:justify-end justify-center p-5">
-            <button className="w-[250px] md:hidden flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-3 py-2 text-white rounded-xl font-bold ">
+            <button className="w-[250px] md:hidden flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-3 py-2 text-white rounded-xl font-bold" >
               {iconeCalendario} Planejar agora
             </button>
           </div>
