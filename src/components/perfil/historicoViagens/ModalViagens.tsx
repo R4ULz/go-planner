@@ -92,17 +92,16 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
 
             try {
                 const convidadosDetalhes = await Promise.all(
-                    viagem.amigos.map(async (amigoId) => {
+                    viagem.amigos.map(async (amigo) => {
                         const response = await fetch("/api/getUserById", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ id: amigoId }),
+                            body: JSON.stringify({ id: amigo.amigoId }),
                         });
-                        if (!response.ok) throw new Error("Erro ao buscar convidado");
-                        console.log("tentando buscar convidados com ID:", amigoId)
+                        if (!response.ok) throw new Error(`Erro ao buscar convidado com ID ${amigo.amigoId}`);
                         const data = await response.json();
                         console.log("dados do usuario:", data)
-                        return data.user;
+                        return {...data.user, status:amigo.status};
                     })
                 );
 
@@ -272,8 +271,8 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         };
 
         fetchTopicos();
-    }, 
-    [viagem]);
+    },
+        [viagem]);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
@@ -486,10 +485,14 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                                     <p className="px-5">{convidado.email}</p>
                                                 </div>
                                                 <div className="flex justify-between ">
-                                                    <p className="flex items-center px-5 gap-3 font-bold">
-                                                        <span className="bg-laranjinha w-2 h-2 rounded-full p-1 flex mt- ml-1"></span>{" "}
-                                                        Convite pendente
-                                                    </p>
+                                                    <span
+                                                        className={`px-2 py-1 text-sm font-semibold rounded-lg ${convidado.status === "PENDENTE"
+                                                                ? "bg-yellow-100 text-yellow-700"
+                                                                : "bg-green-100 text-green-700"
+                                                            }`}
+                                                    >
+                                                        {convidado.status === "PENDENTE" ? "Pendente" : "Confirmado"}
+                                                    </span>
                                                     <button className="border-l-2 pl-2 hidden">
                                                         {lixeira}
                                                     </button>

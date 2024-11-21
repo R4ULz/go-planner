@@ -97,11 +97,6 @@ export default function SuasViagens() {
                                 <div className="items-center mt-2 hidden">
                                     <p className="text-sm text-zinc-500 mr-2">Convidados:</p>
                                     <div className="flex space-x-2">
-                                        {viagem.amigos.map((convidado, index) => (
-                                            <span key={index} className="text-white bg-blue-500 rounded-full w-6 h-6 flex items-center justify-center">
-                                                {convidado}
-                                            </span>
-                                        ))}
                                     </div>
                                 </div>
                                 <div className="flex space-x-4 mt-4">
