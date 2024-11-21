@@ -10,6 +10,7 @@ const config: Config = {
   plugins: [],
   theme: {
     extend: {
+      scrollBehavior: ['responsive'],
       boxShadow:{
         'border-shadow': '3px 3px 5px 3px rgba(0, 0, 0, 0.2)',
       },
