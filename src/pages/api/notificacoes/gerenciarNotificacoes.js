@@ -30,8 +30,10 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: "Notificação não encontrada" });
     }
 
+    // Marca a notificação como lida
     notification.lida = true;
 
+    // Caso: Convite de viagem
     if (notification.tipo === "CONVITE_VIAGEM") {
       const trip = await Trip.findById(notification.viagemId);
       if (!trip) {
@@ -49,6 +51,26 @@ export default async function handler(req, res) {
 
       await trip.save();
     }
+
+    // Caso: Convite de amizade
+    if (notification.tipo === "SOLICITACAO_AMIZADE") {
+      const requester = await User.findById(notification.remetenteId);
+      if (!requester) {
+        return res.status(404).json({ message: "Remetente do convite não encontrado" });
+      }
+
+      if (action === "ACCEPT") {
+        // Adiciona a amizade em ambos os usuários
+        user.amigos.push({ amigoId: requester._id });
+        requester.amigos.push({ amigoId: user._id });
+        await requester.save();
+      }
+    }
+
+    // Remove a notificação processada
+    user.notificacoes = user.notificacoes.filter(
+      (notificacao) => notificacao.id !== notificationId
+    );
 
     await user.save();
 
