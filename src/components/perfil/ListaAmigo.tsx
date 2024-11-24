@@ -70,64 +70,54 @@ export default function ListaAmigos({ user }) {
   // Função para adicionar amigo
   const handleAddFriend = async () => {
     if (!user?.id || !friendEmail) {
-      Toastify({
-        text: 'Dados insuficientes: Verifique o ID do usuário e o email.',
-        duration: 2000,
-        style: { background: "#ce1836" }
-      }).showToast();
-      return;
+        Toastify({
+            text: 'Dados insuficientes: Verifique o ID do usuário e o email.',
+            duration: 2000,
+            style: { background: "#ce1836" }
+        }).showToast();
+        return;
     }
 
-    if(user.email === friendEmail){
-      Toastify({
-        text:"Opa, você não consegue se adicionar como amigo! Escolha outro email",
-        duration: 3500,
-        style: {background: "#ce1836"}
-      }).showToast();
-      return;
-    }
-
-    if (friends.some(friend => friend.email === friendEmail)) {
-      Toastify({
-        text: "Este amigo já está na sua lista!",
-        duration: 2000,
-        style: { background: "#ce1836" }
-      }).showToast();
-      return;
+    if (user.email === friendEmail) {
+        Toastify({
+            text: "Você não pode se adicionar como amigo!",
+            duration: 3500,
+            style: { background: "#ce1836" }
+        }).showToast();
+        return;
     }
 
     try {
-      const response = await fetch('/api/addFriend', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          currentUserId: user.id,
-          friendEmail: friendEmail,
-        }),
-      });
+        const response = await fetch('/api/addFriend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                currentUserId: user.id,
+                friendEmail: friendEmail,
+            }),
+        });
 
-      const data = await response.json();
-      if (response.ok) {
-        setFriends((prevFriends) => [...prevFriends, data.friend]);
-        setFriendEmail(''); 
-        Toastify({
-          text: 'Amigo adicionado com sucesso!',
-          duration: 2000,
-          style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
-        }).showToast();
-      } else {
-        Toastify({
-          text: data.message || 'Erro ao adicionar amigo',
-          duration: 2000,
-          style: { background: "#ce1836" }
-        }).showToast();
-      }
+        const data = await response.json();
+        if (response.ok) {
+            Toastify({
+                text: 'Solicitação de amizade enviada!',
+                duration: 2000,
+                style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+            }).showToast();
+            setFriendEmail('');
+        } else {
+            Toastify({
+                text: data.message || 'Erro ao enviar solicitação',
+                duration: 2000,
+                style: { background: "#ce1836" }
+            }).showToast();
+        }
     } catch (error) {
-      console.error('Erro ao adicionar amigo:', error);
+        console.error('Erro ao adicionar amigo:', error);
     }
-  };
+};
 
   if (isLoading) {
     return <p>Carregando amigos...</p>;

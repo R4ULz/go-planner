@@ -1,67 +1,53 @@
-import connect from "../../lib/mongoose";
+import mongoose from 'mongoose';
+import connect from '../../lib/mongoose';
 import User from '../../models/User';
-import { enviarEmail } from '../../lib/emailService';
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ message: `Método ${req.method} não permitido` });
+    }
+
+    await connect();
+
     const { currentUserId, friendEmail } = req.body;
 
     if (!currentUserId || !friendEmail) {
-      return res.status(400).json({ message: "Dados insuficientes: Verifique o ID do usuário e o email do amigo." });
+        return res.status(400).json({ message: 'Dados obrigatórios não fornecidos' });
     }
 
     try {
-      await connect();
-
-      const friendUser = await User.findOne({ email: friendEmail });
-
-      if (!friendUser) {
-        // Enviar email para convidar a pessoa a se cadastrar
-        try {
-          const mensagem = `
-            Olá,
-
-            Você foi convidado para se cadastrar no Go.Planner, um aplicativo de planejamento de viagens.
-
-            Clique no link abaixo para se registrar:
-            https://go-planner.com/register
-
-            Abraços,
-            Equipe Go.Planner
-          `;
-
-          await enviarEmail(friendEmail, mensagem);
-
-          return res.status(200).json({
-            message: "Usuário amigo não encontrado. Email de convite enviado com sucesso.",
-          });
-        } catch (emailError) {
-          console.error("Erro ao enviar email de convite:", emailError);
-          return res.status(500).json({
-            message: "Usuário amigo não encontrado e falha ao enviar email de convite.",
-          });
+        // Verifica se o usuário atual existe
+        const currentUser = await User.findById(currentUserId);
+        if (!currentUser) {
+            return res.status(404).json({ message: 'Usuário atual não encontrado' });
         }
-      }
 
-      // Adicionar o amigo se ele for encontrado no banco de dados
-      const currentUser = await User.findByIdAndUpdate(
-        currentUserId,
-        { $addToSet: { amigos: friendUser._id } }, // Garante que o amigo não será adicionado mais de uma vez
-        { new: true }
-      );
+        // Verifica se o amigo com o email fornecido existe
+        const friend = await User.findOne({ email: friendEmail });
+        if (!friend) {
+            return res.status(404).json({ message: 'Usuário com este email não encontrado' });
+        }
 
-      await User.findByIdAndUpdate(
-        friendUser._id,
-        { $addToSet: { amigos: currentUserId } }, // Garante que o usuário atual não será adicionado mais de uma vez
-        { new: true }
-      );
+        const alreadyFriends = currentUser.amigos.some(
+            (amigo) => amigo.amigoId.toString() === friend._id.toString()
+        );
+        if (alreadyFriends) {
+            return res.status(400).json({ message: 'Vocês já são amigos!' });
+        }
 
-      res.status(200).json({ message: "Amizade estabelecida com sucesso!", friend: friendUser });
+        friend.notificacoes.push({
+            id: new mongoose.Types.ObjectId(),
+            tipo: 'SOLICITACAO_AMIZADE',
+            mensagem: `${currentUser.nome} enviou uma solicitação de amizade.`,
+            lida: false,
+            remetenteId: currentUser._id,
+        });
+
+        await friend.save();
+
+        return res.status(200).json({ message: 'Solicitação de amizade enviada com sucesso.' });
     } catch (error) {
-      console.error("Erro ao estabelecer amizade:", error);
-      res.status(500).json({ message: "Erro ao estabelecer amizade" });
+        console.error('Erro ao adicionar amigo:', error);
+        return res.status(500).json({ message: 'Erro ao adicionar amigo.' });
     }
-  } else {
-    res.status(405).json({ message: "Método não permitido" });
-  }
 }
