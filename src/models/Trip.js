@@ -26,7 +26,8 @@ const tripSchema = new mongoose.Schema({
   amigos: [
     {
       amigoId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-      status: { type: String, enum: ["PENDENTE", "ACEITO", "RECUSADO"], default: "PENDENTE" }, // Status do convite
+      status: { type: String, enum: ["PENDENTE", "ACEITO", "RECUSADO"], default: "PENDENTE" },
+      permissao: { type: String, enum: ['EDITOR', 'LEITOR'], default: 'LEITOR' }
     },
   ],
   imagem: { type: String },

@@ -34,7 +34,11 @@ export default function Header() {
           if (!response.ok) throw new Error("Erro ao buscar notificações");
     
           const data = await response.json();
-          setNotificationsList(data.notifications || []);
+
+          const unreadNotifications = data.notifications.filter(
+            (notification) => !notification.lida
+          )
+          setNotificationsList(unreadNotifications || []);
         } catch (error) {
           console.error("Erro ao buscar notificações:", error);
         }
