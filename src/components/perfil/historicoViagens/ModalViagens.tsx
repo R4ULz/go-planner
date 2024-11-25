@@ -318,20 +318,20 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                         <div className="flex gap-4">
                             <div className="w-1/2">
                                 <label className="block text-zinc-700">Nome da sua viagem:</label>
-                                <input type="text" name="titulo" value={dadosViagem.titulo} readOnly={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-[10px] rounded-xl" />
+                                <input type="text" name="titulo" value={dadosViagem.titulo} disabled={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-[10px] rounded-xl" />
                             </div>
                             <div className="w-1/4">
                                 <label className="block text-zinc-700">Início da viagem:</label>
                                 <div className="flex items-center gap-2 border border-gray-300 p-1 rounded-xl">
                                     <span>{calendariu}</span>
-                                    <input type="date" name="dataInicio" value={dadosViagem.dataInicio} onChange={handleInputChange} readOnly={!editavel} className="w-full focus:outline-none" />
+                                    <input type="date" name="dataInicio" value={dadosViagem.dataInicio} onChange={handleInputChange} disabled={!editavel} className="w-full focus:outline-none" />
                                 </div>
                             </div>
                             <div className="w-1/4">
                                 <label className="block text-zinc-700">Fim da viagem:</label>
                                 <div className="flex items-center gap-2 border border-gray-300 p-1 rounded-xl">
                                     <span>{calendariu}</span>
-                                    <input type="date" name="fimViagem" value={dadosViagem.fimViagem} onChange={handleInputChange} readOnly={!editavel} className="w-full focus:outline-none" />
+                                    <input type="date" name="fimViagem" value={dadosViagem.fimViagem} onChange={handleInputChange} disabled={!editavel} className="w-full focus:outline-none" />
                                 </div>
                             </div>
                         </div>
@@ -339,16 +339,16 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                             <div className="w-1/2 space-y-5">
                                 <div>
                                     <label className="block text-zinc-700">Local de partida:</label>
-                                    <input type="text" name="partida" value={dadosViagem.partida} readOnly={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl" />
+                                    <input type="text" name="partida" value={dadosViagem.partida} disabled={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl" />
                                 </div>
                                 <div>
                                     <label className="block text-zinc-700">Local de destino:</label>
-                                    <input type="text" name="destino" value={dadosViagem.destino} readOnly={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl" />
+                                    <input type="text" name="destino" value={dadosViagem.destino} disabled={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl" />
                                 </div>
                             </div>
                             <div className="w-1/2">
                                 <label className="block text-zinc-700">Descrição:</label>
-                                <textarea name="descricao" value={dadosViagem.descricao} readOnly={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl h-32 resize-none" />
+                                <textarea name="descricao" value={dadosViagem.descricao} disabled={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl h-32 resize-none" />
                             </div>
                         </div>
                         <hr className="border-spacing-0 border-zinc-400" />

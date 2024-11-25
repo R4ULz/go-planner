@@ -94,13 +94,26 @@ export default function Login() {
             console.log('Erro ao se conectar ao servidor', error);
         }
     };
-    
-    
       
 
 
       const handleCadastro = async (e: any) => {
-    
+
+        if (!email.endsWith('@gmail.com')) {
+            Toastify({
+                text: 'Somente emails do domínio @gmail.com são permitidos.',
+                duration: 3000,
+                close:true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style:{
+                    background: "#EB4335",
+                }
+            }).showToast()
+            return;
+        }
+
         if (senhasNaoIguais()) {
             return;
         }
