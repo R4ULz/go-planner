@@ -8,6 +8,7 @@ import Toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css';
 import { olhoCortado } from "../components/icons/olhoCortado";
 import { olhoAberto } from "../components/icons/olhoAberto";
+import InputMask from 'react-input-mask';
 
 
 export default function Login() {
@@ -247,7 +248,7 @@ export default function Login() {
                             <form onSubmit={(e) => {e.preventDefault(); handleCadastro();}}>
                                 <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="Nome:" value={nome} onChange={(e) => setNome(e.target.value)} required/>
                                 <input type="email" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-5 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-                                <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-5 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="CPF:" value={cpf} onChange={(e) => setCPF(e.target.value)} required/>
+                                <InputMask type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-5 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="CPF:" mask="999.999.999-99" value={cpf} onChange={(e) => setCPF(e.target.value)} required/>
                                 
                                 <div className="relative w-full">
                                     <input
