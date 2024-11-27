@@ -34,30 +34,26 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col relative w-full items-center">
-
-      <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
-        <Header />
-      </header>
-
-      <section className="z-0 h-full w-full mt-20 bg-hero-pattern bg-cover bg-center flex justify-center">
-        <SectionHome pontoPartida={pontoPartida} pontoDestino={pontoDestino} onPartidaChange={handlePartidaChange} onDestinoChange={handleDestinoChange} onCreateTrip={handleCreateTrip}/>
-      </section>
+    <div>
+      <div className="flex flex-col relative w-full items-center">
+        <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
+          <Header />
+        </header>
+        <section className="z-0 h-full w-full mt-20 bg-hero-pattern bg-cover bg-center flex justify-center">
+          <SectionHome pontoPartida={pontoPartida} pontoDestino={pontoDestino} onPartidaChange={handlePartidaChange} onDestinoChange={handleDestinoChange} onCreateTrip={handleCreateTrip}/>
+        </section>
       
-      <section className=" w-full flex justify-center">
-        <Services/>
-      </section>
-
-        <hr className="bg-laranjinha h-[2px] w-3/4 " id="lugares"/>
-
-      <section className="flex justify-center w-full">
-        <TripsSection/>                               
-      </section>
-
-      <footer className="w-full flex justify-center bg-black">
-        <Footer/>
-      </footer>
-
+        <section className=" w-full flex justify-center">
+          <Services/>
+        </section>
+          <hr className="bg-laranjinha h-[2px] w-3/4 " id="lugares"/>
+        <section className="flex justify-center w-full">
+          <TripsSection/>
+        </section>
+        <footer className="w-full flex justify-center bg-black">
+          <Footer/>
+        </footer>
+      </div>
     </div>
   );
 }
