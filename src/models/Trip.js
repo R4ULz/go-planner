@@ -16,7 +16,7 @@ const tripSchema = new mongoose.Schema({
   amigos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   imagem: { type: String },
   criador:{type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-});
+},{ timestamps: true });
 
 
 export default mongoose.models.Trip || mongoose.model('Trip', tripSchema);
