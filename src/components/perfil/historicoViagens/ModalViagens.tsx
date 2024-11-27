@@ -178,25 +178,27 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     useEffect(() => {
         const fetchTopicos = async () => {
             if (!viagem || !viagem._id) return;
-
+    
             setLoadingTopicos(true);
             try {
                 const response = await fetch(`/api/trip/getTopics?tripId=${viagem._id}`);
                 if (!response.ok) throw new Error("Erro ao buscar tópicos");
-
-                const topicosData = await response.json();
-                setTopicos(topicosData.topicos || []);
+    
+                const data = await response.json();
+                console.log("Resposta da API de tópicos:", data); // Log da resposta da API
+    
+                // Atualizando o estado com os tópicos recebidos
+                setTopicos(data.trip.topicos || []);
             } catch (error) {
                 console.error("Erro ao buscar tópicos:", error);
             } finally {
                 setLoadingTopicos(false);
             }
         };
-
+    
         fetchTopicos();
-    },
-        [viagem]);
-
+    }, [viagem]);
+    
     const fetchViagem = async () => {
         try {
             setLoadingAtividades(true);
@@ -430,6 +432,9 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         }
     };
 
+console.log("Estado atual de selectedItem:", selectedItem);
+console.log("Estado atual de topicos:", topicos);
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
             <div className="bg-white w-3/4 max-w-3xl rounded-lg p-6 shadow-lg relative border-rosinha border">
@@ -628,26 +633,26 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                         </div>
                     </div>
                 ) : selectedItem === "topicos" ? (
-    <div className="space-y-4 mt-1">
-        <p className="font-bold text-2xl flex -mb-3">Tópicos</p>
-        {loadingTopicos ? (
-            <p>Carregando tópicos...</p>
-        ) : topicos.length === 0 ? (
-            <p>Esta viagem não possui tópicos.</p>
-        ) : (
-            <ul className="space-y-4">
-                {topicos.map((topico, index) => (
-                    <li
-                        key={index}
-                        className="p-4 border border-gray-300 rounded-xl bg-white"
-                    >
-                        <h3 className="font-bold text-lg">{topico.nome}</h3>
-                        <p className="text-zinc-500">{topico.conteudo}</p>
-                    </li>
-                ))}
-            </ul>
-        )}
-    </div>
+                    <div className="space-y-4 mt-1">
+                        <p className="font-bold text-2xl flex -mb-3">Tópicos</p>
+                        {loadingTopicos ? (
+                            <p>Carregando tópicos...</p>
+                        ) : topicos.length === 0 ? (
+                            <p>Esta viagem não possui tópicos.</p>
+                        ) : (
+                            <ul className="space-y-4">
+                                {topicos.map((topico, index) => (
+                                    <li
+                                        key={index} // Define uma key única para cada item
+                                        className="p-4 border border-gray-300 rounded-xl bg-white"
+                                    >
+                                        <h3 className="font-bold text-lg">{topico.nome}</h3>
+                                        <p className="text-zinc-500">{topico.conteudo}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 ) : (
                     <div className="space-y-4 mt-1">
                         <div className="flex flex-col h-96">
