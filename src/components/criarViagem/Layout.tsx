@@ -9,6 +9,7 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { useUser } from "@/src/contexts/UserContext";
 import Topicos from "./Topicos/Topicos";
+import { v4 as uuidv4 } from "uuid"
 
 interface LayoutProps {
   isEditMode: boolean;
@@ -91,14 +92,19 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
     }
 
     const atividadesAjustadas = tripData.atividades.map((atividade) => ({
+      ...atividade,
+      id: atividade.id || uuidv4(),
       nome: atividade.name,
       data: atividade.date,
       horario: atividade.time,
     }));
+  
+    console.log("teste", tripData.amigos)
 
-    tripData = { ...tripData, atividades: atividadesAjustadas };
-
-    const amigosAjustados = tripData.amigos.map((amigo) => amigo.id);
+    const amigosAjustados = tripData.amigos.map((amigo) => ({
+      amigoId: amigo.id || amigo.amigoId,
+      status: "PENDENTE"
+    }));
     tripData = { ...tripData, atividades: atividadesAjustadas, amigos: amigosAjustados };
 
     console.log("Enviando dados ajustados:", tripData);
@@ -136,7 +142,6 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
     }
   };
 
-  // Definir a função onSaveTrip corretamente
   const onSaveTrip = () => {
     setMenuEnabled(true);
   };

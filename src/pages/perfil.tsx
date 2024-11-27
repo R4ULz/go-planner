@@ -2,13 +2,14 @@ import Footer from "../components/Home/Footer/footer";
 import Header from "../components/Home/Header/Header";
 import DadosPessoais from "../components/perfil/DadosPessoais";
 import HistoricoViagens from "../components/perfil/HistoricoViagens";
-import LoginESenha from "../components/perfil/LoginESenha";
+import LoginESenha from "../components/perfil/ListaAmigo";
 import MenuLateral from "../components/perfil/MenuLateral";
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { useRouter } from "next/router";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import ListaAmigos from "../components/perfil/ListaAmigo";
 
 type ComponentType = "DadosPessoais" | "HistoricoViagens" | "LoginSenha";
 
@@ -126,7 +127,7 @@ export default function Perfil() {
       case "HistoricoViagens":
         return <HistoricoViagens user={user} onCreateTrip={handleCreateTrip}/>; // Passa o usuário como prop
       case "LoginSenha":
-        return <LoginESenha user={user} />; // Passa o usuário como prop
+        return <ListaAmigos user={user} />; // Passa o usuário como prop
       default:
         return <DadosPessoais user={user}
           nome={nome}
@@ -138,7 +139,7 @@ export default function Perfil() {
           confirmSenha={confirmSenha}
           setConfirmSenha={setConfirmSenha} />; // Passa o usuário como prop
     }
-  };
+  };   
 
 
   return (

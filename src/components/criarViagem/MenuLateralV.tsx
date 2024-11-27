@@ -68,7 +68,6 @@ export default function MenuLateralV({ setSelectedComponent, salvarViagem, menuE
       </div>
       <hr className="flex bg-gradient-to-r to-rosinha from-laranja h-[3px] mx-3 mt-8" />
       <ul className="flex flex-col space-y-5 m-6">
-        <button className="py-1 border-2 border-zinc-400 text-zinc-700 rounded-xl">Sair</button>
         <button
           className="py-2 bg-gradient-to-r to-rosinha from-laranja rounded-xl text-white font-semibold"
           onClick={salvarViagem}

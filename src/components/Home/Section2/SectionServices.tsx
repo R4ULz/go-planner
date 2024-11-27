@@ -39,7 +39,7 @@ export default function Services() {
     <div className="flex flex-col w-full max-w-screen-xl md:pt-10 pt-10 p-1 md:p-10">
       <div className="md:h-[100px] w-full sm:h-[50px]">
         <div className="flex flex-row md:justify-start justify-center">
-          <h1 className="font-rubik font-bold text-black md:text-4xl text-2xl">
+          <h1 className="font-rubik font-bold text-black md:text-4xl text-2xl scroll-smooth" id="como-funciona">
             Simplicidade e praticidade
           </h1>
           <span className="flex flex-row bg-rosinha w-2 h-2 rounded-full p-1 relative md:w-2 md:h-2 md:top-7 mx-1 md:top-5 top-5 w-1 h-1"></span>
@@ -76,7 +76,7 @@ export default function Services() {
             </div>
           </div>
           <div className="w-full flex md:justify-end justify-center p-5">
-            <button className="w-[250px] md:hidden flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-3 py-2 text-white rounded-xl font-bold ">
+            <button className="w-[250px] md:hidden flex gap-1 items-center font-inter justify-center bg-gradient-to-r from-rosinha to-laranja px-3 py-2 text-white rounded-xl font-bold" >
               {iconeCalendario} Planejar agora
             </button>
           </div>
