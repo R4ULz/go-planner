@@ -9,6 +9,7 @@ import { useState } from "react";
 import SectionHome from "../components/Home/Section1/SectionHome";
 import { useUser } from "../contexts/UserContext";
 
+
 export default function Home() {
   const router = useRouter()
   const user = useUser()
@@ -40,20 +41,21 @@ export default function Home() {
           <Header />
         </header>
         <section className="z-0 h-full w-full mt-20 bg-hero-pattern bg-cover bg-center flex justify-center">
-          <SectionHome pontoPartida={pontoPartida} pontoDestino={pontoDestino} onPartidaChange={handlePartidaChange} onDestinoChange={handleDestinoChange} onCreateTrip={handleCreateTrip}/>
+          <SectionHome pontoPartida={pontoPartida} pontoDestino={pontoDestino} onPartidaChange={handlePartidaChange} onDestinoChange={handleDestinoChange} onCreateTrip={handleCreateTrip} />
         </section>
-      
+
         <section className=" w-full flex justify-center">
-          <Services/>
+          <Services />
         </section>
-          <hr className="bg-laranjinha h-[2px] w-3/4 " id="lugares"/>
+        <hr className="bg-laranjinha h-[2px] w-3/4 " id="lugares" />
         <section className="flex justify-center w-full">
-          <TripsSection/>
+          <TripsSection />
         </section>
         <footer className="w-full flex justify-center bg-black">
-          <Footer/>
+          <Footer />
         </footer>
       </div>
+
     </div>
   );
 }

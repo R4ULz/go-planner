@@ -3,25 +3,30 @@
 @tailwind utilities;
 
 .custom-scrollbar::-webkit-scrollbar {
-    width: 12px; 
+    width: 12px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
     background: #f0f0f0;
-    border-radius: 6px; 
+    border-radius: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #C70039; 
+    background-color: #C70039;
     border-radius: 6px;
     border: 3px solid #f0f0f0;
 }
 
 html {
     scroll-behavior: smooth;
+}
+.userway_buttons_wrapper {
+    position: fixed !important; /* Garante que o botão seja posicionado fixamente */
+    bottom: 20px !important;    /* Move para a parte inferior */
+    right: -20px !important;     /* Ajusta para o lado direito */
+    top: auto !important;       /* Remove qualquer posicionamento no topo */
+    z-index: 9999 !important;   /* Garante que esteja acima de outros elementos */
   }
-  
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-
