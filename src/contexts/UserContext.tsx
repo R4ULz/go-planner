@@ -8,6 +8,7 @@ interface User {
   cpf: string;
   senha: string;
   amigos: string[]; // Array de IDs dos amigos
+  role: string;
 }
 
 interface UserContextProps {
