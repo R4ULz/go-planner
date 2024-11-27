@@ -41,38 +41,40 @@ export default function CriarViagem() {
 
     return (
         <div>
-            {user ?
-                <div className="flex h-screen flex-col">
-                    <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
-                        <Header />
-                    </header>
-                    <div className="mt-20 p-5 w-full flex justify-center">
-                        <Layout 
-                            tripData={tripData} 
-                            menuEnabled={menuEnabled} 
-                            setMenuEnabled={setMenuEnabled} 
-                        />
-                    </div>
-                    <footer className="w-full flex justify-center bg-black">
-                        <Footer />
-                    </footer>
-                </div>
-                :
-                showModal && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm">
-                        <div className="bg-white p-8 rounded-lg shadow-lg">
-                            <h2 className="text-xl font-bold mb-4">Acesso não permitido</h2>
-                            <p className="mb-4 text-lg">Você precisa estar logado para acessar o perfil.</p>
-                            <button
-                                onClick={handleRedirect}
-                                className="bg-gradient-to-r to-rosinha from-laranja text-white px-4 py-2 rounded-lg"
-                            >
-                                Fazer login
-                            </button>
+            <div>
+                {user ?
+                    <div className="flex h-screen flex-col">
+                        <header className="fixed z-50 w-full flex justify-center bg-white border-b-[0.5px] border-zinc-200">
+                            <Header />
+                        </header>
+                        <div className="mt-20 p-5 w-full flex justify-center">
+                            <Layout
+                                tripData={tripData}
+                                menuEnabled={menuEnabled}
+                                setMenuEnabled={setMenuEnabled}
+                            />
                         </div>
+                        <footer className="w-full flex justify-center bg-black">
+                            <Footer />
+                        </footer>
                     </div>
-                )
-            }
+                    :
+                    showModal && (
+                        <div className="fixed inset-0 flex items-center justify-center bg-black/35 backdrop-blur-sm">
+                            <div className="bg-white p-8 rounded-lg shadow-lg">
+                                <h2 className="text-xl font-bold mb-4">Acesso não permitido</h2>
+                                <p className="mb-4 text-lg">Você precisa estar logado para acessar o perfil.</p>
+                                <button
+                                    onClick={handleRedirect}
+                                    className="bg-gradient-to-r to-rosinha from-laranja text-white px-4 py-2 rounded-lg"
+                                >
+                                    Fazer login
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
         </div>
     );
 }

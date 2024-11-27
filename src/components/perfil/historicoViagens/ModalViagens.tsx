@@ -3,6 +3,7 @@ import { calendariu } from "../../icons/teste"; // Ícone do calendário
 import { lixeira } from "../../icons/lixeira";
 import { User } from "../../icons/user";
 import { v4 as uuidv4 } from 'uuid';
+import { useUser } from "@/src/contexts/UserContext";
 
 export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [selectedItem, setSelectedItem] = useState("dadosPrincipais");
@@ -19,6 +20,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [adicionandoAtividade, setAdicionandoAtividade] = useState(false);
     const [convidados, setConvidados] = useState([]);
     const [loadingConvidados, setLoadingConvidados] = useState(true);
+    const { user } = useUser()
 
     const [dadosViagem, setDadosViagem] = useState({
         titulo: viagem.titulo,
@@ -40,16 +42,34 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         });
     }, [viagem]);
 
+    const isEditor =
+    viagem.criador === user?.id ||
+    convidados.some(
+      (convidado) =>
+        String(convidado.amigoId) === String(user?.id) &&
+        convidado.permissao === "EDITOR"
+    );
+  
+  useEffect(() => {
+    console.log("Usuário logado:", user);
+    console.log("Convidados carregados:", convidados);
+    console.log("isEditor:", isEditor);
+  }, [user, convidados]);
+
     const habilitarEdicao = () => {
-        setEditavel(true);
-        setDadosViagem({
-            titulo: viagem.titulo || "",
-            dataInicio: viagem.dataInicio || "",
-            fimViagem: viagem.fimViagem || "",
-            partida: viagem.partida || "",
-            destino: viagem.destino || "",
-            descricao: viagem.descricao || ""
-        });
+        if (isEditor) {
+            setEditavel(true);
+            setDadosViagem({
+                titulo: viagem.titulo || "",
+                dataInicio: viagem.dataInicio || "",
+                fimViagem: viagem.fimViagem || "",
+                partida: viagem.partida || "",
+                destino: viagem.destino || "",
+                descricao: viagem.descricao || ""
+            });
+        } else {
+            alert("Você não tem permissão para editar esta viagem.");
+        }
     };
 
     const desabilitarEdicao = () => {
@@ -87,35 +107,69 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
 
     useEffect(() => {
         const fetchConvidados = async () => {
-            if (!viagem || !viagem.amigos || viagem.amigos.length === 0) return;
-            setLoadingConvidados(true);
+          if (!viagem || !viagem.amigos || viagem.amigos.length === 0) {
+            setConvidados([]);
+            return;
+          }
+          setLoadingConvidados(true);
+      
+          try {
+            const convidadosDetalhes = await Promise.all(
+              viagem.amigos.map(async (amigo) => {
+                const response = await fetch("/api/getUserById", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ id: amigo.amigoId }),
+                });
+      
+                if (!response.ok) {
+                  throw new Error(`Erro ao buscar convidado com ID ${amigo.amigoId}`);
+                }
+      
+                const { user } = await response.json();
+                return {
+                  amigoId: amigo.amigoId,
+                  nome: user.nome,
+                  email: user.email,
+                  permissao: amigo.permissao,
+                  status: amigo.status,
+                };
+              })
+            );
+      
+            setConvidados(convidadosDetalhes);
+            console.log("Convidados carregados:", convidadosDetalhes);
+          } catch (error) {
+            console.error("Erro ao buscar convidados:", error);
+          } finally {
+            setLoadingConvidados(false);
+          }
+        };
+      
+        fetchConvidados();
+      }, [viagem]);
+      
+    useEffect(() => {
+        const fetchTopicos = async () => {
+            if (!viagem || !viagem._id) return;
 
+            setLoadingTopicos(true);
             try {
-                const convidadosDetalhes = await Promise.all(
-                    viagem.amigos.map(async (amigo) => {
-                        const response = await fetch("/api/getUserById", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ id: amigo.amigoId }),
-                        });
-                        if (!response.ok) throw new Error(`Erro ao buscar convidado com ID ${amigo.amigoId}`);
-                        const data = await response.json();
-                        console.log("dados do usuario:", data)
-                        return {...data.user, status:amigo.status};
-                    })
-                );
+                const response = await fetch(`/api/trip/getTopics?tripId=${viagem._id}`);
+                if (!response.ok) throw new Error("Erro ao buscar tópicos");
 
-                setConvidados(convidadosDetalhes);
-                console.log("Convidados:", convidadosDetalhes); // Verifique os dados carregados
+                const topicosData = await response.json();
+                setTopicos(topicosData.topicos || []);
             } catch (error) {
-                console.error("Erro ao buscar convidados:", error);
+                console.error("Erro ao buscar tópicos:", error);
             } finally {
-                setLoadingConvidados(false);
+                setLoadingTopicos(false);
             }
         };
 
-        fetchConvidados();
-    }, [viagem]);
+        fetchTopicos();
+    },
+        [viagem]);
 
     const fetchViagem = async () => {
         try {
@@ -252,27 +306,33 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
             alert("Erro ao adicionar a atividade.");
         }
     };
-    useEffect(() => {
-        const fetchTopicos = async () => {
-            if (!viagem || !viagem._id) return;
 
-            setLoadingTopicos(true);
-            try {
-                const response = await fetch(`/api/trip/getTopics?tripId=${viagem._id}`);
-                if (!response.ok) throw new Error("Erro ao buscar tópicos");
+    const atualizarPapelConvidado = async (guestId, novaPermissao) => {
+        try {
+            const response = await fetch(`/api/trip/updateGuestRole`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    tripId: viagem._id,
+                    guestId,
+                    permissao: novaPermissao,
+                }),
+            });
 
-                const topicosData = await response.json();
-                setTopicos(topicosData.topicos || []);
-            } catch (error) {
-                console.error("Erro ao buscar tópicos:", error);
-            } finally {
-                setLoadingTopicos(false);
+            if (response.ok) {
+                const data = await response.json();
+                alert("Papel atualizado com sucesso!");
+                console.log("Convidado atualizado:", data.guest);
+            } else {
+                const errorData = await response.json();
+                console.error("Erro ao atualizar papel:", errorData.message);
+                alert(errorData.message || "Erro ao atualizar papel do convidado.");
             }
-        };
-
-        fetchTopicos();
-    },
-        [viagem]);
+        } catch (error) {
+            console.error("Erro ao atualizar papel do convidado:", error);
+            alert("Erro ao atualizar papel do convidado.");
+        }
+    };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
@@ -358,7 +418,14 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                 <button onClick={atualizarViagem} className="float-end  bg-laranja px-4 py-1 text-white rounded-xl font-semibold">Atualizar viagem</button>
                             </div>
                         ) : (
-                            <button onClick={habilitarEdicao} className="float-end border border-laranja px-4 py-1 text-laranja rounded-xl font-semibold hover:bg-laranja hover:text-white">Editar viagem</button>
+                            <button
+                                onClick={habilitarEdicao}
+                                disabled={!isEditor}
+                                className={`float-end border px-4 py-1 text-laranja rounded-xl font-semibold ${isEditor ? "hover:bg-laranja hover:text-white" : "opacity-50 cursor-not-allowed"
+                                    }`}
+                            >
+                                Editar viagem
+                            </button>
                         )}
                     </div>
                 ) : selectedItem === "atividades" ? (
@@ -474,30 +541,30 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                 ) : (
                                     <ul className="w-full">
                                         {convidados.map((convidado) => (
-                                            <li
-                                                key={convidado.id}
-                                                className="border p-3 mb-2 rounded-lg flex gap-10 text-zinc-500 justify-between text-lg"
-                                            >
-                                                <div className="flex flex-row items-center">
-                                                    <p className="gap-2 font-inter font-bold flex items-center border-r-2 pr-2">
-                                                        {User} {convidado.nome}
-                                                    </p>
-                                                    <p className="px-5">{convidado.email}</p>
-                                                </div>
-                                                <div className="flex justify-between ">
+                                            <div key={convidado.id} className="flex justify-between items-center border-b py-2">
+                                                <div className="flex items-center gap-4">
+                                                    <span className="font-bold">{convidado.nome}</span>
+                                                    <span className="text-gray-500">{convidado.email}</span>
                                                     <span
                                                         className={`px-2 py-1 text-sm font-semibold rounded-lg ${convidado.status === "PENDENTE"
-                                                                ? "bg-yellow-100 text-yellow-700"
-                                                                : "bg-green-100 text-green-700"
+                                                            ? "bg-yellow-100 text-yellow-700"
+                                                            : "bg-green-100 text-green-700"
                                                             }`}
                                                     >
-                                                        {convidado.status === "PENDENTE" ? "Pendente" : "Confirmado"}
+                                                        {convidado.status === "PENDENTE" ? "Pendente" : "Aceito"}
                                                     </span>
-                                                    <button className="border-l-2 pl-2 hidden">
-                                                        {lixeira}
-                                                    </button>
                                                 </div>
-                                            </li>
+                                                {convidado.status === "ACEITO" && (
+                                                    <select
+                                                        value={convidado.permissao}
+                                                        onChange={(e) => atualizarPapelConvidado(convidado.id, e.target.value)}
+                                                        className="border border-gray-300 rounded-lg px-2 py-1"
+                                                    >
+                                                        <option value="LEITOR">Leitor</option>
+                                                        <option value="EDITOR">Editor</option>
+                                                    </select>
+                                                )}
+                                            </div>
                                         ))}
                                     </ul>
                                 )}

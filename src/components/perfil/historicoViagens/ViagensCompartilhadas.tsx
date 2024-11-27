@@ -14,6 +14,7 @@ export default function ViagensCompartilhadas() {
   const buscaViagensCompartilhadas = async () => {
     if (!user) return;
     try {
+      setLoading(true);
       const response = await fetch(`/api/trip/sharedTrips?id=${user.id}`, {
         method: "GET",
       });
@@ -21,6 +22,7 @@ export default function ViagensCompartilhadas() {
         throw new Error("Erro ao buscar viagens compartilhadas");
       }
       const viagens = await response.json();
+      console.log("Viagens compartilhadas:", viagens);
       setViagensCompartilhadas(viagens);
     } catch (error) {
       console.error("Erro ao buscar viagens compartilhadas: ", error);
@@ -41,7 +43,7 @@ export default function ViagensCompartilhadas() {
 
   useEffect(() => {
     buscaViagensCompartilhadas();
-  }, []);
+  }, [user]);
 
   return (
     <div className="font-inter">
@@ -71,9 +73,7 @@ export default function ViagensCompartilhadas() {
                 <div className="flex space-x-4 mt-4">
                   <button
                     className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
-                    onClick={() => {
-                      setModalViagem(viagem);
-                    }}
+                    onClick={() => setModalViagem(viagem)}
                   >
                     Visualizar
                   </button>
@@ -95,7 +95,10 @@ export default function ViagensCompartilhadas() {
       {modalViagem && (
         <ModalViagem
           viagem={modalViagem}
-          buscarViagens={buscaViagensCompartilhadas}
+          buscarViagens={() => {
+            setModalViagem(null);
+            buscaViagensCompartilhadas();
+          }}
           onClose={() => setModalViagem(null)}
         />
       )}
