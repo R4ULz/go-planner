@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { calendariu } from "../../icons/teste"; // Ícone do calendário
-import { lixeira } from "../../icons/lixeira";
-import { User } from "../../icons/user";
 import { v4 as uuidv4 } from 'uuid';
 import { useUser } from "@/src/contexts/UserContext";
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [selectedItem, setSelectedItem] = useState("dadosPrincipais");
@@ -42,19 +42,28 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         });
     }, [viagem]);
 
-    const isEditor =
-    viagem.criador === user?.id ||
-    convidados.some(
-      (convidado) =>
-        String(convidado.amigoId) === String(user?.id) &&
-        convidado.permissao === "EDITOR"
-    );
-  
-  useEffect(() => {
-    console.log("Usuário logado:", user);
-    console.log("Convidados carregados:", convidados);
-    console.log("isEditor:", isEditor);
-  }, [user, convidados]);
+    const isEditor = (() => {
+        console.log("Usuário logado:", user?.id);
+        console.log("Criador da viagem:", viagem.criador);
+        console.log("Convidados carregados:", convidados);
+
+        const criadorEhEditor = viagem.criador?.toString() === user?.id?.toString();
+        console.log("É criador da viagem:", criadorEhEditor);
+
+        const convidadoEhEditor = convidados.some((convidado) => {
+            console.log("Verificando convidado:", convidado);
+            return (
+                (convidado.id?.toString() === user?.id?.toString() ||
+                    convidado.amigoId?._id?.toString() === user?.id?.toString() ||
+                    convidado.amigoId?.toString() === user?.id?.toString()) &&
+                convidado.permissao === "EDITOR"
+            );
+        });
+
+        console.log("Convidado é editor:", convidadoEhEditor);
+
+        return criadorEhEditor || convidadoEhEditor;
+    })();
 
     const habilitarEdicao = () => {
         if (isEditor) {
@@ -68,7 +77,17 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                 descricao: viagem.descricao || ""
             });
         } else {
-            alert("Você não tem permissão para editar esta viagem.");
+            Toastify({
+                text: 'Você não tem permissão para editar esta viagem!',
+                duration: 3000,
+                close: true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style: {
+                    background: "#ce1836",
+                }
+            }).showToast();
         }
     };
 
@@ -105,50 +124,57 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         fetchAtividades();
     }, [viagem]);
 
+
     useEffect(() => {
         const fetchConvidados = async () => {
-          if (!viagem || !viagem.amigos || viagem.amigos.length === 0) {
-            setConvidados([]);
-            return;
-          }
-          setLoadingConvidados(true);
-      
-          try {
-            const convidadosDetalhes = await Promise.all(
-              viagem.amigos.map(async (amigo) => {
-                const response = await fetch("/api/getUserById", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ id: amigo.amigoId }),
-                });
-      
-                if (!response.ok) {
-                  throw new Error(`Erro ao buscar convidado com ID ${amigo.amigoId}`);
-                }
-      
-                const { user } = await response.json();
-                return {
-                  amigoId: amigo.amigoId,
-                  nome: user.nome,
-                  email: user.email,
-                  permissao: amigo.permissao,
-                  status: amigo.status,
-                };
-              })
-            );
-      
-            setConvidados(convidadosDetalhes);
-            console.log("Convidados carregados:", convidadosDetalhes);
-          } catch (error) {
-            console.error("Erro ao buscar convidados:", error);
-          } finally {
-            setLoadingConvidados(false);
-          }
+            if (!viagem || !viagem.amigos || viagem.amigos.length === 0) {
+                console.log("Nenhuma viagem ou amigos encontrados."); // Debug
+                setConvidados([]); // Garante que zera os convidados se não houver amigos
+                setLoadingConvidados(false); // Atualiza o estado de carregamento
+                return;
+            }
+    
+            console.log("Viagem carregada com amigos:", viagem.amigos); // Debug
+    
+            try {
+                const convidadosDetalhes = await Promise.all(
+                    viagem.amigos.map(async (amigo) => {
+                        try {
+                            const amigoId = typeof amigo.amigoId === "object" ? amigo.amigoId._id : amigo.amigoId;
+                            console.log("Buscando dados do convidado com ID:", amigoId); // Debug
+    
+                            const response = await fetch("/api/getUserById", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ id: amigoId }),
+                            });
+    
+                            if (!response.ok) throw new Error(`Erro ao buscar convidado com ID ${amigoId}`);
+                            
+                            const data = await response.json();
+                            console.log("Dados do convidado recebido:", data); // Debug
+    
+                            return { ...data.user, permissao: amigo.permissao, status: amigo.status };
+                        } catch (error) {
+                            console.error(`Erro ao buscar convidado ${amigo.amigoId}:`, error);
+                            return null; // Retorna null em caso de erro
+                        }
+                    })
+                );
+    
+                const convidadosFiltrados = convidadosDetalhes.filter(Boolean); // Remove valores nulos
+                setConvidados(convidadosFiltrados);
+                console.log("Convidados carregados:", convidadosFiltrados); // Debug final
+            } catch (error) {
+                console.error("Erro ao buscar convidados:", error);
+            } finally {
+                setLoadingConvidados(false);
+            }
         };
-      
+
         fetchConvidados();
-      }, [viagem]);
-      
+    }, [viagem]);
+
     useEffect(() => {
         const fetchTopicos = async () => {
             if (!viagem || !viagem._id) return;
@@ -211,13 +237,33 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
 
             if (!response.ok) throw new Error("Erro ao atualizar a viagem");
 
-            alert("Viagem atualizada com sucesso!");
+            Toastify({
+                text: 'Viagem editada com sucesso!',
+                duration: 3000,
+                close: true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+            }).showToast();
             setEditavel(false);
             await fetchViagem(); // Refresca os dados após atualizar
             await buscarViagens(); // Atualiza a lista de viagens no componente pai, se necessário
         } catch (error) {
             console.error("Erro ao atualizar viagem:", error);
-            alert("Erro ao atualizar a viagem.");
+            Toastify({
+                text: 'Erro ao atualizar viagem!',
+                duration: 3000,
+                close: true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style: {
+                    background: "#ce1836",
+                }
+            }).showToast();
         }
     };
 
@@ -277,7 +323,17 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
 
     const adicionarAtividade = async () => {
         if (!novaAtividade.nome || !novaAtividade.horario) {
-            alert("Por favor, preencha todos os campos da atividade.");
+            Toastify({
+                text: 'Preencha todos os campos da atividade!',
+                duration: 3000,
+                close: true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style: {
+                    background: "#ce1836",
+                }
+            }).showToast();
             return;
         }
 
@@ -303,7 +359,17 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
             setNovaAtividade({ nome: "", data: "", horario: "" });
         } catch (error) {
             console.error("Erro ao adicionar atividade:", error);
-            alert("Erro ao adicionar a atividade.");
+            Toastify({
+                text: 'Erro ao adicionar atividade!',
+                duration: 3000,
+                close: true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style: {
+                    background: "#ce1836",
+                }
+            }).showToast();
         }
     };
 
@@ -321,16 +387,46 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
 
             if (response.ok) {
                 const data = await response.json();
-                alert("Papel atualizado com sucesso!");
+                Toastify({
+                    text: 'Papel do convidado alterado com sucesso!',
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    }
+                }).showToast();
                 console.log("Convidado atualizado:", data.guest);
             } else {
                 const errorData = await response.json();
                 console.error("Erro ao atualizar papel:", errorData.message);
-                alert(errorData.message || "Erro ao atualizar papel do convidado.");
+                Toastify({
+                    text: errorData.message || "Erro ao atualizar papel do convidado.",
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    stopOnFocus: true,
+                    style: {
+                        background: "#ce1836",
+                    }
+                }).showToast();
             }
         } catch (error) {
             console.error("Erro ao atualizar papel do convidado:", error);
-            alert("Erro ao atualizar papel do convidado.");
+            Toastify({
+                text: "Erro ao atualizar papel do convidado.",
+                duration: 3000,
+                close: true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style: {
+                    background: "#ce1836",
+                }
+            }).showToast();
         }
     };
 
@@ -540,34 +636,42 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                     <p>Carregando convidados...</p>
                                 ) : (
                                     <ul className="w-full">
-                                        {convidados.map((convidado) => (
-                                            <div key={convidado.id} className="flex justify-between items-center border-b py-2">
-                                                <div className="flex items-center gap-4">
-                                                    <span className="font-bold">{convidado.nome}</span>
-                                                    <span className="text-gray-500">{convidado.email}</span>
-                                                    <span
-                                                        className={`px-2 py-1 text-sm font-semibold rounded-lg ${convidado.status === "PENDENTE"
-                                                            ? "bg-yellow-100 text-yellow-700"
-                                                            : "bg-green-100 text-green-700"
-                                                            }`}
-                                                    >
-                                                        {convidado.status === "PENDENTE" ? "Pendente" : "Aceito"}
-                                                    </span>
+                                        {convidados.length > 0 ? (
+                                            convidados.map((convidado, index) => (
+                                                <div
+                                                    key={convidado.id || convidado._id || index} // Garante uma key válida
+                                                    className="flex justify-between items-center border-b py-2"
+                                                >
+                                                    <div className="flex items-center gap-4">
+                                                        <span className="font-bold">{convidado.nome || "Nome não encontrado"}</span>
+                                                        <span className="text-gray-500">{convidado.email || "E-mail não disponível"}</span>
+                                                        <span
+                                                            className={`px-2 py-1 text-sm font-semibold rounded-lg ${convidado.status === "PENDENTE"
+                                                                    ? "bg-yellow-100 text-yellow-700"
+                                                                    : "bg-green-100 text-green-700"
+                                                                }`}
+                                                        >
+                                                            {convidado.status === "PENDENTE" ? "Pendente" : "Aceito"}
+                                                        </span>
+                                                    </div>
+                                                    {convidado.status === "ACEITO" && (
+                                                        <select
+                                                            value={convidado.permissao || "LEITOR"}
+                                                            onChange={(e) => atualizarPapelConvidado(convidado.id || convidado._id, e.target.value)}
+                                                            className="border border-gray-300 rounded-lg px-2 py-1"
+                                                        >
+                                                            <option value="LEITOR">Leitor</option>
+                                                            <option value="EDITOR">Editor</option>
+                                                        </select>
+                                                    )}
                                                 </div>
-                                                {convidado.status === "ACEITO" && (
-                                                    <select
-                                                        value={convidado.permissao}
-                                                        onChange={(e) => atualizarPapelConvidado(convidado.id, e.target.value)}
-                                                        className="border border-gray-300 rounded-lg px-2 py-1"
-                                                    >
-                                                        <option value="LEITOR">Leitor</option>
-                                                        <option value="EDITOR">Editor</option>
-                                                    </select>
-                                                )}
-                                            </div>
-                                        ))}
+                                            ))
+                                        ) : (
+                                            <p>Nenhum convidado encontrado.</p>
+                                        )}
                                     </ul>
                                 )}
+
                             </div>
                         </div>
                     </div>

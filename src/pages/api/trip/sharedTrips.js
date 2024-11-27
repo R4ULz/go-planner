@@ -23,10 +23,10 @@ export default async function handler(req, res) {
         }
       }
     })
-    .select("titulo destino partida descricao dataInicio fimViagem imagem amigos")
+    .select("titulo destino partida descricao dataInicio fimViagem imagem criador amigos.permissao")
     .populate({
         path: "amigos.amigoId",
-        select:"nome email",
+        select:"nome email permissao _id",
     });
 
     const viagensComPermissoes = viagens.map((viagem) => ({
@@ -34,11 +34,11 @@ export default async function handler(req, res) {
       amigos: viagem.amigos.map((amigo) => ({
         amigoId: amigo.amigoId,
         status: amigo.status,
-        permissao: amigo.permissao, // Inclui a permissão aqui
+        permissao: amigo.permissao,
       })),
     }));
 
-    console.log(viagensComPermissoes);
+    console.log("Dados retornados pela API sharedTrips:", viagensComPermissoes);
     return res.status(200).json(viagensComPermissoes);
   } catch (error) {
     console.error("Erro ao buscar viagens compartilhadas: ", error);

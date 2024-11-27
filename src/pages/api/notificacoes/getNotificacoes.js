@@ -17,8 +17,6 @@ export default async function getNotificacao(req, res) {
             if(!user){
                 return res.status(404).json({error: "Usuário não encontrado"})
             }
-
-            console.log("Notificações encontradas:", user.notificacoes);
             res.status(200).json({notifications: user.notificacoes || []});
         }catch(error){
             console.error("erro ao buscar notificacoes: ", error);
