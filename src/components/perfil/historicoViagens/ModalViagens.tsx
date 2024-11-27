@@ -393,6 +393,27 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                             )}
                         </div>
                     </div>
+                ) : selectedItem === "topicos" ? (
+    <div className="space-y-4 mt-1">
+        <p className="font-bold text-2xl flex -mb-3">Tópicos</p>
+        {loadingTopicos ? (
+            <p>Carregando tópicos...</p>
+        ) : topicos.length === 0 ? (
+            <p>Esta viagem não possui tópicos.</p>
+        ) : (
+            <ul className="space-y-4">
+                {topicos.map((topico, index) => (
+                    <li
+                        key={index}
+                        className="p-4 border border-gray-300 rounded-xl bg-white"
+                    >
+                        <h3 className="font-bold text-lg">{topico.nome}</h3>
+                        <p className="text-zinc-500">{topico.conteudo}</p>
+                    </li>
+                ))}
+            </ul>
+        )}
+    </div>
                 ) : (
                     <div className="font-inter text-zinc-700 text-2xl p-5">Aqui teremos a parte de convidados da viagem</div>
                 )
@@ -401,3 +422,4 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         </div>
     );
 }
+

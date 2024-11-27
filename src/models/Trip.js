@@ -30,7 +30,16 @@ const tripSchema = new mongoose.Schema({
       conteudo: { type: String },
     },
   ],
-  amigos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  
+  favoritada: { type: Boolean, default: false },
+
+  amigos: [
+    {
+      amigoId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+      status: { type: String, enum: ["PENDENTE", "ACEITO", "RECUSADO"], default: "PENDENTE" },
+      permissao: { type: String, enum: ['EDITOR', 'LEITOR'], default: 'LEITOR' }
+    },
+  ],
   imagem: { type: String },
   criador: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
