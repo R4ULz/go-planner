@@ -3,10 +3,12 @@ import Image from "next/image";
 import imagem1 from "@/src/components/Home/About/imagem01.png"
 import imagem2 from "@/src/components/Home/About/imagem02.png"
 import {Viagem } from "../../icons/index";
+import Voltar from "../../BtnVoltar/btnVoltar"
 
 export default function txtSobre({ onCreateTrip }){
     return(
         <div className="flex flex-col  justify-center items-center max-w-screen-xl w-full font-inter">
+
             <div>
                 <div className='flex flex-row pb-4'>
                     <h1 className='font-bold text-3xl font-rubik'>Sobre nós</h1><span className="bg-rosinha rounded-full p-1 relative w-1 h-1 top-6 mx-1 md:w-1 md:h-1 md:top-5"></span>

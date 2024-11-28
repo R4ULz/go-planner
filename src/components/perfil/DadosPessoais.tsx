@@ -7,6 +7,7 @@ import { canetinha } from "../icons";
 export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) {
   const { user } = useUser();
   const [imagemURL, setImagemURL] = useState('/imgs/perfil.jpg'); // Padrão inicial
+  const [cpf, setCpf] = useState('');
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -29,6 +30,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) 
       if (res.ok) {
         setNome(data.user.nome);
         setEmail(data.user.email);
+        setCpf(data.user.cpf);
 
         // Define imagem de perfil do usuário ou imagem padrão
         setImagemURL(data.user.foto || '/imgs/perfil.jpg');
@@ -108,6 +110,7 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) 
           novoEmail: email,
           nome: nome,
           foto: foto,
+          cpf: cpf,
         }),
       });
 
@@ -175,12 +178,14 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) 
               disabled={!editavel}
             />
           </div>
-          <div className="px-16 py-5">
+          <div className="px-16">
             <p>
             <input
               type="text"
-              className={`relative flex items-center border p-4 pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-              disabled={!editavel}
+              placeholder="CPF"
+              className={`relative flex items-center border rounded-xl p-4 pl-10 w-full text-zinc-700 border-gray-300 rounded-xl focus:outline-none 'border-zinc-400 bg-white' 'border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed`}
+              value={cpf}
+              disabled
             />
             </p>
           </div>

@@ -31,6 +31,7 @@ export default async function getUserByEmail(req, res) {
         nome: user.nome,
         email: user.email,
         foto: user.foto,
+        cpf: user.cpf,
       },
     });
   } catch (error) {

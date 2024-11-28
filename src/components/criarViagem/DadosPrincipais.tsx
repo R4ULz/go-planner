@@ -71,15 +71,50 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     }
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setImagemFile(file);
-      const imageURL = URL.createObjectURL(file);
-      handleUpdateTrip({ imagem: imageURL });
+      const formData = new FormData();
+      formData.append('TripImage', file);
+      formData.append('id', tripData.id); // Certifique-se de que 'id' está correto e deveria ser '_id' se você estiver usando MongoDB.
+  
+      try {
+        const response = await fetch('/api/uploadTripImage', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        if (response.ok) {
+          handleUpdateTrip({ ...tripData, imagem: data.imagem }); // Atualiza diretamente a imagem no estado do componente
+          Toastify({
+            text: 'Imagem da viagem atualizada com sucesso',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            stopOnFocus: true,
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)"
+            }
+          }).showToast();
+        } else {
+          throw new Error(data.message || 'Erro ao atualizar imagem');
+        }
+      } catch (error) {
+        console.error('Erro ao fazer upload da imagem:', error);
+        Toastify({
+          text: 'Erro ao fazer upload da imagem',
+          duration: 3000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style: { background: "#ce1836" }
+        }).showToast();
+      }
     }
   };
-
+  
   const handleClick = () => {
     const fileInput = document.getElementById("fileInput");
     if (fileInput) {
@@ -275,3 +310,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     </div>
   );
 }
+function setImagemURL(foto: any) {
+  throw new Error("Function not implemented.");
+}
+

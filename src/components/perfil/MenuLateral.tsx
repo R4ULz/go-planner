@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUser } from "@/src/contexts/UserContext";
 import MenuItem from "./MenuItem";
 import { useRouter } from "next/router";
+import Voltar from "../BtnVoltar/btnVoltar";
 
 export default function MenuLateral({ setSelectedComponent, handleSave }) {
   const { logout } = useUser();
@@ -45,7 +46,11 @@ export default function MenuLateral({ setSelectedComponent, handleSave }) {
         </ul>
       </div>
       <hr className="flex bg-gradient-to-r to-rosinha from-laranja h-[3px] mx-3 mt-8" />
-      <ul className="flex flex-col space-y-5 m-6">
+      <ul className="flex flex-col m-6">
+        <Voltar/>
+      </ul>
+      
+      <ul className="flex flex-col mx-6 mb-6">
         <button
           className="py-1 border-2 border-zinc-400 text-zinc-700 rounded-xl"
           onClick={handleLogout}
