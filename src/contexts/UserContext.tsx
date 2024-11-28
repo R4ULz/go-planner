@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 
 // Definição do tipo User
 interface User {
+  foto: any;
   id: string;
   nome: string;
   email: string;

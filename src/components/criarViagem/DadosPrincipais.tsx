@@ -70,6 +70,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     }
   };
 
+
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -94,7 +95,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
       }
     }
   };
-
+  
   const handleClick = () => {
     const fileInput = document.getElementById("fileInput");
     if (fileInput) {
@@ -290,3 +291,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     </div>
   );
 }
+function setImagemURL(foto: any) {
+  throw new Error("Function not implemented.");
+}
+
