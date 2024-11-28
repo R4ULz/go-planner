@@ -605,107 +605,201 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                     </div>
                 ) : selectedItem === "atividades" ? (
                     <div className="space-y-4 mt-1 h-96">
-                        <div className="flex justify-between">
-                            <p className="items-center font-bold text-2xl flex -mb-3">Atividades<span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span></p>
-                            <button onClick={abrirFormularioAtividade} className="text-white font-inter font-bold text-sm border-solid margin-0 bg-laranjinha px-2 py-3 rounded-2xl flex gap-2 items-center">Adicionar Atividade <p className="text-xl">+</p></button>
-                        </div>
-                        {adicionandoAtividade && (
-                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                                <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative">
-                                    <button onClick={fecharFormularioAtividade} className="absolute top-4 right-4 text-xl">&times;</button>
-                                    <h2 className="text-xl font-bold mb-2 flex">
-                                        Adicionar Atividade
-                                        <span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-3 ml-1"></span>
-                                    </h2>
-                                    <div className="space-y-4">
-                                        <div>
+                    <div className="flex justify-between">
+                        <p className="items-center font-bold text-2xl flex -mb-3">
+                            Atividades
+                            <span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span>
+                        </p>
+                        <button
+                            onClick={abrirFormularioAtividade}
+                            className="text-white font-inter font-bold text-sm border-solid margin-0 bg-laranjinha px-2 py-3 rounded-2xl flex gap-2 items-center"
+                        >
+                            Adicionar Atividade <p className="text-xl">+</p>
+                        </button>
+                    </div>
+                    {adicionandoAtividade && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative">
+                                <button onClick={fecharFormularioAtividade} className="absolute top-4 right-4 text-xl">
+                                    &times;
+                                </button>
+                                <h2 className="text-xl font-bold mb-2 flex">
+                                    Adicionar Atividade
+                                    <span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-3 ml-1"></span>
+                                </h2>
+                                <div className="space-y-4">
+                                    <div>
+                                        <input
+                                            type="text"
+                                            name="nome"
+                                            placeholder="Nome da Atividade:"
+                                            value={novaAtividade.nome}
+                                            onChange={(e) => setNovaAtividade({ ...novaAtividade, nome: e.target.value })}
+                                            className="w-full border border-gray-300 p-2 rounded-xl"
+                                        />
+                                    </div>
+                                    <div className="flex gap-3">
+                                        <div className="w-1/4">
                                             <input
-                                                type="text"
-                                                name="nome"
-                                                placeholder="Nome da Atividade:"
-                                                value={novaAtividade.nome}
-                                                onChange={(e) => setNovaAtividade({ ...novaAtividade, nome: e.target.value })}
+                                                type="time"
+                                                name="horario"
+                                                value={novaAtividade.horario}
+                                                onChange={(e) => setNovaAtividade({ ...novaAtividade, horario: e.target.value })}
                                                 className="w-full border border-gray-300 p-2 rounded-xl"
                                             />
                                         </div>
-                                        <div className="flex gap-3">
-                                            <div className="w-1/4">
-                                                <input
-                                                    type="time"
-                                                    name="horario"
-                                                    value={novaAtividade.horario}
-                                                    onChange={(e) => setNovaAtividade({ ...novaAtividade, horario: e.target.value })}
-                                                    className="w-full border border-gray-300 p-2 rounded-xl"
-                                                />
-                                            </div>
-                                            <div className="w-3/4">
-                                                <input
-                                                    type="date"
-                                                    name="data"
-                                                    value={novaAtividade.data}
-                                                    min={dataMinima}
-                                                    max={dataMaxima}
-                                                    onChange={(e) => setNovaAtividade({ ...novaAtividade, data: e.target.value })}
-                                                    className="w-full border border-gray-300 p-2 rounded-xl"
-                                                />
-                                            </div>
+                                        <div className="w-3/4">
+                                            <input
+                                                type="date"
+                                                name="data"
+                                                value={novaAtividade.data}
+                                                min={dataMinima}
+                                                max={dataMaxima}
+                                                onChange={(e) => setNovaAtividade({ ...novaAtividade, data: e.target.value })}
+                                                className="w-full border border-gray-300 p-2 rounded-xl"
+                                            />
                                         </div>
-                                        <div className="flex justify-end space-x-4">
-                                            <button onClick={fecharFormularioAtividade} className="px-4 py-2 text-zinc-600 border border-zinc-300 rounded-xl">Cancelar</button>
-                                            <button onClick={adicionarAtividade} className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold">Adicionar</button>
-                                        </div>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                        <button
+                                            onClick={fecharFormularioAtividade}
+                                            className="px-4 py-2 text-zinc-600 border border-zinc-300 rounded-xl"
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            onClick={async () => {
+                                                try {
+                                                    if (!novaAtividade.nome || !novaAtividade.horario) {
+                                                        Toastify({
+                                                            text: "Preencha todos os campos da atividade!",
+                                                            duration: 3000,
+                                                            close: true,
+                                                            gravity: "top",
+                                                            position: "right",
+                                                            stopOnFocus: true,
+                                                            style: {
+                                                                background: "#ce1836",
+                                                            },
+                                                        }).showToast();
+                                                        return;
+                                                    }
+                
+                                                    const atividadeComId = {
+                                                        ...novaAtividade,
+                                                        id: uuidv4(),
+                                                    };
+                
+                                                    const response = await fetch(`/api/trip/addActivityToTrip`, {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Content-Type": "application/json",
+                                                        },
+                                                        body: JSON.stringify({ tripId: viagem._id, atividade: atividadeComId }),
+                                                    });
+                
+                                                    if (!response.ok) {
+                                                        throw new Error("Erro ao adicionar a atividade");
+                                                    }
+                
+                                                    const atividadesAtualizadas = await response.json();
+                                                    setAtividades(atividadesAtualizadas);
+                                                    fecharFormularioAtividade();
+                                                    setNovaAtividade({ nome: "", data: "", horario: "" });
+                
+                                                    Toastify({
+                                                        text: "Atividade adicionada com sucesso!",
+                                                        duration: 3000,
+                                                        close: true,
+                                                        gravity: "top",
+                                                        position: "right",
+                                                        stopOnFocus: true,
+                                                        style: {
+                                                            background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                                        },
+                                                    }).showToast();
+                                                } catch (error) {
+                                                    console.error("Erro ao adicionar atividade:", error);
+                                                    Toastify({
+                                                        text: "Erro ao adicionar atividade!",
+                                                        duration: 3000,
+                                                        close: true,
+                                                        gravity: "top",
+                                                        position: "right",
+                                                        stopOnFocus: true,
+                                                        style: {
+                                                            background: "#ce1836",
+                                                        },
+                                                    }).showToast();
+                                                }
+                                            }}
+                                            className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
+                                        >
+                                            Adicionar
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                        <div className="items-center h-96 overflow-auto">
-                            {loadingAtividades ? (
-                                <p>Carregando atividades...</p>
-                            ) : (
-                                Object.keys(atividadesPorData).map((data) => (
-                                    <div key={data} className="mb-4">
-                                        <h3 className="font-bold text-lg">{data}</h3>
-                                        <ul className="space-y-2">
-                                            {atividadesPorData[data].map((atividade) => (
-                                                <li key={atividade.id} className="flex items-center justify-between p-4 rounded-2xl border border-zinc-300">
-                                                    <div className="flex items-center gap-2">
-                                                        <label className="inline-flex items-center cursor-pointer">
-                                                            <input
-                                                                type="checkbox"
-                                                                className="hidden peer"
-                                                                checked={atividade.concluida}
-                                                                onChange={() => toggleAtividade(atividade.id, atividade.concluida)}
-                                                            />
-                                                            <span className="w-5 h-5 bg-white border border-rosinha rounded-md peer-checked:bg-rosinha peer-checked:border-rosinha transition duration-200 flex items-center justify-center">
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    className="size-5 text-white"
-                                                                    fill="none"
-                                                                    viewBox="0 0 24 24"
-                                                                    stroke="currentColor"
-                                                                    strokeWidth="2"
-                                                                >
-                                                                    <path
-                                                                        strokeLinecap="round"
-                                                                        strokeLinejoin="round"
-                                                                        d="M5 13l4 4L19 7"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </label>
-                                                        <span className={`${atividade.concluida ? "line-through text-gray-500 bg-gray-100" : "text-zinc-700"}`}>
-                                                            {atividade.nome}
-                                                        </span>
-                                                    </div>
-                                                    <span className="text-zinc-600">{atividade.horario}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                ))
-                            )}
                         </div>
+                    )}
+                    <div className="items-center h-80 overflow-y-auto">
+                        {loadingAtividades ? (
+                            <p>Carregando atividades...</p>
+                        ) : (
+                            Object.keys(atividadesPorData).map((data) => (
+                                <div key={data} className="mb-4">
+                                    <h3 className="font-bold text-lg">{data}</h3>
+                                    <ul className="space-y-2">
+                                        {atividadesPorData[data].map((atividade) => (
+                                            <li
+                                                key={atividade.id}
+                                                className="flex items-center justify-between p-4 rounded-2xl border border-zinc-300"
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <label className="inline-flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="hidden peer"
+                                                            checked={atividade.concluida}
+                                                            onChange={() => toggleAtividade(atividade.id, atividade.concluida)}
+                                                        />
+                                                        <span className="w-5 h-5 bg-white border border-rosinha rounded-md peer-checked:bg-rosinha peer-checked:border-rosinha transition duration-200 flex items-center justify-center">
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                className="size-5 text-white"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke="currentColor"
+                                                                strokeWidth="2"
+                                                            >
+                                                                <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    d="M5 13l4 4L19 7"
+                                                                />
+                                                            </svg>
+                                                        </span>
+                                                    </label>
+                                                    <span
+                                                        className={`${
+                                                            atividade.concluida
+                                                                ? "line-through text-gray-500 bg-gray-100"
+                                                                : "text-zinc-700"
+                                                        }`}
+                                                    >
+                                                        {atividade.nome}
+                                                    </span>
+                                                </div>
+                                                <span className="text-zinc-600">{atividade.horario}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))
+                        )}
                     </div>
+                </div>
+
                 ) : selectedItem === "topicos" ? (
                     <div className="space-y-4 mt-1 h-96">
                         <p className="font-bold text-2xl flex mb-3">Tópicos</p>
@@ -754,11 +848,11 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                 </ul>
                             </div>
                         )}
-                        <div className="flex justify-end">
+                        <div className="flex justify-end gap-4">
                             {editandoTopicos ? (
                                 <>
                                     <button
-                                        className="bg-gray-300 px-4 py-2 text-black rounded-xl font-semibold mr-2"
+                                        className="bg-gray-300 px-4 py-2 text-black rounded-xl font-semibold"
                                         onClick={() => setEditandoTopicos(false)}
                                     >
                                         Cancelar
@@ -805,12 +899,24 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                     </button>
                                 </>
                             ) : (
-                                <button
-                                    className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
-                                    onClick={() => setEditandoTopicos(true)}
-                                >
-                                    Editar tópicos
-                                </button>
+                                <>
+                                    <button
+                                        className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
+                                        onClick={() => setEditandoTopicos(true)}
+                                    >
+                                        Editar tópicos
+                                    </button>
+                                    <button
+                                        className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
+                                        onClick={() => {
+                                            const novoTopico = { nome: "", conteudo: "" };
+                                            setTopicos([...topicos, novoTopico]);
+                                            setEditandoTopicos(true); // Habilita a edição imediatamente
+                                        }}
+                                    >
+                                        Adicionar tópico
+                                    </button>
+                                </>
                             )}
                         </div>
                     </div>
