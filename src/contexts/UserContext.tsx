@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 
 // Definição do tipo User
 interface User {
+  foto: any;
   id: string;
   nome: string;
   email: string;
@@ -37,8 +38,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [token, setToken] = useState<string | null>(null);
 
   const login = (userData: User, token: string) => {
-    setUser(userData); // Armazena as informações do usuário
-    setToken(token);    // Armazena o token JWT
+    setUser(userData); 
+    setToken(token);   
     sessionStorage.setItem('user', JSON.stringify(userData));
     sessionStorage.setItem('token', token);
   };

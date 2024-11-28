@@ -4,10 +4,12 @@ import Atividades from "./Atividades/Atividades";
 import ConvidarAmigos from "./convidarAmigos/Amigos";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos";
+type ComponentType = "DadosPrincipais" | "Atividades" | "ConvidarAmigos" | "Topicos";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { useUser } from "@/src/contexts/UserContext";
+import Topicos from "./Topicos/Topicos";
+import { v4 as uuidv4 } from "uuid"
 
 interface LayoutProps {
   isEditMode: boolean;
@@ -17,12 +19,13 @@ interface LayoutProps {
   setMenuEnabled: (enabled: boolean) => void;
 }
 
-export default function Layout({isEditMode, tripId, tripData: initialTripData, menuEnabled, setMenuEnabled}: LayoutProps) {
+export default function Layout({ isEditMode, tripId, tripData: initialTripData, menuEnabled, setMenuEnabled }: LayoutProps) {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>("DadosPrincipais");
-  const {user} = useUser();
-
+  const { user } = useUser();
   const router = useRouter();
+
   const [tripData, setTripData] = useState({
+    _id: "",
     nomeViagem: "",
     partida: initialTripData?.partida || "",
     destino: initialTripData?.destino || "",
@@ -32,6 +35,7 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
     atividades: [],
     amigos: [],
     imagem: null,
+    topicos: [],
   });
 
   useEffect(() => {
@@ -51,67 +55,88 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
     }
   }, [isEditMode, tripId]);
 
-  useEffect(() => {
-    if (initialTripData.partida || initialTripData.destino) {
-      setTripData(prevTripData => ({
-        ...prevTripData,
-        partida: initialTripData.partida,
-        destino: initialTripData.destino,
-      }));
-      console.log("Initial trip data set in Layout:", initialTripData);
-    }
-  }, [initialTripData]);
-
-  useEffect(() => {
-    console.log("Initial trip data:", initialTripData);
-    console.log("Current trip data:", tripData);
-  }, [initialTripData, tripData]);
-
   const handleUpdateTrip = (updatedData: Partial<typeof tripData>) => {
     const newTripData = { ...tripData, ...updatedData };
     setTripData(newTripData);
     sessionStorage.setItem("tripData", JSON.stringify(newTripData));
   };
 
+  const handleAddNewTopic = (newTopic) => {
+    setTripData((prevTripData) => {
+      const updatedTopics = [...prevTripData.topicos, newTopic];
+      return { ...prevTripData, topicos: updatedTopics };
+    });
+  };
+
   const salvarViagem = async () => {
     const tripDataString = sessionStorage.getItem("tripData");
-
     if (!tripDataString) {
       alert("Nenhum dado de viagem encontrado para salvar.");
       return;
     }
-
+  
     let tripData = JSON.parse(tripDataString);
-
-    const partidaStored = sessionStorage.getItem("partida")
-    const destinoStored = sessionStorage.getItem("destino")
-
+    const partidaStored = sessionStorage.getItem("partida");
+    const destinoStored = sessionStorage.getItem("destino");
+  
     tripData = {
       ...tripData,
       partida: tripData.partida || partidaStored,
       destino: tripData.destino || destinoStored,
       criador: user?.id,
     };
-
+  
     if (!tripData.partida || !tripData.destino) {
       alert("Partida e destino são obrigatórios.");
       return;
     }
-
+  
+    // Upload da imagem se ela estiver presente
+    if (tripData.imagemFile) {
+      const formData = new FormData();
+      formData.append("file", tripData.imagemFile); // tripData.imagemFile deve conter o arquivo de imagem
+  
+      try {
+        const uploadResponse = await fetch("/api/uploadProfileTrip", {
+          method: "POST",
+          body: formData,
+        });
+  
+        if (!uploadResponse.ok) {
+          throw new Error("Erro ao fazer upload da imagem.");
+        }
+  
+        const uploadResult = await uploadResponse.json();
+        tripData.imagem = uploadResult.url; // URL retornada pelo backend
+        console.log("Imagem salva com sucesso:", uploadResult.url);
+      } catch (uploadError) {
+        console.error("Erro ao fazer upload da imagem:", uploadError);
+        alert("Falha ao fazer upload da imagem.");
+        return;
+      }
+    }
+  
+    // Ajustar atividades
     const atividadesAjustadas = tripData.atividades.map((atividade) => ({
-      nome: atividade.name, // Ajustando 'name' para 'nome'
-      data: atividade.date, // Ajustando 'date' para 'data'
-      horario: atividade.time, // Ajustando 'time' para 'horario'
+      ...atividade,
+      id: atividade.id || uuidv4(),
+      nome: atividade.name,
+      data: atividade.date,
+      horario: atividade.time,
     }));
-
-    tripData = { ...tripData, atividades: atividadesAjustadas };
-
-    const amigosAjustados = tripData.amigos.map((amigo) => amigo.id);
-
+  
+    // Ajustar amigos
+    const amigosAjustados = tripData.amigos.map((amigo) => ({
+      amigoId: amigo.id || amigo.amigoId,
+      status: "PENDENTE",
+    }));
+  
+    // Atualizar tripData com as mudanças
     tripData = { ...tripData, atividades: atividadesAjustadas, amigos: amigosAjustados };
-
+  
     console.log("Enviando dados ajustados:", tripData);
-
+  
+    // Salvar viagem no backend
     try {
       const response = await fetch("/api/trip", {
         method: "POST",
@@ -120,25 +145,25 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
         },
         body: JSON.stringify(tripData),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Erro ao enviar os dados para o banco de dados. ", data);
+        throw new Error("Erro ao enviar os dados para o banco de dados.");
       }
-
+  
       const result = await response.json();
       Toastify({
-        text: isEditMode ? 'Viagem atualizada com sucesso!' : 'Viagem criada com sucesso!',
+        text: isEditMode ? "Viagem atualizada com sucesso!" : "Viagem criada com sucesso!",
         duration: 3000,
         close: true,
-        gravity: 'top',
-        position: 'right',
+        gravity: "top",
+        position: "right",
         stopOnFocus: true,
-        style:{
+        style: {
           background: "linear-gradient(to right, #00b09b, #96c93d)",
-        }
+        },
       }).showToast();
       console.log(result);
-      router.push('/perfil')
+      router.push("/perfil");
     } catch (error) {
       console.error("Erro ao enviar os dados:", error);
       alert("Falha ao confirmar a viagem.");
@@ -152,11 +177,13 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
   const renderComponent = () => {
     switch (selectedComponent) {
       case "DadosPrincipais":
-        return <DadosPrincipais tripData={tripData} handleUpdateTrip={handleUpdateTrip} onSaveTrip={onSaveTrip}/>;
+        return <DadosPrincipais tripData={tripData} handleUpdateTrip={handleUpdateTrip} onSaveTrip={onSaveTrip} />;
       case "Atividades":
         return <Atividades tripData={tripData} handleUpdateTrip={handleUpdateTrip} />;
       case "ConvidarAmigos":
         return <ConvidarAmigos tripData={tripData} handleUpdateTrip={handleUpdateTrip} />;
+      case "Topicos":
+        return <Topicos tripData={tripData} handleUpdateTrip={handleUpdateTrip} handleAddNewTopic={handleAddNewTopic} />;
       default:
         return null;
     }
@@ -165,12 +192,12 @@ export default function Layout({isEditMode, tripId, tripData: initialTripData, m
   return (
     <div className="flex gap-10 max-hd:gap-20 w-full max-hd:max-w-screen-xl min-h-[716px] px-24 max-hd:px-14 justify-center">
       <aside className="w-1/5 flex justify-center ml-10">
-        <MenuLateralV 
-          setSelectedComponent={setSelectedComponent} 
-          salvarViagem={salvarViagem} 
-          menuEnabled={menuEnabled} 
+        <MenuLateralV
+          setSelectedComponent={setSelectedComponent}
+          salvarViagem={salvarViagem}
+          menuEnabled={menuEnabled}
           selectedComponent={selectedComponent}
-        />
+          />      
       </aside>
       <div className="w-full">
         <p className="text-black font-inter font-medium">{isEditMode ? "EDITANDO SUA VIAGEM!" : "CRIANDO SUA VIAGEM!"}</p>

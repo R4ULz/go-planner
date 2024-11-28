@@ -18,7 +18,6 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     console.log("Dados de tripData em Dados Principais:", tripData);
   }, [tripData]);
 
-  // Função para buscar as sugestões da API LocationIQ
   const fetchLocationSuggestions = async (inputValue: string, type: string) => {
     if (inputValue.length > 2) {
       try {
@@ -71,15 +70,32 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     }
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setImagemFile(file);
-      const imageURL = URL.createObjectURL(file);
-      handleUpdateTrip({ imagem: imageURL });
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      try {
+        const response = await fetch('/api/uploadProfileTrip', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!response.ok) {
+          throw new Error('Erro ao fazer upload da imagem');
+        }
+  
+        const data = await response.json();
+        console.log('URL do arquivo enviado:', data.url);
+        handleUpdateTrip({ imagem: data.url }); // Atualiza o tripData com o URL da imagem
+      } catch (error) {
+        console.error('Erro ao fazer upload da imagem:', error);
+      }
     }
   };
-
+  
   const handleClick = () => {
     const fileInput = document.getElementById("fileInput");
     if (fileInput) {
@@ -131,7 +147,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
         </h1>
       </div>
       <div className="flex justify-between max-hd:gap-20">
-        <div className="mt-8 space-y-7 w-1/2">
+        <div className="mt-8 space-y-5 w-1/2">
           <div className="flex flex-col">
             <label className="text-zinc-700 font-inter pl-1">Nome da sua viagem:</label>
             <input
@@ -192,27 +208,33 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
           </div>
           <hr className="border-zinc-300" />
           <div className="gap-6 flex justify-between">
-            <div className={`relative flex items-center w-full border rounded-xl p-3`}>
-              <i className={`absolute left-3`}>{calendariu}</i>
-              <input
-                type="date"
-                name="DataIda"
-                className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-                value={DataIda}
-                onChange={e => setDataIda(e.target.value)}
-              />
+            <div className="w-full">
+              <label htmlFor="DataIda" className="flex text-zinc-700">Data de ida:</label>
+              <div className={`relative flex items-center w-full border rounded-xl p-3`}>
+                <i className={`absolute left-3`}>{calendariu}</i>
+                <input
+                  type="date"
+                  name="DataIda"
+                  className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
+                  value={DataIda}
+                  onChange={e => setDataIda(e.target.value)}
+                />
+              </div>
             </div>
-            <div className={`text-zinc-700 relative flex items-center border w-full rounded-xl p-3`}>
-              <i className={`absolute left-3`}>{calendariu}</i>
-              <input
-                type="date"
-                name="DataRetorno"
-                className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
-                value={DataRetorno}
-                min={DataIda}
-                onChange={e => setDataRetorno(e.target.value)}
-                disabled={!DataIda}
-              />
+            <div className="w-full">
+              <label htmlFor="DataIda" className="flex text-zinc-700">Data de ida:</label>
+              <div className={`text-zinc-700 relative flex items-center border w-full rounded-xl p-3`}>
+                <i className={`absolute left-3`}>{calendariu}</i>
+                <input
+                  type="date"
+                  name="DataRetorno"
+                  className={`pl-10 w-full text-zinc-700 border-none rounded-xl focus:outline-none`}
+                  value={DataRetorno}
+                  min={DataIda}
+                  onChange={e => setDataRetorno(e.target.value)}
+                  disabled={!DataIda}
+                />
+              </div>
             </div>
           </div>
           <div>
@@ -269,3 +291,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     </div>
   );
 }
+function setImagemURL(foto: any) {
+  throw new Error("Function not implemented.");
+}
+

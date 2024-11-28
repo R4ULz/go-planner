@@ -32,12 +32,15 @@ export default async function handler(req, res) {
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    res.status(200).json({
+
+    return res.status(200).json({
       user: {
         id: user._id.toString(),
         nome: user.nome,
         email: user.email,
         role: user.role,
+        foto: user.foto,
+
       },
       token,
     });

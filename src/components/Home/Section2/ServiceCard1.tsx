@@ -22,7 +22,7 @@ export default function ServiceCard1({ title, description, onClick, option, isAc
             <span
               className={`${
                 isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-              } flex flex-row ${bgColorClass} w-2 h-40 rounded-full p-1 top-6`}
+              } flex flex-row ${bgColorClass} w-2 md:h-40 rounded-full p-1 top-6 h-44`}
             ></span>
           </div>
         </div>
