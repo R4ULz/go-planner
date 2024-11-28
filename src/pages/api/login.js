@@ -38,18 +38,14 @@ export default async function handler(req, res) {
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    // Log para verificar se o login foi bem-sucedido e se o user está sendo passado corretamente
-    console.log("Login bem-sucedido para o usuário:", {
-      id: user._id.toString(),
-      nome: user.nome,
-      email: user.email,
-    });
+
 
     return res.status(200).json({
       user: {
         id: user._id.toString(),
         nome: user.nome,
         email: user.email,
+        foto: user.foto,
       },
       token,
     });
