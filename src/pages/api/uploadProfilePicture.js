@@ -1,5 +1,4 @@
 import formidable from 'formidable';
-import fs from 'fs';
 import path from 'path';
 import User from '../../models/User';
 import connect from '../../lib/mongoose';

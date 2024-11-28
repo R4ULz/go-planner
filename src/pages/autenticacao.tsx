@@ -9,6 +9,8 @@ import 'toastify-js/src/toastify.css';
 import { olhoCortado } from "../components/icons/olhoCortado";
 import { olhoAberto } from "../components/icons/olhoAberto";
 import InputMask from 'react-input-mask';
+import Voltar from "../components/BtnVoltar/btnVoltar";
+import VoltarSetinha from "../components/BtnVoltar/btnSetinha";
 
 
 export default function Login() {
@@ -177,6 +179,9 @@ export default function Login() {
                 <div className="w-full h-full flex">
 
                     <div className="w-1/2 h-full bg-black/35 backdrop-blur-sm rounded-r-3xl flex flex-col justify-center items-center">
+                    <div className="flex flex-start items-center justify-start w-2/3">
+                        <VoltarSetinha/>
+                    </div>
                         <Link href="/">
                         <i className="flex justify-center">
                             {LogoAutent}
@@ -188,6 +193,7 @@ export default function Login() {
                                 {message}
                             </p>
                         )}
+                        
                             <form onSubmit={(e) => {e.preventDefault(); handleLogin();}}>
                                 <input type="text" className="w-full text-zinc-500 px-4 py-3 rounded-xl bg-gray-200 mt-2 border focus:border-rosinha focus:outline-none focus:bg-white" placeholder="Email:" value={email} onChange={(e) => setEmail(e.target.value)}/>
                                 <div className="relative w-full">
@@ -223,6 +229,9 @@ export default function Login() {
                         <TxtHome />
                     </div>
                     <div className="w-1/2 h-full bg-black/35 backdrop-blur-sm rounded-l-3xl flex flex-col justify-center items-center">
+                    <div className="flex flex-start items-center justify-start w-2/3">
+                        <VoltarSetinha/>
+                    </div>
                     <Link href="/">
                         <i className="flex justify-center">
                             {LogoAutent}

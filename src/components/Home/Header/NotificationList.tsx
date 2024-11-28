@@ -57,8 +57,6 @@ export default function NotificationList({
                   <p className="text-sm text-gray-500">{notification.mensagem}</p>
                 </div>
               </div>
-
-              {/* Botões */}
               {!notification.status && (
                 <div className="flex flex-col items-center gap-2">
                   <button
@@ -100,7 +98,6 @@ export default function NotificationList({
                 </div>
               )}
 
-              {/* Indicador de status */}
               {notification.status === "ACEITO" && (
                 <span className="text-green-500 text-sm font-bold">✔ Aceito</span>
               )}

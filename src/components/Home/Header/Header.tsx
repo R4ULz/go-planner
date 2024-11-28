@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useUser } from "@/src/contexts/UserContext";
 import { notifications } from "../../icons/notifications";
 import NotificationList from "./NotificationList";
+const userData = useUserData(user?.id);
+
 
 export default function Header() {
     const { user } = useUser();
@@ -14,6 +16,7 @@ export default function Header() {
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
     const toggleNotifications = () => setNotificationsOpen(!notificationsOpen)
+    
 
     useEffect(() => {
       const fetchNotifications = async () => {
@@ -72,6 +75,34 @@ export default function Header() {
         console.error("Erro ao processar notificação:", error);
       }
     };
+
+    function useUserData(userId) {
+      const [user, setUser] = useState(null);
+
+      useEffect(() => {
+        async function fetchUser() {
+          const response = await fetch('/api/user/getUserById', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: userId }),
+          });
+          const data = await response.json();
+          if (response.ok) {
+            setUser(data.user);
+          } else {
+            console.error('Falha ao buscar dados do usuário:', data.message);
+          }
+        }
+
+        if (userId) {
+          fetchUser();
+        }
+      }, [userId]);
+
+      return user;
+    }
 
     return (
         <div className="h-20 w-full flex justify-between items-center max-w-screen-2xl gap-10 px-5">
@@ -132,7 +163,7 @@ export default function Header() {
                     )}
 
                         <Link href={{ pathname: '/perfil' }}>
-                            <Image className="rounded-full" src="/imgs/perfil.jpg" alt="Imagem de perfil" width={50} height={50} />
+                            <Image className="rounded-full" src={userData.foto || '/imgs/default-profile.jpg'} alt="Imagem de perfil" width={50} height={50} />
                         </Link>
                     </div>
                 ) : (

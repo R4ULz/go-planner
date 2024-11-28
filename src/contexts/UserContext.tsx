@@ -2,12 +2,13 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 
 // Definição do tipo User
 interface User {
+  foto: any;
   id: string;
   nome: string;
   email: string;
   cpf: string;
   senha: string;
-  amigos: string[]; // Array de IDs dos amigos
+  amigos: string[];
 }
 
 interface UserContextProps {

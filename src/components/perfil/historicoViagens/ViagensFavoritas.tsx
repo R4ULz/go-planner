@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import { location } from "../../icons/location";
 import { iconeCalendario2 } from "../../icons/Schedule2";
@@ -6,7 +7,7 @@ import { useUser } from "@/src/contexts/UserContext";
 import ModalViagem from "./ModalViagens";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
-
+        
 export default function SuasViagens() {
     const [minhasViagens, setMinhasViagens] = useState([]);
     const [loading, setLoading] = useState(true);

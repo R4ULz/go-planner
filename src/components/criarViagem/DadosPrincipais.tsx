@@ -18,7 +18,6 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     console.log("Dados de tripData em Dados Principais:", tripData);
   }, [tripData]);
 
-  // Função para buscar as sugestões da API LocationIQ
   const fetchLocationSuggestions = async (inputValue: string, type: string) => {
     if (inputValue.length > 2) {
       try {
@@ -71,15 +70,32 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     }
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setImagemFile(file);
-      const imageURL = URL.createObjectURL(file);
-      handleUpdateTrip({ imagem: imageURL });
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      try {
+        const response = await fetch('/api/uploadProfileTrip', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!response.ok) {
+          throw new Error('Erro ao fazer upload da imagem');
+        }
+  
+        const data = await response.json();
+        console.log('URL do arquivo enviado:', data.url);
+        handleUpdateTrip({ imagem: data.url }); // Atualiza o tripData com o URL da imagem
+      } catch (error) {
+        console.error('Erro ao fazer upload da imagem:', error);
+      }
     }
   };
-
+  
   const handleClick = () => {
     const fileInput = document.getElementById("fileInput");
     if (fileInput) {
@@ -275,3 +291,7 @@ export default function DadosPrincipais({ tripData, handleUpdateTrip, onSaveTrip
     </div>
   );
 }
+function setImagemURL(foto: any) {
+  throw new Error("Function not implemented.");
+}
+
