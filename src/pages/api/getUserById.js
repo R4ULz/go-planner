@@ -10,8 +10,6 @@ export default async function getUserById(req, res) {
   await connect();
 
   const { id } = req.body;
-  console.log("ID recebido na API:", id);
-
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "ID inválido" });
@@ -22,8 +20,6 @@ export default async function getUserById(req, res) {
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
-
-    console.log("Usuário encontrado:", user);
 
     return res.status(200).json({
       user: {
