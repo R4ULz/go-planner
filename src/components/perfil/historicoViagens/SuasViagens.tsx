@@ -7,6 +7,7 @@ import { estrelaCheia } from "../../icons/estrelaCheia";
 import { useEffect, useState } from "react";
 import { useUser } from "@/src/contexts/UserContext";
 import ModalViagem from "./ModalViagens";
+import Toastify from "toastify-js";
 
 export default function SuasViagens() {
     const [minhasViagens, setMinhasViagens] = useState([]);
@@ -26,14 +27,34 @@ export default function SuasViagens() {
 
             if (response.ok) {
                 setMinhasViagens((prev) => prev.filter((viagem) => viagem._id !== id));
-                alert("Viagem deletada com sucesso!");
+                Toastify({
+                    text: "Viagem deletada com sucesso!",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                }).showToast();
             } else {
                 const errorData = await response.json();
                 alert(`Erro: ${errorData.message}`);
             }
         } catch (error) {
             console.error("Erro ao deletar a viagem:", error);
-            alert("Não foi possível deletar a viagem. Tente novamente.");
+            Toastify({
+                text: "Não foi possível deletar a viagem. Tente novamente.",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: "#ce1836",
+                },
+            }).showToast();
         }
     };
 

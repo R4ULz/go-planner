@@ -11,27 +11,19 @@ export default async function handler(req, res) {
       const { tripId } = req.query;
 
       if (!tripId) {
-        console.log("Nenhum ID fornecido na requisição.");
         return res.status(400).json({ message: "ID da viagem não fornecido." });
       }
 
-      console.log("Buscando viagem com ID:", tripId);
       const trip = await Trip.findById(tripId).select("topicos");
 
       if (!trip) {
-        console.log("Viagem não encontrada para o ID:", tripId);
         return res.status(404).json({ message: "Viagem não encontrada." });
       }
-
-      console.log("Viagem encontrada:", trip);
-
       // Limpa as tags HTML dos tópicos antes de enviar ao cliente
       const sanitizedTopics = trip.topicos.map((topic) => ({
         nome: sanitizeHtml(topic.nome, { allowedTags: [], allowedAttributes: {} }),
         conteudo: sanitizeHtml(topic.conteudo, { allowedTags: [], allowedAttributes: {} }),
       }));
-
-      console.log("Tópicos sanitizados:", sanitizedTopics);
 
       res.status(200).json({ message: "Tópicos carregados com sucesso.", trip: { topicos: sanitizedTopics } });
     } catch (error) {
