@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { iconeCalendario2 } from "../../icons/Schedule2";
 import { location } from "../../icons/location";
 import { adicionarFriend } from "../../icons/addFriend";
@@ -6,6 +6,7 @@ import ModalAmigos from "./modalAmigos";
 import { User } from "../../icons/user";
 import { lixeira } from "../../icons/lixeira";
 import { frameUser } from "../../icons/FrameUser";
+import Toastify from 'toastify-js';
 
 type Amigo = {
   email: string;
@@ -68,6 +69,25 @@ export default function  ConvidarAmigos({
   
   const formattedDataIda = DataIda ? parseLocalDate(DataIda).toLocaleDateString('pt-BR') : "Data não informada";
   const formattedDataVolta = DataRetorno ? parseLocalDate(DataRetorno).toLocaleDateString('pt-BR') : "Data não informada";
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && errorMessage) {
+      // Exibe o Toastify quando o errorMessage for atualizado
+      Toastify({
+        text: errorMessage,
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#ce1836",
+        },
+      }).showToast();
+    }
+  }, [errorMessage]);
+  
+
 
   return (
     <div className="font-rubik">
@@ -137,9 +157,6 @@ export default function  ConvidarAmigos({
           </div>
         </div>
       </div>
-
-      {/* Mostra mensagem de erro, se existir */}
-      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
       <ModalAmigos
         isOpen={isModalOpen}

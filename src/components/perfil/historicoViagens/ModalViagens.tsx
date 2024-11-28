@@ -11,7 +11,10 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [topicos, setTopicos] = useState([]);
     const [loadingAtividades, setLoadingAtividades] = useState(true);
     const [loadingTopicos, setLoadingTopicos] = useState(true);
+    const [editandoTopicos, setEditandoTopicos] = useState(false);
     const [editavel, setEditavel] = useState(false);
+    const [suggestionsPartida, setSuggestionsPartida] = useState([]);
+    const [suggestionsDestino, setSuggestionsDestino] = useState([]);
     const [novaAtividade, setNovaAtividade] = useState({
         nome: "",
         data: "",
@@ -43,15 +46,9 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     }, [viagem]);
 
     const isEditor = (() => {
-        console.log("Usuário logado:", user?.id);
-        console.log("Criador da viagem:", viagem.criador);
-        console.log("Convidados carregados:", convidados);
-
         const criadorEhEditor = viagem.criador?.toString() === user?.id?.toString();
-        console.log("É criador da viagem:", criadorEhEditor);
 
         const convidadoEhEditor = convidados.some((convidado) => {
-            console.log("Verificando convidado:", convidado);
             return (
                 (convidado.id?.toString() === user?.id?.toString() ||
                     convidado.amigoId?._id?.toString() === user?.id?.toString() ||
@@ -59,9 +56,6 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                 convidado.permissao === "EDITOR"
             );
         });
-
-        console.log("Convidado é editor:", convidadoEhEditor);
-
         return criadorEhEditor || convidadoEhEditor;
     })();
 
@@ -99,9 +93,16 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         const { name, value } = e.target;
         setDadosViagem((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
+
+        if (name === "partida") {
+            fetchLocationSuggestions(value, "partida");
+        } else if (name === "destino") {
+            fetchLocationSuggestions(value, "destino");
+        }
     };
+
 
     useEffect(() => {
         const fetchAtividades = async () => {
@@ -133,27 +134,27 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                 setLoadingConvidados(false); // Atualiza o estado de carregamento
                 return;
             }
-    
+
             console.log("Viagem carregada com amigos:", viagem.amigos); // Debug
-    
+
             try {
                 const convidadosDetalhes = await Promise.all(
                     viagem.amigos.map(async (amigo) => {
                         try {
                             const amigoId = typeof amigo.amigoId === "object" ? amigo.amigoId._id : amigo.amigoId;
                             console.log("Buscando dados do convidado com ID:", amigoId); // Debug
-    
+
                             const response = await fetch("/api/getUserById", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({ id: amigoId }),
                             });
-    
+
                             if (!response.ok) throw new Error(`Erro ao buscar convidado com ID ${amigoId}`);
-                            
+
                             const data = await response.json();
                             console.log("Dados do convidado recebido:", data); // Debug
-    
+
                             return { ...data.user, permissao: amigo.permissao, status: amigo.status };
                         } catch (error) {
                             console.error(`Erro ao buscar convidado ${amigo.amigoId}:`, error);
@@ -161,7 +162,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                         }
                     })
                 );
-    
+
                 const convidadosFiltrados = convidadosDetalhes.filter(Boolean); // Remove valores nulos
                 setConvidados(convidadosFiltrados);
                 console.log("Convidados carregados:", convidadosFiltrados); // Debug final
@@ -184,8 +185,11 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                 const response = await fetch(`/api/trip/getTopics?tripId=${viagem._id}`);
                 if (!response.ok) throw new Error("Erro ao buscar tópicos");
 
-                const topicosData = await response.json();
-                setTopicos(topicosData.topicos || []);
+                const data = await response.json();
+                console.log("Resposta da API de tópicos:", data); // Log da resposta da API
+
+                // Atualizando o estado com os tópicos recebidos
+                setTopicos(data.trip.topicos || []);
             } catch (error) {
                 console.error("Erro ao buscar tópicos:", error);
             } finally {
@@ -194,8 +198,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         };
 
         fetchTopicos();
-    },
-        [viagem]);
+    }, [viagem]);
 
     const fetchViagem = async () => {
         try {
@@ -222,6 +225,31 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         } finally {
             setLoadingAtividades(false);
             setLoadingConvidados(false)
+        }
+    };
+
+    const fetchLocationSuggestions = async (inputValue, type) => {
+        if (inputValue.length > 2) {
+            try {
+                const response = await fetch(
+                    `https://eu1.locationiq.com/v1/autocomplete.php?key=${process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY}&q=${inputValue}&format=json`
+                );
+                const data = await response.json();
+
+                if (type === "partida") {
+                    setSuggestionsPartida(data);
+                } else if (type === "destino") {
+                    setSuggestionsDestino(data);
+                }
+            } catch (error) {
+                console.error("Erro ao buscar sugestões de localizações:", error);
+            }
+        } else {
+            if (type === "partida") {
+                setSuggestionsPartida([]);
+            } else if (type === "destino") {
+                setSuggestionsDestino([]);
+            }
         }
     };
 
@@ -430,6 +458,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         }
     };
 
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
             <div className="bg-white w-3/4 max-w-3xl rounded-lg p-6 shadow-lg relative border-rosinha border">
@@ -469,7 +498,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                 </ul>
 
                 {selectedItem === "dadosPrincipais" ? (
-                    <div className="space-y-4 mt-1">
+                    <div className="space-y-4 mt-1 h-96">
                         <p className="font-bold text-2xl flex -mb-3">Dados Principais<span className="bg-rosinha w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span></p>
                         <div className="flex gap-4">
                             <div className="w-1/2">
@@ -495,11 +524,61 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                             <div className="w-1/2 space-y-5">
                                 <div>
                                     <label className="block text-zinc-700">Local de partida:</label>
-                                    <input type="text" name="partida" value={dadosViagem.partida} disabled={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl" />
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            name="partida"
+                                            value={dadosViagem.partida}
+                                            disabled={!editavel}
+                                            onChange={handleInputChange}
+                                            className="w-full border border-gray-300 p-2 rounded-xl"
+                                        />
+                                        {suggestionsPartida.length > 0 && (
+                                            <ul className="absolute z-10 bg-white border border-gray-300 rounded-xl w-full max-h-40 overflow-y-auto">
+                                                {suggestionsPartida.map((suggestion, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className="p-2 cursor-pointer hover:bg-gray-100"
+                                                        onClick={() => {
+                                                            setDadosViagem((prev) => ({ ...prev, partida: suggestion.display_name }));
+                                                            setSuggestionsPartida([]);
+                                                        }}
+                                                    >
+                                                        {suggestion.display_name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="block text-zinc-700">Local de destino:</label>
-                                    <input type="text" name="destino" value={dadosViagem.destino} disabled={!editavel} onChange={handleInputChange} className="w-full border border-gray-300 p-2 rounded-xl" />
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            name="destino"
+                                            value={dadosViagem.destino}
+                                            disabled={!editavel}
+                                            onChange={handleInputChange}
+                                            className="w-full border border-gray-300 p-2 rounded-xl"
+                                        />
+                                        {suggestionsDestino.length > 0 && (
+                                            <ul className="absolute z-10 bg-white border border-gray-300 rounded-xl w-full max-h-40 overflow-y-auto">
+                                                {suggestionsDestino.map((suggestion, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className="p-2 cursor-pointer hover:bg-gray-100"
+                                                        onClick={() => {
+                                                            setDadosViagem((prev) => ({ ...prev, destino: suggestion.display_name }));
+                                                            setSuggestionsDestino([]);
+                                                        }}
+                                                    >
+                                                        {suggestion.display_name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                             <div className="w-1/2">
@@ -525,7 +604,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                         )}
                     </div>
                 ) : selectedItem === "atividades" ? (
-                    <div className="space-y-4 mt-1">
+                    <div className="space-y-4 mt-1 h-96">
                         <div className="flex justify-between">
                             <p className="items-center font-bold text-2xl flex -mb-3">Atividades<span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span></p>
                             <button onClick={abrirFormularioAtividade} className="text-white font-inter font-bold text-sm border-solid margin-0 bg-laranjinha px-2 py-3 rounded-2xl flex gap-2 items-center">Adicionar Atividade <p className="text-xl">+</p></button>
@@ -627,6 +706,114 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                             )}
                         </div>
                     </div>
+                ) : selectedItem === "topicos" ? (
+                    <div className="space-y-4 mt-1 h-96">
+                        <p className="font-bold text-2xl flex mb-3">Tópicos</p>
+                        {loadingTopicos ? (
+                            <p>Carregando tópicos...</p>
+                        ) : topicos.length === 0 ? (
+                            <p>Esta viagem não possui tópicos.</p>
+                        ) : (
+                            <div className="overflow-auto h-64">
+                                <ul className="space-y-4">
+                                    {topicos.map((topico, index) => (
+                                        <li
+                                            key={index}
+                                            className="p-4 border border-gray-300 rounded-xl"
+                                        >
+                                            {editandoTopicos ? (
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        value={topico.nome}
+                                                        onChange={(e) => {
+                                                            const novosTopicos = [...topicos];
+                                                            novosTopicos[index].nome = e.target.value;
+                                                            setTopicos(novosTopicos);
+                                                        }}
+                                                        className="w-full border border-gray-300 p-2 rounded-xl mb-2"
+                                                    />
+                                                    <textarea
+                                                        value={topico.conteudo}
+                                                        onChange={(e) => {
+                                                            const novosTopicos = [...topicos];
+                                                            novosTopicos[index].conteudo = e.target.value;
+                                                            setTopicos(novosTopicos);
+                                                        }}
+                                                        className="w-full border border-gray-300 p-2 rounded-xl"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <h3 className="font-bold text-lg">{topico.nome}</h3>
+                                                    <p className="text-zinc-500">{topico.conteudo}</p>
+                                                </div>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        <div className="flex justify-end">
+                            {editandoTopicos ? (
+                                <>
+                                    <button
+                                        className="bg-gray-300 px-4 py-2 text-black rounded-xl font-semibold mr-2"
+                                        onClick={() => setEditandoTopicos(false)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
+                                        onClick={async () => {
+                                            try {
+                                                const response = await fetch(`/api/trip/updateTopic`, {
+                                                    method: "PATCH",
+                                                    headers: {
+                                                        "Content-Type": "application/json",
+                                                    },
+                                                    body: JSON.stringify({ tripId: viagem._id, topicos }),
+                                                });
+                                                if (!response.ok) throw new Error("Erro ao salvar tópicos");
+
+                                                Toastify({
+                                                    text: "Tópicos atualizados com sucesso!",
+                                                    duration: 3000,
+                                                    gravity: "top",
+                                                    position: "right",
+                                                    style: {
+                                                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                                    },
+                                                }).showToast();
+
+                                                setEditandoTopicos(false);
+                                            } catch (error) {
+                                                console.error("Erro ao atualizar tópicos:", error);
+                                                Toastify({
+                                                    text: "Erro ao atualizar tópicos!",
+                                                    duration: 3000,
+                                                    gravity: "top",
+                                                    position: "right",
+                                                    style: {
+                                                        background: "#ce1836",
+                                                    },
+                                                }).showToast();
+                                            }
+                                        }}
+                                    >
+                                        Salvar
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
+                                    onClick={() => setEditandoTopicos(true)}
+                                >
+                                    Editar tópicos
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 ) : (
                     <div className="space-y-4 mt-1">
                         <div className="flex flex-col h-96">
@@ -647,8 +834,8 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                                         <span className="text-gray-500">{convidado.email || "E-mail não disponível"}</span>
                                                         <span
                                                             className={`px-2 py-1 text-sm font-semibold rounded-lg ${convidado.status === "PENDENTE"
-                                                                    ? "bg-yellow-100 text-yellow-700"
-                                                                    : "bg-green-100 text-green-700"
+                                                                ? "bg-yellow-100 text-yellow-700"
+                                                                : "bg-green-100 text-green-700"
                                                                 }`}
                                                         >
                                                             {convidado.status === "PENDENTE" ? "Pendente" : "Aceito"}
@@ -681,3 +868,4 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         </div>
     );
 }
+

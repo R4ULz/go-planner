@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useUser } from "@/src/contexts/UserContext";
 import MenuItem from "./MenuItem";
 import { useRouter } from "next/router";
+
 import Voltar from "../BtnVoltar/btnVoltar";
+
+import Toastify from "toastify-js";
+
 
 export default function MenuLateral({ setSelectedComponent, handleSave }) {
   const { logout } = useUser();
@@ -12,7 +16,18 @@ export default function MenuLateral({ setSelectedComponent, handleSave }) {
 
   const handleLogout = () => {
     logout();
-    alert("Você está saindo");
+    Toastify({
+      text: "Você está saindo",
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+  }).showToast();
+
     router.push("/autenticacao");
   };
 

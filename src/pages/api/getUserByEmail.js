@@ -10,7 +10,6 @@ export default async function getUserByEmail(req, res) {
 
   const { email } = req.body;
 
-  // Validação simples para garantir que o e-mail foi fornecido
   if (!email || !email.includes('@')) {
     return res.status(400).json({ message: 'E-mail inválido ou não fornecido' });
   }

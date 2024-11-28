@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Email, iconePerfil } from "../icons";
 import { useUser } from "../../contexts/UserContext"; // Importa o contexto do usuário
 import { canetinha } from "../icons";
+import Toastify from "toastify-js";
 
 export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) {
   const { user } = useUser();
@@ -64,14 +65,44 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) 
         const data = await res.json();
         if (res.ok) {
           setImagemURL(data.foto); // Atualiza a URL da imagem no estado após o upload
-          alert('Imagem de perfil atualizada com sucesso');
+          Toastify({
+            text: "Imagem de perfil atualizada com sucesso",
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+        }).showToast();
         } else {
           console.error('Erro ao atualizar imagem:', data.message);
-          alert('Erro ao atualizar imagem');
+          Toastify({
+            text: "Erro ao atualizar imagem",
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: "#ce1836",
+            },
+        }).showToast();
         }
       } catch (error) {
         console.error('Erro ao fazer upload da imagem:', error);
-        alert('Erro ao fazer upload da imagem');
+        Toastify({
+          text: "Erro ao fazer upload da imagem",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+              background: "#ce1836",
+          },
+      }).showToast();
       }
     }
   };
@@ -118,15 +149,42 @@ export default function DadosPessoais({ nome, setNome, email, setEmail, foto }) 
 
       if (res.ok) {
         setEditavel(false);
-        alert('Dados atualizados com sucesso');
-      } else {
+        Toastify({
+          text: "Dados atualizados com sucesso",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+          },
+      }).showToast();      } else {
         console.error('Erro ao atualizar os dados do usuário:', data.message);
-        alert('Erro ao atualizar os dados do usuário');
-      }
+        Toastify({
+          text: "Erro ao atualizar os dados do usuário",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+              background: "#ce1836",
+          },
+      }).showToast();      }
     } catch (error) { 
       console.error('Erro ao atualizar os dados do usuário:', error);
-      alert('Erro ao atualizar os dados do usuário');
-    }
+      Toastify({
+        text: "Erro ao atualizar os dados do usuário",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+            background: "#ce1836",
+        },
+    }).showToast();    }
   };
 
   return (
