@@ -83,10 +83,12 @@ export default function Login() {
     
             if (res.ok) {
                 login(data.user, data.token);
-
-                const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || '/perfil';
-                sessionStorage.removeItem("redirectAfterLogin"); 
-                router.push(redirectUrl); 
+                
+                if (data.user.role === 'admin') {
+                    router.push('/admin'); // Redireciona para o painel de administrador
+                } else {
+                    router.push('/perfil'); // Redireciona para a página de perfil
+                }
             } else {
                 setMessage(data.message);
                 setShowMessage(true);

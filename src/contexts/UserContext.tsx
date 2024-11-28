@@ -9,6 +9,7 @@ interface User {
   cpf: string;
   senha: string;
   amigos: string[];
+  role: string;
 }
 
 interface UserContextProps {

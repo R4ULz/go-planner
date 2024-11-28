@@ -35,6 +35,6 @@ const tripSchema = new mongoose.Schema({
   ],
   imagem: { type: String },
   criador: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-});
+},{ timestamps: true });
 
 module.exports = mongoose.models.Trip || mongoose.model('Trip', tripSchema);

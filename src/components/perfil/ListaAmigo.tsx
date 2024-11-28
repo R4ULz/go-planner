@@ -9,8 +9,17 @@ export default function ListaAmigos({ user }) {
   const [friendEmail, setFriendEmail] = useState("");
   const [friends, setFriends] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setModalOpen] = useState(false)
+  const [selectedFriend, setSelectedFriend] = useState(null);
 
+  const openModal = (friendId) => {
+    setSelectedFriend(friendId)
+    setModalOpen(true)
+  }
 
+  const closeModal = () => {
+    setModalOpen(false)
+  }
 
   const handleRemoveFriend = async (friendId) => {
     try {
@@ -175,7 +184,7 @@ export default function ListaAmigos({ user }) {
                   <div className="w-[1px] h-10 bg-zinc-300" />
                   <p className="text-lg text-zinc-500">{friend.email}</p>
                 </div>
-                <button onClick={() => handleRemoveFriend(friend._id)}>
+                <button onClick={() => openModal(friend)/*() => handleRemoveFriend(friend._id)*/}>
                   {lixeira}
                 </button>
               </div>
@@ -188,6 +197,26 @@ export default function ListaAmigos({ user }) {
           )}
         </div>
       </div>
+
+      { isModalOpen && selectedFriend && (
+        <div onClick={() => closeModal()} className="fixed -inset-9 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50">
+          <div onClick={(e) => e.stopPropagation()}  className="relative flex border-rosinha p-12 w-[550px] flex-col gap-4 bg-white rounded-xl">
+            <h1 className="text-3xl font-rubik font-semibold">Removendo amigo :(</h1>
+            <p className="text-zinc-400">Você esta desfazendo uma amizade. Gostaria mesmo de remover <span className=" font-semibold">"{selectedFriend.nome}"</span> da sua lista de amigos?</p>
+            <div className="w-full flex justify-between items-center">
+              <button onClick={closeModal} className="bg-rosinha px-12 py-3 flex items-center justify-center text-white font-semibold rounded-lg">
+                Não
+              </button>
+              <button onClick={() => {handleRemoveFriend(selectedFriend._id); closeModal()}} className="bg-laranja px-12 py-3 flex items-center justify-center text-white font-semibold rounded-lg">
+                Sim
+              </button>
+            </div>
+            <button onClick={closeModal} className="absolute right-7 top-3 text-4xl text-zinc-500 font-rubik"> x </button>
+          </div>
+        </div>
+       )
+      }
     </div>
+    
   );
 }
