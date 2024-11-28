@@ -82,7 +82,7 @@ export default function Login() {
                 login(data.user, data.token);
 
                 if (data.user.role === 'admin') {
-                    router.push('/dashboardAdmin'); // Redireciona para o painel de administrador
+                    router.push('/admin'); // Redireciona para o painel de administrador
                 } else {
                     router.push('/perfil'); // Redireciona para a página de perfil
                 }
