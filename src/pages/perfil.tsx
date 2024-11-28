@@ -2,7 +2,6 @@ import Footer from "../components/Home/Footer/footer";
 import Header from "../components/Home/Header/Header";
 import DadosPessoais from "../components/perfil/DadosPessoais";
 import HistoricoViagens from "../components/perfil/HistoricoViagens";
-import LoginESenha from "../components/perfil/ListaAmigo";
 import MenuLateral from "../components/perfil/MenuLateral";
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";

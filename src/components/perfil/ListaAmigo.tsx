@@ -166,7 +166,7 @@ export default function ListaAmigos({ user }) {
         <div className="w-full h-[290px] flex flex-col gap-5 mt-6 overflow-y-auto box-border">
           {friends.length > 0 ? (
             friends.map((friend) => (
-              <div key={friend._id} className="rounded-xl border-[0.5px] px-4 py-3 flex justify-between items-center">
+              <div key={friend.id} className="rounded-xl border-[0.5px] px-4 py-3 flex justify-between items-center">
                 <div className="flex items-center gap-4 ">
                   <div className="flex gap-2">
                     {User}

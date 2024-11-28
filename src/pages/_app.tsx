@@ -1,18 +1,16 @@
 import "../../styles/globals.css";
 import type { AppProps } from "next/app";
 import { UserProvider } from '../contexts/UserContext'; 
-import Head from "next/head";
+import Script from "next/script";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
-       <Head>
-       <script
+       <Script
           src="https://cdn.userway.org/widget.js"
           data-userway="true"
           async
-        ></script>
-      </Head>
+        ></Script>
       <Component {...pageProps} />
     </UserProvider>
   );

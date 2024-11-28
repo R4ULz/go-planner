@@ -81,7 +81,7 @@ export default function ViagensCompartilhadas() {
               </div>
               <div className="size-44 relative">
                 <Image
-                  src={viagem.imagem || "/imgs/default.jpg"}
+                  src={viagem.imagem || "/imgs/rio.jpg"} // Use a imagem do banco ou uma padrão
                   alt={viagem.titulo}
                   layout="fill"
                   objectFit="cover"
