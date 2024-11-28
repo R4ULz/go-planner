@@ -59,7 +59,6 @@ export default function SuasViagens() {
     };
 
     const toggleFavorito = async (id) => {
-        // Atualiza o estado local imediatamente
         setMinhasViagens((prev) =>
             prev.map((viagem) =>
                 viagem._id === id ? { ...viagem, favoritada: !viagem.favoritada } : viagem
@@ -166,7 +165,7 @@ export default function SuasViagens() {
                             </div>
                             <div className="size-44 relative">
                                 <Image
-                                    src={viagem.imagem || "/imgs/rio.jpg"}
+                                    src={viagem.imagem || "/imgs/rio.jpg"} // Use a imagem do banco ou uma padrão
                                     alt={viagem.titulo}
                                     layout="fill"
                                     objectFit="cover"

@@ -20,6 +20,8 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
 
+    console.log("Lista de amigos populada:", user?.amigos);
+
     const friends = user.amigos.map((amigo) => ({
       id: amigo.amigoId._id,
       nome: amigo.amigoId.nome,

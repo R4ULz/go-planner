@@ -74,23 +74,49 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
       alert("Nenhum dado de viagem encontrado para salvar.");
       return;
     }
-
+  
     let tripData = JSON.parse(tripDataString);
     const partidaStored = sessionStorage.getItem("partida");
     const destinoStored = sessionStorage.getItem("destino");
-
+  
     tripData = {
       ...tripData,
       partida: tripData.partida || partidaStored,
       destino: tripData.destino || destinoStored,
       criador: user?.id,
     };
-
+  
     if (!tripData.partida || !tripData.destino) {
       alert("Partida e destino são obrigatórios.");
       return;
     }
-
+  
+    // Upload da imagem se ela estiver presente
+    if (tripData.imagemFile) {
+      const formData = new FormData();
+      formData.append("file", tripData.imagemFile); // tripData.imagemFile deve conter o arquivo de imagem
+  
+      try {
+        const uploadResponse = await fetch("/api/uploadProfileTrip", {
+          method: "POST",
+          body: formData,
+        });
+  
+        if (!uploadResponse.ok) {
+          throw new Error("Erro ao fazer upload da imagem.");
+        }
+  
+        const uploadResult = await uploadResponse.json();
+        tripData.imagem = uploadResult.url; // URL retornada pelo backend
+        console.log("Imagem salva com sucesso:", uploadResult.url);
+      } catch (uploadError) {
+        console.error("Erro ao fazer upload da imagem:", uploadError);
+        alert("Falha ao fazer upload da imagem.");
+        return;
+      }
+    }
+  
+    // Ajustar atividades
     const atividadesAjustadas = tripData.atividades.map((atividade) => ({
       ...atividade,
       id: atividade.id || uuidv4(),
@@ -99,16 +125,18 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
       horario: atividade.time,
     }));
   
-    console.log("teste", tripData.amigos)
-
+    // Ajustar amigos
     const amigosAjustados = tripData.amigos.map((amigo) => ({
       amigoId: amigo.id || amigo.amigoId,
-      status: "PENDENTE"
+      status: "PENDENTE",
     }));
+  
+    // Atualizar tripData com as mudanças
     tripData = { ...tripData, atividades: atividadesAjustadas, amigos: amigosAjustados };
-
+  
     console.log("Enviando dados ajustados:", tripData);
-
+  
+    // Salvar viagem no backend
     try {
       const response = await fetch("/api/trip", {
         method: "POST",
@@ -117,25 +145,25 @@ export default function Layout({ isEditMode, tripId, tripData: initialTripData, 
         },
         body: JSON.stringify(tripData),
       });
-
+  
       if (!response.ok) {
         throw new Error("Erro ao enviar os dados para o banco de dados.");
       }
-
+  
       const result = await response.json();
       Toastify({
-        text: isEditMode ? 'Viagem atualizada com sucesso!' : 'Viagem criada com sucesso!',
+        text: isEditMode ? "Viagem atualizada com sucesso!" : "Viagem criada com sucesso!",
         duration: 3000,
         close: true,
-        gravity: 'top',
-        position: 'right',
+        gravity: "top",
+        position: "right",
         stopOnFocus: true,
         style: {
           background: "linear-gradient(to right, #00b09b, #96c93d)",
-        }
+        },
       }).showToast();
       console.log(result);
-      router.push('/perfil');
+      router.push("/perfil");
     } catch (error) {
       console.error("Erro ao enviar os dados:", error);
       alert("Falha ao confirmar a viagem.");

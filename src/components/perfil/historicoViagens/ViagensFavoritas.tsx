@@ -2,10 +2,9 @@ import Image from "next/image"
 import { location } from "../../icons/location"
 import { lixeira } from "../../icons/lixeira"
 import { iconeCalendario2 } from "../../icons/Schedule2"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useUser } from "@/src/contexts/UserContext"
 import ModalViagem from "./ModalViagens"
-import { useRouter } from "next/router"
 
 export default function SuasViagens() {
 
@@ -15,15 +14,15 @@ export default function SuasViagens() {
     const {user} = useUser()
 
     const deleteTrip = async (id) => {
-        console.log("ID para deletar:", id); // Verificação do ID
+        console.log("ID para deletar:", id);
     
         try {
-          const response = await fetch(`/api/trip/deleteTripById`, { // Certifique-se de que o caminho está correto
+          const response = await fetch(`/api/trip/deleteTripById`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id }), // Enviando o ID no corpo da requisição
+            body: JSON.stringify({ id }),
           });
       
           if (response.ok) {
