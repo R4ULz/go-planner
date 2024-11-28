@@ -9,9 +9,7 @@ const userSchema = new mongoose.Schema({
   amigos: [
     {
       amigoId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-      status: { type: String, enum: ["PENDENTE", "ACEITO"], default: "PENDENTE" }, 
-      
-      // Status do convite
+      status: { type: String, enum: ["PENDENTE", "ACEITO"], default: "PENDENTE" }, // Status do convite
     },
   ],
   notificacoes: [
@@ -24,8 +22,7 @@ const userSchema = new mongoose.Schema({
       viagemId:{ type:mongoose.Schema.Types.ObjectId, ref: 'Trip'},
       remetenteId:{ type:mongoose.Schema.Types.ObjectId, ref: 'User'},
     }
-  ], role: { type: String, enum: ['user', 'admin'], default: 'user' }, 
-}, { timestamps: true });
+  ]
 });
 
 export default mongoose.models.User || mongoose.model('User', userSchema);
