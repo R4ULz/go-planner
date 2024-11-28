@@ -14,6 +14,7 @@ export default function SuasViagens() {
     const [loading, setLoading] = useState(true);
     const [modalViagem, setModalViagem] = useState(null);
     const { user } = useUser();
+    const [deleteConfirm, setDeleteConfirm] = useState(null);
 
     const deleteTrip = async (id) => {
         try {
@@ -115,7 +116,22 @@ export default function SuasViagens() {
         });
     };
 
+    function ConfirmDeleteModal({ viagem, onConfirm, onCancel }) {
+        return (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg ">
+              <h2>Confirmar Exclusão</h2>
+              <p className="py-1">Você realmente deseja excluir a sua viagem?</p>
+              <button onClick={() => onConfirm(viagem._id)} className="bg-gradient-to-r from-rosinha to-laranja  text-white p-2 rounded-md">Excluir</button>
+              <button onClick={onCancel} className="ml-2 bg-gray-300 p-2 rounded-md">Cancelar</button>
+            </div>
+          </div>
+        );
+      }
+      
+
     return (
+        
         <div className="font-inter">
             {loading ? (
                 <p>Carregando...</p>
@@ -131,7 +147,17 @@ export default function SuasViagens() {
                                 <button onClick={() => toggleFavorito(viagem._id)}>
                                     {viagem.favoritada ? estrelaCheia : estrelaVazia}
                                 </button>
-                                <button onClick={() => deleteTrip(viagem._id)}>{lixeira}</button>
+                                <button onClick={() => setDeleteConfirm(viagem)}>{lixeira}</button>
+                                {deleteConfirm && (
+                                <ConfirmDeleteModal
+                                    viagem={deleteConfirm}
+                                    onConfirm={(id) => {
+                                    deleteTrip(id);
+                                    setDeleteConfirm(null);
+                                    }}
+                                    onCancel={() => setDeleteConfirm(null)}
+                                />
+                                )}
                             </div>
                         </div>
                         <div className="flex justify-between">
@@ -185,4 +211,5 @@ export default function SuasViagens() {
             )}
         </div>
     );
+    
 }
