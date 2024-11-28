@@ -11,6 +11,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     const [topicos, setTopicos] = useState([]);
     const [loadingAtividades, setLoadingAtividades] = useState(true);
     const [loadingTopicos, setLoadingTopicos] = useState(true);
+    const [editandoTopicos, setEditandoTopicos] = useState(false);
     const [editavel, setEditavel] = useState(false);
     const [novaAtividade, setNovaAtividade] = useState({
         nome: "",
@@ -178,25 +179,27 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
     useEffect(() => {
         const fetchTopicos = async () => {
             if (!viagem || !viagem._id) return;
-
+    
             setLoadingTopicos(true);
             try {
                 const response = await fetch(`/api/trip/getTopics?tripId=${viagem._id}`);
                 if (!response.ok) throw new Error("Erro ao buscar tópicos");
-
-                const topicosData = await response.json();
-                setTopicos(topicosData.topicos || []);
+    
+                const data = await response.json();
+                console.log("Resposta da API de tópicos:", data); // Log da resposta da API
+    
+                // Atualizando o estado com os tópicos recebidos
+                setTopicos(data.trip.topicos || []);
             } catch (error) {
                 console.error("Erro ao buscar tópicos:", error);
             } finally {
                 setLoadingTopicos(false);
             }
         };
-
+    
         fetchTopicos();
-    },
-        [viagem]);
-
+    }, [viagem]);
+    
     const fetchViagem = async () => {
         try {
             setLoadingAtividades(true);
@@ -430,6 +433,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         }
     };
 
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center h-full z-50">
             <div className="bg-white w-3/4 max-w-3xl rounded-lg p-6 shadow-lg relative border-rosinha border">
@@ -469,7 +473,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                 </ul>
 
                 {selectedItem === "dadosPrincipais" ? (
-                    <div className="space-y-4 mt-1">
+                    <div className="space-y-4 mt-1 h-96">
                         <p className="font-bold text-2xl flex -mb-3">Dados Principais<span className="bg-rosinha w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span></p>
                         <div className="flex gap-4">
                             <div className="w-1/2">
@@ -525,7 +529,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                         )}
                     </div>
                 ) : selectedItem === "atividades" ? (
-                    <div className="space-y-4 mt-1">
+                    <div className="space-y-4 mt-1 h-96">
                         <div className="flex justify-between">
                             <p className="items-center font-bold text-2xl flex -mb-3">Atividades<span className="bg-laranja w-2 h-2 rounded-full p-1 flex mt-4 ml-1"></span></p>
                             <button onClick={abrirFormularioAtividade} className="text-white font-inter font-bold text-sm border-solid margin-0 bg-laranjinha px-2 py-3 rounded-2xl flex gap-2 items-center">Adicionar Atividade <p className="text-xl">+</p></button>
@@ -627,6 +631,114 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                             )}
                         </div>
                     </div>
+                ) : selectedItem === "topicos" ? (
+                    <div className="space-y-4 mt-1 h-96">
+                        <p className="font-bold text-2xl flex mb-3">Tópicos</p>
+                        {loadingTopicos ? (
+                            <p>Carregando tópicos...</p>
+                        ) : topicos.length === 0 ? (
+                            <p>Esta viagem não possui tópicos.</p>
+                        ) : (
+                            <div className="overflow-auto h-64">
+                                <ul className="space-y-4">
+                                    {topicos.map((topico, index) => (
+                                        <li
+                                            key={index}
+                                            className="p-4 border border-gray-300 rounded-xl"
+                                        >
+                                            {editandoTopicos ? (
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        value={topico.nome}
+                                                        onChange={(e) => {
+                                                            const novosTopicos = [...topicos];
+                                                            novosTopicos[index].nome = e.target.value;
+                                                            setTopicos(novosTopicos);
+                                                        }}
+                                                        className="w-full border border-gray-300 p-2 rounded-xl mb-2"
+                                                    />
+                                                    <textarea
+                                                        value={topico.conteudo}
+                                                        onChange={(e) => {
+                                                            const novosTopicos = [...topicos];
+                                                            novosTopicos[index].conteudo = e.target.value;
+                                                            setTopicos(novosTopicos);
+                                                        }}
+                                                        className="w-full border border-gray-300 p-2 rounded-xl"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <h3 className="font-bold text-lg">{topico.nome}</h3>
+                                                    <p className="text-zinc-500">{topico.conteudo}</p>
+                                                </div>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        <div className="flex justify-end">
+                            {editandoTopicos ? (
+                                <>
+                                    <button
+                                        className="bg-gray-300 px-4 py-2 text-black rounded-xl font-semibold mr-2"
+                                        onClick={() => setEditandoTopicos(false)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
+                                        onClick={async () => {
+                                            try {
+                                                const response = await fetch(`/api/trip/updateTopic`, {
+                                                    method: "PATCH",
+                                                    headers: {
+                                                        "Content-Type": "application/json",
+                                                    },
+                                                    body: JSON.stringify({ tripId: viagem._id, topicos }),
+                                                });
+                                                if (!response.ok) throw new Error("Erro ao salvar tópicos");
+                
+                                                Toastify({
+                                                    text: "Tópicos atualizados com sucesso!",
+                                                    duration: 3000,
+                                                    gravity: "top",
+                                                    position: "right",
+                                                    style: {
+                                                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                                    },
+                                                }).showToast();
+                
+                                                setEditandoTopicos(false);
+                                            } catch (error) {
+                                                console.error("Erro ao atualizar tópicos:", error);
+                                                Toastify({
+                                                    text: "Erro ao atualizar tópicos!",
+                                                    duration: 3000,
+                                                    gravity: "top",
+                                                    position: "right",
+                                                    style: {
+                                                        background: "#ce1836",
+                                                    },
+                                                }).showToast();
+                                            }
+                                        }}
+                                    >
+                                        Salvar
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    className="bg-laranja px-4 py-2 text-white rounded-xl font-semibold"
+                                    onClick={() => setEditandoTopicos(true)}
+                                >
+                                    Editar tópicos
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 ) : (
                     <div className="space-y-4 mt-1">
                         <div className="flex flex-col h-96">
@@ -681,3 +793,4 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
         </div>
     );
 }
+

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
+import Toastify from 'toastify-js';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'froala-editor/css/froala_style.min.css';
@@ -42,60 +43,115 @@ export default function Topico({ tripData, handleUpdateTrip }) {
 
   const salvarTopico = () => {
     if (!topicName.trim()) {
-      alert('O nome do tópico não pode estar vazio.');
-      return;
+        Toastify({
+            text: 'O nome do tópico não pode estar vazio.',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            stopOnFocus: true,
+            style: {
+                background: "#ce1836",
+            }
+        }).showToast();
+        return;
     }
 
     if (isCreatingNew) {
-      const newTopic = {
-        nome: topicName,
-        conteudo: '',
-      };
+        const newTopic = {
+            nome: topicName,
+            conteudo: '',
+        };
 
-      const updatedTopics = [...topics, newTopic];
-      setTopics(updatedTopics);
+        const updatedTopics = [...topics, newTopic];
+        setTopics(updatedTopics);
 
-      handleUpdateTrip({
-        topicos: updatedTopics,
-      });
+        handleUpdateTrip({
+            topicos: updatedTopics,
+        });
 
-      setTopicName('');
-      setIsCreatingNew(false);
-      alert('Novo tópico criado com sucesso!');
+        setTopicName('');
+        setIsCreatingNew(false);
+
+        Toastify({
+            text: 'Novo tópico criado com sucesso!',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+        }).showToast();
     } else {
-      const updatedTopics = topics.map((topic, index) =>
-        index === activeTopicIndex ? { ...topic, nome: topicName } : topic
-      );
-      setTopics(updatedTopics);
+        const updatedTopics = topics.map((topic, index) =>
+            index === activeTopicIndex ? { ...topic, nome: topicName } : topic
+        );
+        setTopics(updatedTopics);
 
-      handleUpdateTrip({
-        topicos: updatedTopics,
-      });
+        handleUpdateTrip({
+            topicos: updatedTopics,
+        });
 
-      setIsCreatingNew(false); // Desativa o modo de criação de novos tópicos
-      setTopicName(''); // Limpa o input de nome
-      alert('Tópico atualizado com sucesso!');
+        setIsCreatingNew(false); // Desativa o modo de criação de novos tópicos
+        setTopicName(''); // Limpa o input de nome
+
+        Toastify({
+            text: 'Tópico atualizado com sucesso!',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+        }).showToast();
     }
-  };
+};
 
-  const excluirTopico = () => {
-    if (activeTopicIndex === null) {
-      alert('Nenhum tópico selecionado para exclusão.');
+
+const excluirTopico = () => {
+  if (activeTopicIndex === null) {
+      Toastify({
+          text: 'Nenhum tópico selecionado para exclusão.',
+          duration: 3000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style: {
+              background: "#ce1836",
+          }
+      }).showToast();
       return;
-    }
+  }
 
-    const updatedTopics = topics.filter((_, index) => index !== activeTopicIndex);
-    setTopics(updatedTopics);
+  const updatedTopics = topics.filter((_, index) => index !== activeTopicIndex);
+  setTopics(updatedTopics);
 
-    handleUpdateTrip({
+  handleUpdateTrip({
       topicos: updatedTopics,
-    });
+  });
 
-    setActiveTopicIndex(null);
-    setTopicName('');
-    setIsCreatingNew(false);
-    alert('Tópico excluído com sucesso!');
-  };
+  setActiveTopicIndex(null);
+  setTopicName('');
+  setIsCreatingNew(false);
+
+  Toastify({
+      text: 'Tópico excluído com sucesso!',
+      duration: 3000,
+      close: true,
+      gravity: 'top',
+      position: 'right',
+      stopOnFocus: true,
+      style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+      }
+  }).showToast();
+};
+
 
   const selecionarTopico = (index) => {
     setActiveTopicIndex(index);

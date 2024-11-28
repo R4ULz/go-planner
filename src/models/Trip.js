@@ -23,6 +23,9 @@ const tripSchema = new mongoose.Schema({
       conteudo: { type: String },
     },
   ],
+  
+  favoritada: { type: Boolean, default: false },
+
   amigos: [
     {
       amigoId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
