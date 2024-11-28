@@ -158,7 +158,7 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                             return { ...data.user, permissao: amigo.permissao, status: amigo.status };
                         } catch (error) {
                             console.error(`Erro ao buscar convidado ${amigo.amigoId}:`, error);
-                            return null; // Retorna null em caso de erro
+                            return null;
                         }
                     })
                 );
@@ -940,11 +940,17 @@ export default function ModalViagem({ viagem, buscarViagens, onClose }) {
                                                         <span className="text-gray-500">{convidado.email || "E-mail não disponível"}</span>
                                                         <span
                                                             className={`px-2 py-1 text-sm font-semibold rounded-lg ${convidado.status === "PENDENTE"
-                                                                ? "bg-yellow-100 text-yellow-700"
-                                                                : "bg-green-100 text-green-700"
+                                                                    ? "bg-yellow-100 text-yellow-700"
+                                                                    : convidado.status === "ACEITO"
+                                                                        ? "bg-green-100 text-green-700"
+                                                                        : "bg-red-100 text-red-700"
                                                                 }`}
                                                         >
-                                                            {convidado.status === "PENDENTE" ? "Pendente" : "Aceito"}
+                                                            {convidado.status === "PENDENTE"
+                                                                ? "Pendente"
+                                                                : convidado.status === "ACEITO"
+                                                                    ? "Aceito"
+                                                                    : "Recusado"}
                                                         </span>
                                                     </div>
                                                     {convidado.status === "ACEITO" && (
