@@ -46,7 +46,7 @@ export default function SectionHome({pontoPartida, pontoDestino, onPartidaChange
   };
 
   return (
-    <section className="h-[400px] md:h-[664px] flex-col md:flex-row max-w-screen-xl w-full flex justify-between items-center ">
+    <section className="h-[400px] md:h-[664px] flex-col md:flex-row max-w-screen-xl w-full flex justify-between items-center px-5">
       <div className="flex w-full md:w-2/3 gap-16 h-full flex-col space-y-2 justify-center items-center md:items-start">
         <TxtHome />
         <button 
