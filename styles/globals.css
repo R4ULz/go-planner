@@ -23,7 +23,7 @@ html {
 .userway_buttons_wrapper {
     position: fixed !important; /* Garante que o botão seja posicionado fixamente */
     bottom: 20px !important;    /* Move para a parte inferior */
-    right: -20px !important;     /* Ajusta para o lado direito */
+    right: -70px !important;     /* Ajusta para o lado direito */
     top: auto !important;       /* Remove qualquer posicionamento no topo */
     z-index: 9999 !important;   /* Garante que esteja acima de outros elementos */
   }
